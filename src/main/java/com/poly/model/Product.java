@@ -32,6 +32,7 @@ import lombok.NoArgsConstructor;
 public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_product")
 	private Integer id;
 	@NotBlank(message = "{NotBlank.product.name}")
 	private String name;

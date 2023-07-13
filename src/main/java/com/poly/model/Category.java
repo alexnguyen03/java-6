@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -28,7 +29,8 @@ import lombok.ToString;
 public class Category implements Serializable {
 	@Id
 	@NotBlank(message = "{NotBlank.category.id}")
-	@Length(min=4,max=4,message="{Length.category.id}")
+	@Length(min = 4, max = 4, message = "{Length.category.id}")
+	@Column(name = "id_category")
 	String id;
 	@NotBlank(message = "{NotBlank.category.name}")
 	String name;

@@ -19,7 +19,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Entity
@@ -27,10 +26,11 @@ import lombok.Setter;
 public class Review implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_review")
     private int id;
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product; 
+    private Product product;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Account account;
