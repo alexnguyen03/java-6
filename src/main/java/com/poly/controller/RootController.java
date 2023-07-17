@@ -27,15 +27,20 @@ public class RootController {
 		if (session.get("username") != null) {
 			Account account = accountDAO.findById(session.get("username")).orElse(null);
 			// model.addAttribute("isAdmin", account.getAdmin());
-			session.set("isAdmin", account.getAdmin());
+//			session.set("isAdmin", account.getAdmin());
 		}
 		if (session.get("account") == null) {
 			session.set("totalCart", 0);
 		}
+		
+//		<%=session.getAttribute("totalCart")%>
+		model.addAttribute("totalCart", session.get("totalCart"));
+		
+		
 		List<Product> items = productDAO.findTop10BestSellingProducts();
 		model.addAttribute("items", items);
 		model.addAttribute("pageActive", "index");
-		return "/client/index";
+		return "client/index";
 	}
 
 	@GetMapping("/top-lastest")
@@ -43,7 +48,7 @@ public class RootController {
 		if (session.get("username") != null) {
 			Account account = accountDAO.findById(session.get("username")).orElse(null);
 			// model.addAttribute("isAdmin", account.getAdmin());
-			session.set("isAdmin", account.getAdmin());
+//			session.set("isAdmin", account.getAdmin());
 		}
 		if (session.get("account") == null) {
 			session.set("totalCart", 0);
