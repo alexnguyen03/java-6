@@ -20,7 +20,6 @@ public class GlobalControllerAdvice {
 
 	@ModelAttribute("account")
 	public Boolean getIsLogin() {
-		boolean hasAccount = session.get("account") != null ? true : false;
-		return hasAccount ? session.get("account") : null;
+		return session.get("account") != null ? true : false;
 	}
 }
