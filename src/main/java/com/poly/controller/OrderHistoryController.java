@@ -38,14 +38,14 @@ public class OrderHistoryController {
 
 	@GetMapping("")
 	public String index(Model model) {
-		if (sessionService.get("account") == null) {
-            sessionService.set("messageShop", "Đăng nhập trước khi xem đơn hàng");
-            return "redirect:/account/login";
-        }
+//		if (sessionService.get("account") == null) {
+//            sessionService.set("messageShop", "Đăng nhập trước khi xem đơn hàng");
+//            return "redirect:/account/login";
+//        }
 
-		Account account = sessionService.get("account");
-		List<Order> orders = orderDao.findByAccountName(account.getUsername());
-		model.addAttribute("orders", orders);
+//		Account account = sessionService.get("account");
+//		List<Order> orders = orderDao.findByAccountName(account.getUsername());
+//		model.addAttribute("orders", orders);
 		model.addAttribute("pageActive", "order-history");
 
 		return "/client/order-history";

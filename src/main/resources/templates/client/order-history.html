@@ -1,89 +1,36 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
-<html lang="zxx">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <meta name="description" content="Male_Fashion Template" />
 <meta name="keywords" content="Male_Fashion, unica, creative, html" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>Male-Fashion | Template</title>
+<title>4Mems - Shop</title>
 <!-- Google Font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
 	rel="stylesheet" />
 <!-- Css Styles -->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/bootstrap.min.css"
-	type="text/css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/font-awesome.min.css"
-	type="text/css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/elegant-icons.css"
-	type="text/css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/magnific-popup.css"
-	type="text/css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/nice-select.css"
-	type="text/css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/owl.carousel.min.css"
-	type="text/css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/slicknav.min.css"
-	type="text/css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath }/css/style.css"
-	type="text/css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="/css/elegant-icons.css" type="text/css" />
+<link rel="stylesheet" href="/css/magnific-popup.css" type="text/css" />
+<link rel="stylesheet" href="/css/nice-select.css" type="text/css" />
+<link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css" />
+<link rel="stylesheet" href="/css/slicknav.min.css" type="text/css" />
+<link rel="stylesheet" href="/css/style.css" type="text/css" />
 </head>
 
 <body>
 	<!-- Page Preloder -->
-	<div id="preloder">
-		<div class="loader"></div>
-	</div>
-	<!-- Offcanvas Menu Begin -->
-	<div class="offcanvas-menu-overlay"></div>
-	<div class="offcanvas-menu-wrapper">
-		<div class="offcanvas__option">
-			<div class="offcanvas__links">
-				<a href="#">Sign in</a> <a href="#">FAQs</a>
-			</div>
-			<div class="offcanvas__top__hover">
-				<span>Usd <i class="arrow_carrot-down"></i></span>
-				<ul>
-					<li>USD</li>
-					<li>EUR</li>
-					<li>USD</li>
-				</ul>
-			</div>
-		</div>
-		<div class="offcanvas__nav__option">
-			<a href="#" class="search-switch"><img
-				src="${pageContext.request.contextPath}/img/icon/search.png" alt="" /></a>
-			<a href="#"><img
-				src="${pageContext.request.contextPath}/img/icon/heart.png" alt="" /></a>
-			<a href="#"><img
-				src="${pageContext.request.contextPath}/img/icon/cart.png" alt="" />
-				<span>0</span></a>
-			<div class="price">$0.00</div>
-		</div>
-		<div id="mobile-menu-wrap"></div>
-		<div class="offcanvas__text">
-			<p>Free shipping, 30-day return or refund guarantee.</p>
-		</div>
-	</div>
-	<!-- Offcanvas Menu End -->
+	<!-- 	<div id="preloder"> -->
+	<!-- 		<div class="loader"></div> -->
+	<!-- 	</div> -->
 
 	<!-- Header -->
-	<jsp:include page="header.jsp" />
+	<!-- 	<header th:insert="~{/client/header::header}"></header> -->
+	<!-- Header Section End -->
 
 	<!-- Shop Details Section Begin -->
 	<section class="breadcrumb-option">
@@ -129,15 +76,13 @@
 									<select class="custom-select" id="inputGroupSelect01"
 										name="search" onchange="handleSearchChange()">
 										<option value="select">Chọn</option>
-										<option value="id"
-											${
+										<option value="id"${
 													isId
 													? 'selected'
 													: ''
 													}>Mã
 											đơn hàng</option>
-										<option value="date"
-											${
+										<option value="date"${
 													isCreateDate
 													? 'selected'
 													: ''
@@ -147,9 +92,11 @@
 								</div>
 							</div>
 							<div class="pl-2">
-								<input class="search-bar bg-white text-dark form-control" ${ isSuscess ? 'disabled' : '' }
-									placeholder="Search..." type="text" style="height: 40px;"
-									id="searchInput" name="keyword">
+								<input class="search-bar bg-white text-dark form-control"
+									${ isSuscess ? 'disabled' : '' }
+									placeholder="Search..."
+									type="text" style="height: 40px;" id="searchInput"
+									name="keyword">
 							</div>
 							<div class="mr-auto pl-2">
 								<button type="submit" class="btn btn-primary"
@@ -173,36 +120,31 @@
 									<select class="custom-select mr-2" id="inputGroupSelect01"
 										name="status" style="height: 40px;">
 										<option value="select">Chọn trạng thái</option>
-										<option value="C"
-											${
+										<option value="C"${
 													isC
 													? 'selected'
 													: ''
 													}>Đang
 											chờ</option>
-										<option value="XL"
-											${
+										<option value="XL"${
 													isXl
 													? 'selected'
 													: ''
 													}>Đang
 											xử lý</option>
-										<option value="G"
-											${
+										<option value="G"${
 													isG
 													? 'selected'
 													: ''
 													}>Đang
 											giao</option>
-										<option value="DG"
-											${
+										<option value="DG"${
 													isDg
 													? 'selected'
 													: ''
 													}>Đã
 											giao</option>
-										<option value="H"
-											${
+										<option value="H"${
 													isH
 													? 'selected'
 													: ''
@@ -365,27 +307,35 @@
 
 					<!-- 					<div class="modal-footer"> -->
 					<!-- 						<h4> -->
-					<%-- 							Tổng số lượng: <strong> <c:set var="totalQuantity" --%>
-					<%-- 									value="0" /> <c:forEach var="detail" --%>
+					<%-- Tổng số lượng: <strong> <c:set var="totalQuantity"--%>
+					<%-- 									value="0" /> <c:forEach var="detail"--%>
 					<%-- 									items="${order.orderDetails}"> --%>
-					<%-- 									<c:set var="totalQuantity" --%>
+					<%-- 									<c:set var="totalQuantity"--%>
 					<%-- 										value="${totalQuantity + detail.quantity}" /> --%>
-					<%-- 								</c:forEach> ${totalQuantity} --%>
+					<%-- 								
+							
+							
+							</c:forEach> ${totalQuantity} --%>
 					<!-- 							</strong> -->
-					<!-- 						</h4> -->
-					<!-- 						<h4> -->
-					<%-- 							Tổng tiền : <strong> <c:set var="total" value="0" /> <c:forEach --%>
+							<!-- 						</h4> -->
+							<!-- 						<h4> -->
+					<%-- 							Tổng tiền : <strong> <c:set var="total"
+									value="0" /> <c:forEach--%>
 					<%-- 									var="detail" items="${order.orderDetails}"> --%>
-					<%-- 									<c:set var="total" --%>
+					<%-- 									<c:set var="total"--%>
 					<%-- 										value="${total + (detail.product.price  * detail.quantity)}" /> --%>
-					<%-- 								</c:forEach> <fmt:formatNumber value="${ total }" type="currency" --%>
+					<%-- 								
+	
+	
+	</c:forEach>
+<!-- 	<fmt:formatNumber value="${ total }" type="currency"--%> 
 					<%-- 									currencySymbol="" /><sup>đ</sup> --%>
 					<!-- 							</strong> -->
-					<!-- 						</h4> -->
-					<!-- 					</div> -->
-				</div>
-			</div>
-		</div>
+		<!-- 						</h4> -->
+		<!-- 					</div> -->
+	</div>
+	</div>
+	</div>
 	</c:forEach>
 	<!-- Footer Section Begin -->
 	<footer class="footer">
@@ -484,33 +434,23 @@
 	</script>
 
 	<!-- Js Plugins -->
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-		crossorigin="anonymous"></script>
-	<script
-		src="${pageContext.request.contextPath }/js/jquery-3.3.1.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath }/js/jquery.nice-select.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath }/js/jquery.nicescroll.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath }/js/jquery.magnific-popup.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath }/js/jquery.countdown.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/jquery.slicknav.js"></script>
-	<script src="${pageContext.request.contextPath }/js/mixitup.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath }/js/owl.carousel.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/main.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-		crossorigin="anonymous"></script>
-</body>
+<!-- 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" -->
+<!-- 		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" -->
+<!-- 		crossorigin="anonymous"></script> -->
+<!-- 	<script -->
+<!-- 		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" -->
+<!-- 		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" -->
+<!-- 		crossorigin="anonymous"></script> -->
+	<script src="/js/jquery-3.3.1.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/jquery.nice-select.min.js"></script>
+	<script src="/js/jquery.nicescroll.min.js"></script>
+	<script src="/js/jquery.magnific-popup.min.js"></script>
+	<script src="/js/jquery.countdown.min.js"></script>
+	<script src="/js/jquery.slicknav.js"></script>
+	<script src="/js/mixitup.min.js"></script>
+	<script src="/js/owl.carousel.min.js"></script>
+	<script src="/js/main.js"></script>
 
+</body>
 </html>
