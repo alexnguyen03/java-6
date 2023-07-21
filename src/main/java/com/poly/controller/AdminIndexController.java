@@ -63,8 +63,7 @@ public class AdminIndexController {
 		}
 		model.addAttribute("totalRevenue", totalRevenue);
 
-		// SELECT Revenue from 1 month past
-
+		
 		// SELECT ALL SOLD PRODUCT IN DAY
 		LocalDate today = LocalDate.now();
 		Date startDateSold = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -72,6 +71,7 @@ public class AdminIndexController {
 		Long totalProductsSoldToday = orderDAO.countProductsSoldByDate(startDateSold, endDateSold);
 		System.out.println(totalProductsSoldToday);
 		model.addAttribute("totalProductsSoldToday", totalProductsSoldToday);
+
 
 		List<OrderDetail> getPageTopTenOrderDetails = orderDetailDAO.getTop10OrderDetail(PageRequest.of(0, 10));
 		model.addAttribute("getPageTopTenOrderDetails", getPageTopTenOrderDetails);
