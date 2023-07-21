@@ -112,7 +112,7 @@ public class ShopController {
 		} else {
 			cartDetail = testCarDetail;
 			cartDetail.setQuantity(cartDetail.getQuantity() + 1);
-			
+
 		}
 		for (CartDetail cd : cart.getCartDetails()) {
 			totalQuantity += cd.getQuantity();
@@ -164,6 +164,13 @@ public class ShopController {
 		cartDetailDAO.save(cartDetail);
 		sessionService.set("totalCart", cart.getQuantity());
 		sessionService.set("isUpdated", true);
+
+		// Redirect to previous url path
+		// Demo only...
+		if (sessionService.get("urlPre") != null) {
+			return "redirect:/ " + sessionService.get("urlPre");
+		}
+
 		return "redirect:/shop";
 	}
 
