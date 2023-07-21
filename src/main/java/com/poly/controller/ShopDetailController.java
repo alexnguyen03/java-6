@@ -39,6 +39,7 @@ public class ShopDetailController {
 		List<Product> product_similars = productDao.findByProductCategogy(product.getCategory().getId(),
 				product.getId());
 		float sum_Rating = 0;
+		
 		for (Review review : reviews) {
 			sum_Rating += review.getRating();
 		}
