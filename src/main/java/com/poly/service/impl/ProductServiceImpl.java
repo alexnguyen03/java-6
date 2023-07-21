@@ -59,4 +59,14 @@ public class ProductServiceImpl implements ProductService{
 		return productDAO.findByPriceSortDESC(pageable);
 	}
 
+	@Override
+	public List<Product> findTop10BestSellingProducts() {
+		return productDAO.findTop10BestSellingProducts();
+	}
+
+	@Override
+	public List<Product> findTop10ByOrderByCreateDateDesc() {
+		return productDAO.findTop10ByOrderByCreateDateDesc();
+	}
+
 }

@@ -54,10 +54,10 @@ public class ShopController {
 
 	@GetMapping("")
 	public String index(Model model, @RequestParam("p") Optional<Integer> p) {
-		if (session.get("username") != null) {
-			Account account = accountDAO.findById(session.get("username")).orElse(null);
-			model.addAttribute("isAdmin", account.getAdmin());
-		}
+		// if (session.get("username") != null) {
+		// 	Account account = accountDAO.findById(session.get("username")).orElse(null);
+		// 	model.addAttribute("isAdmin", account.getAdmin());
+		// }
 		Pageable pageable = PageRequest.of(p.orElse(0), 6);
 		Page<Product> page = productService.getAllProducts(pageable);
 		model.addAttribute("page", page);

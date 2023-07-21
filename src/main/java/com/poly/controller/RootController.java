@@ -10,6 +10,7 @@ import com.poly.model.Account;
 import com.poly.model.Product;
 import com.poly.repository.AccountDAO;
 import com.poly.repository.ProductDAO;
+import com.poly.service.ProductService;
 import com.poly.service.SessionService;
 
 @Controller
@@ -17,10 +18,15 @@ import com.poly.service.SessionService;
 public class RootController {
 	@Autowired
 	ProductDAO productDAO;
+
 	@Autowired
 	AccountDAO accountDAO;
+
 	@Autowired
 	SessionService session;
+
+	@Autowired
+	ProductService productService;
 
 	@GetMapping("")
 	public String index(Model model) {
@@ -37,7 +43,7 @@ public class RootController {
 		model.addAttribute("totalCart", session.get("totalCart"));
 		
 		
-		List<Product> items = productDAO.findTop10BestSellingProducts();
+		List<Product> items = productService.findTop10BestSellingProducts();
 		model.addAttribute("items", items);
 		model.addAttribute("pageActive", "index");
 		return "client/index";
@@ -53,9 +59,9 @@ public class RootController {
 		if (session.get("account") == null) {
 			session.set("totalCart", 0);
 		}
-		List<Product> items = productDAO.findTop10ByOrderByCreateDateDesc();
+		List<Product> items = productService.findTop10ByOrderByCreateDateDesc();
 		model.addAttribute("items", items);
 		model.addAttribute("pageActive", "index");
-		return "/client/index";
+		return "client/index";
 	}
 }
