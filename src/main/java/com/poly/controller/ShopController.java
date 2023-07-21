@@ -68,28 +68,30 @@ public class ShopController {
 
 	@GetMapping("cart-detail")
 	public String getCartDetailView(Model model, RedirectAttributes rdAtr) {
-		if (session.get("username") == null) {
-			session.set("messageShop", "Đăng nhập trước khi xem giỏ hàng");
-			rdAtr.addAttribute("isMessageShop", true);
-			return "redirect:/account/login";
-		}
-		// ! mockup get client form session
-		Account account = sessionService.get("account");
-		model.addAttribute("pageActive", "shop");
 
-		// * get client form session
-		Cart cart = cartDAO.findByUserName(account.getUsername());
-		List<CartDetail> cartDetails = cart.getCartDetails();
-		Double totalPrice = 0.0;
-		int totalQuantity = 0;
-		for (CartDetail cartDetail : cartDetails) {
-			totalPrice += (cartDetail.getProduct().getPrice() * cartDetail.getQuantity());
-			totalQuantity += cartDetail.getQuantity();
-		}
-		sessionService.set("totalCart", totalQuantity);
-		model.addAttribute("cartDetails", cartDetails);
-		model.addAttribute("totalPrice", totalPrice);
-		model.addAttribute("cart", cart);
+		// if (session.get("username") == null) {
+		// session.set("messageShop", "Đăng nhập trước khi xem giỏ hàng");
+		// rdAtr.addAttribute("isMessageShop", true);
+		// return "redirect:/account/login";
+		// }
+		// // ! mockup get client form session
+		// Account account = sessionService.get("account");
+		// model.addAttribute("pageActive", "shop");
+
+		// // * get client form session
+		// Cart cart = cartDAO.findByUserName(account.getUsername());
+		// List<CartDetail> cartDetails = cart.getCartDetails();
+		// Double totalPrice = 0.0;
+		// int totalQuantity = 0;
+		// for (CartDetail cartDetail : cartDetails) {
+		// totalPrice += (cartDetail.getProduct().getPrice() *
+		// cartDetail.getQuantity());
+		// totalQuantity += cartDetail.getQuantity();
+		// }
+		// sessionService.set("totalCart", totalQuantity);
+		// model.addAttribute("cartDetails", cartDetails);
+		// model.addAttribute("totalPrice", totalPrice);
+		// model.addAttribute("cart", cart);
 		return "/client/cart-detail";
 	}
 
@@ -112,7 +114,7 @@ public class ShopController {
 		} else {
 			cartDetail = testCarDetail;
 			cartDetail.setQuantity(cartDetail.getQuantity() + 1);
-			
+
 		}
 		for (CartDetail cd : cart.getCartDetails()) {
 			totalQuantity += cd.getQuantity();
