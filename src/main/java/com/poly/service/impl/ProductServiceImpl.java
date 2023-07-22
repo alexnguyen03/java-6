@@ -13,11 +13,10 @@ import com.poly.repository.ProductDAO;
 import com.poly.service.ProductService;
 
 @Service
-public class ProductServiceImpl implements ProductService{
-	
+public class ProductServiceImpl implements ProductService {
+
 	@Autowired
 	ProductDAO productDAO;
-	
 
 	@Override
 	public Page<Product> getAllProducts(Pageable pageable) {
@@ -57,6 +56,16 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public Page<Product> findByPriceSortDESC(Pageable pageable) {
 		return productDAO.findByPriceSortDESC(pageable);
+	}
+
+	@Override
+	public List<Product> findAll() {
+		return productDAO.findAll();
+	}
+
+	@Override
+	public Page<Product> findAll(Pageable pageable) {
+		return productDAO.findAll(pageable);
 	}
 
 }

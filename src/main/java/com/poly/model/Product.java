@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,14 +49,18 @@ public class Product implements Serializable {
 	@NotNull(message = "{NotNull.product.quantity}")
 	@Min(value = 0, message = "{Min.product.quantity}")
 	private Integer quantity;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	@NotNull(message = "{NotNull.product.category}")
 	private Category category;
+	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<OrderDetail> orderDetails;
+	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<CartDetail> cartDetails;
+	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Review> reviews;
 
