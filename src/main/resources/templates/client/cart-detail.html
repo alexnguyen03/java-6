@@ -13,9 +13,6 @@
     <meta http-equiv="X-UA-Compatible"
           content="/ie=edge" />
     <title>Giỏ hàng</title>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js'
-            integrity='sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA=='
-            crossorigin='anonymous'></script>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet" />
@@ -63,11 +60,6 @@
           <div class="col-lg-12">
             <div class="breadcrumb__text">
               <h4>Giỏ hàng</h4>
-              <!-- <button th:attr="ng-click=@{|cart.add(${id})|}"
-                      class="btn btn-primary">add</button> -->
-              <button th:attr="ng-click=@{|cart.add(1001)|}"
-                      class="btn btn-primary">add</button>
-
               <div class="breadcrumb__links">
                 <a href="/">Trang chủ </a>
                 <a href="/shop">Sản phẩm</a>
@@ -88,6 +80,8 @@
               <table>
                 <thead>
                   <tr>
+                    <th>
+                    </th>
                     <th>Sản phẩm </th>
                     <th>Số lượng</th>
                     <th>Tổng cộng</th>
@@ -95,107 +89,99 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td colspan="3">
-                      <c:if test="${cartDetails.size() == 0}">
-                        <div class="alert alert-info text-center">
-                          Chưa có sản phẩm nào trong giỏ hàng của bạn !
-                        </div>
-                      </c:if>
+                  <tr ng-if="cart.items.length == 0">
+                    <td colspan="4">
+                      <div class="alert alert-info text-center">
+                        Chưa có sản phẩm nào trong giỏ hàng của bạn !
+                      </div>
                     </td>
                   </tr>
-                  <c:forEach var="cd"
-                             items="${cartDetails}"
-                             varStatus="loop">
-                    <tr id="cartdetail${cd.id}">
-                      <td class="product__cart__item d-flex justify-content-space-bewteen">
-                        <!-- <div class="form-check d-flex flex-column justify-content-center">
-                          <input class="form-check-input item"
-                                 type="checkbox"
-                                 value=""
-                                 id="defaultCheck1" />
-                        </div> -->
-                        <div class="product__cart__item__pic">
-                          <img src="/img/product/${cd.product.image}"
-                               alt=""
-                               width="90px"
-                               height="90px"
-                               class="" />
+                  <tr id="cartdetail"
+                      ng-repeat="item in cart.items ">
+                    <td>
+                      <input type="checkbox"
+                             class="form-control-lg"
+                             ng-model="check"
+                             ng-checked="checkAll"
+                             ng-change="cart.setSelected(item.id)">
+                    </td>
+                    <td class="product__cart__item d-flex justify-content-space-bewteen">
+                      <div class="product__cart__item__pic">
+                        <img th:src="@{/img/product/{{item.image}}}"
+                             alt=""
+                             width="90px"
+                             height="90px"
+                             class="" />
+                      </div>
+                      <div class="product__cart__item__text">
+                        <h6><a href="/shop/product-detail?id={{item.id}}"
+                             class="text-secondary">
+                            {{item.name}}
+                          </a>
+                        </h6>
+                        <h5>
+                          {{item.price | number : 2}}<sup>đ</sup>
+                        </h5>
+                      </div>
+                    </td>
+                    <td class="quantity__item">
+                      <div class=" quantity">
+                        <div class="pro-qty-2 d-flex justify-content-space-bewteen">
+                          <div style="cursor: pointer;"
+                               class=""><i ng-click="cart.minus(item.id)"
+                               class="fa fa-minus"></i></div>
+                          <input ng-disabled="check"
+                                 type="number"
+                                 ng-model="item.quantity"
+                                 min="1"
+                                 ng-change="cart.saveToLocalStorage()"
+                                 class="" />
+                          <div style="cursor: pointer;"
+                               class=""><i ng-click="cart.plus(item.id)"
+                               class="fa fa-plus"></i></div>
                         </div>
-                        <div class="product__cart__item__text">
-                          <h6><a href="/shop/product-detail?id=${cd.product.id}"
-                               class="text-secondary">
-                              ${cd.product.name}
-                            </a>
-                          </h6>
-                          <h5>
-                            <fmt:formatNumber type="number"
-                                              maxFractionDigits="3"
-                                              value="${cd.product.price} " /><sup>đ</sup>
-                          </h5>
-                        </div>
-                      </td>
-                      <td class="quantity__item">
-                        <form action="/shop/cart-detail/update"
-                              method="post">
-                          <div class="quantity">
-                            <div class="pro-qty-2">
-                              <input type="hidden"
-                                     name="cartdetailId"
-                                     value="${cd.id}">
-                              <input type="number"
-                                     min="0"
-                                     name="quantity"
-                                     value="${cd.quantity}"
-                                     class="input__quantity${cd.id}"
-                                     onchange="const price = document.querySelector('#price${cd.id}').value ;
-                                       document.querySelector('.cart__price${cd.id}').innerHTML =  parseFloat(price) * parseFloat(this.value) +'<sup>đ</sup>'"
-                                     onblur="this.form.submit()"
-                                     onload="const price1 = document.querySelector('#price${cd.id}').value ;
-                             document.querySelector('.cart__price${cd.id}').innerHTML = parseFloat(price) * parseFloat(this.value) +'<sup>đ</sup>'" />
-                            </div>
-                          </div>
-                        </form>
-                      </td>
-                      <td class="cart__price${cd.id}">
-                        <fmt:formatNumber type="number"
-                                          maxFractionDigits="3"
-                                          value=" ${cd.product.price * cd.quantity}" /><sup>đ</sup>
-                      </td>
-                      <input type="text"
-                             id="price${cd.id}"
-                             hidden
-                             value="${cd.product.price} ">
-                      </td>
-                      <td class="cart__close">
-                        <a href="/shop/cart-detail/delete/">
-                          <i class="
+                    </td>
+                    <td class="cart__price">
+                      {{item.quantity * item.price | number : 2}}<sup>đ</sup>
+                    </td>
+                    <td class="cart__close">
+                      <div style="cursor: pointer;"
+                           ng-click="cart.remove(item.id)">
+                        <i class="
                            fa
                            fa-close
                            text-danger"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  </c:forEach>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
+            <div class="btn-group-toggle mb-3"
+                 ng-if="cart.items.length != 0"
+                 data-toggle="buttons">
+              <label class="btn btn-outline-secondary ">
+                <input type="checkbox"
+                       id="checkAll"
+                       hidden
+                       class="form-control-lg"
+                       ng-click="cart.selectAll()"
+                       ng-model="checkAll"
+                       autocomplete="off"> {{cart.checkAll ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}}
+              </label>
+            </div>
             <div class="row">
-              <!-- <div class="col-lg-6 col-md-6 col-sm-2 d-flex flex-column justify-content-center">
-                <div class="form-check d-flex ">
-                  <input class="form-check-input"
-                         type="checkbox"
-                         value=""
-                         checked
-                         id="checkAll"
-                         onClick="selectAll(this)">
-                  <label for="checkAll"
-                         class="font-weight-bold">Chọn tất cả</label>
-                </div>
-              </div> -->
-              <div class="col-lg-6 col-md-6 col-sm-5">
+              <div class="col-lg-6 col-md-6 col-sm-5 ">
+
                 <div class="continue__btn">
                   <a href="/shop">Tiếp tục mua sắm</a>
+                </div>
+              </div>
+              <div ng-if="cart.items.length != 0"
+                   class="col-lg-6 col-md-6 col-sm-5">
+                <div ng-click="cart.clear()"
+                     class="btn btn-lg btn-outline-danger">
+                  Xóa hết sản phẩm
                 </div>
               </div>
             </div>
@@ -205,20 +191,21 @@
               <h4 class="text-center mb-3">Thông tin đặt hàng</h4>
               <ul>
                 <li>
-                  Tổng sản phẩm <span><%= session.getAttribute("totalCart") %> sản phẩm</span>
+                  Tổng sản phẩm <span> <i>{{cart.count}}</i> sản phẩm</span>
                 </li>
                 <li>
                   Tổng tiền <span>
-
-                    <fmt:formatNumber type="number"
-                                      maxFractionDigits="3"
-                                      value="${totalPrice}" /><sup>đ</sup>
+                    {{cart.amount | number: 2}}<sup>đ</sup>
                   </span>
                 </li>
               </ul>
-              <a href="/shop/checkout"
-                 class="btn btn-success w-100">Đặt hàng</a>
+              <a ng-click="cart.order()"
+                 th:href="@{/shop}"
+                 ng-if="cart.selectedItems.length != 0"
+                 class="btn btn-success w-100">Đặt hàng </a>
             </div>
+            <div ng-if="cart.selectedItems.length == 0"
+                 class="alert alert-warning text-center  w-100">Vui lòng chọn sản phẩm để đặt hàng</div>
           </div>
         </div>
       </div>
@@ -331,7 +318,6 @@
     <script src="/js/owl.carousel.min.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/cart.js"></script>
-
   </body>
 
 </html>
