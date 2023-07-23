@@ -2,6 +2,7 @@ const app = angular.module('app', []);
 app.controller('cartCtrl', function ($scope, $http) {
 	$scope.cart = {
 		items: [],
+		currentPath: '',
 		checkAll: false,
 		selectedItems: [],
 		plus(id) {
@@ -30,6 +31,17 @@ app.controller('cartCtrl', function ($scope, $http) {
 					this.saveToLocalStorage();
 				});
 			}
+		},
+		//set active page
+		get path() {
+			let path = '';
+			if (window.location.href.includes('shop')) {
+				path = 'shop';
+			}
+			if (window.location.href.includes('cart-detail')) {
+				path = 'order';
+			}
+			return path;
 		},
 		setSelected(id) {
 			let itemFound = this.items.find((item) => item.id == id);
@@ -69,6 +81,9 @@ app.controller('cartCtrl', function ($scope, $http) {
 		},
 		get count() {
 			return this.selectedItems.map((item) => item.quantity).reduce((total, quantity) => (total += quantity), 0);
+		},
+		get countTotal() {
+			return this.items.map((item) => item.quantity).reduce((total, quantity) => (total += quantity), 0);
 		},
 		get amount() {
 			return this.selectedItems.map((item) => item.quantity * item.price).reduce((total, quantity) => (total += quantity), 0);
