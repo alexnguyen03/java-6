@@ -29,8 +29,6 @@ import com.poly.repository.CartDetailDAO;
 import com.poly.repository.CategoryDAO;
 import com.poly.repository.OrderDetailDAO;
 import com.poly.repository.ProductDAO;
-import com.poly.service.CategoryService;
-import com.poly.service.ProductService;
 import com.poly.service.SessionService;
 
 @Controller
@@ -47,9 +45,9 @@ public class ShopController {
 	@Autowired
 	OrderDetailDAO dao;
 	@Autowired
-	ProductService productService;
+	ProductDAO productDAO;
 	@Autowired
-	CategoryService categoryService;
+	CategoryDAO categoryDAO;
 	@Autowired
 	SessionService session;
 
@@ -89,11 +87,11 @@ public class ShopController {
 		// model.addAttribute("isAdmin", account.getAdmin());
 		// }
 		Pageable pageable = PageRequest.of(p.orElse(0), 6);
-		Page<Product> page = productService.getAllProducts(pageable);
+		Page<Product> page = productDAO.findByAvailable(true, pageable);
 		model.addAttribute("page", page);
 		model.addAttribute("pageActive", "shop");
 		// Category
-		List<Category> categoryLst = categoryService.getAllCategory();
+		List<Category> categoryLst = categoryDAO.findAll();
 		model.addAttribute("categoryLst", categoryLst);
 		return "/client/shop";
 	}
@@ -243,11 +241,10 @@ public class ShopController {
 		String kwords = kw.orElse(sessionService.get("keywords"));
 		sessionService.set("keywords", kwords);
 		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = productService.findByName("%" + kwords + "%", pageable);
+		Page<Product> page = productDAO.findByNameLike("%" + kwords + "%", pageable);
 		model.addAttribute("page", page);
-		model.addAttribute("keywords", sessionService.get("keywords"));
 		// Category
-		List<Category> categoryLst = categoryService.getAllCategory();
+		List<Category> categoryLst = categoryDAO.findAll();
 		model.addAttribute("categoryLst", categoryLst);
 		// Page Active
 		model.addAttribute("pageActive", "shop");
@@ -258,10 +255,11 @@ public class ShopController {
 	public String sortByCategory(@ModelAttribute("item") Category item, @PathVariable("name") String name,
 			@RequestParam("p") Optional<Integer> p, Model model) {
 		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = productService.findByCategoryName("%" + name + "%", pageable);
+		Page<Product> page = productDAO.findByCategoryNameLike("%" + name + "%", pageable);
+		System.out.println(page);
 		model.addAttribute("page", page);
 		// Category
-		List<Category> categoryLst = categoryService.getAllCategory();
+		List<Category> categoryLst = categoryDAO.findAll();
 		model.addAttribute("categoryLst", categoryLst);
 		// Page Active
 		model.addAttribute("pageActive", "shop");
@@ -272,19 +270,20 @@ public class ShopController {
 	public String sortByPrice(Model model, @RequestParam("product-header-sort") String sortValue,
 			@RequestParam("p") Optional<Integer> p) {
 		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = productService.findByPriceSortASC(pageable);
+		Page<Product> page = productDAO.findByPriceSortASC(pageable);
 		if (sortValue.equalsIgnoreCase("ASC")) {
 			System.out.println("ASC");
-			page = productService.findByPriceSortASC(pageable);
-			model.addAttribute("sortValue", true);
+			page = productDAO.findByPriceSortASC(pageable);
 		} else if (sortValue.equalsIgnoreCase("DESC")) {
 			System.out.println("DESC");
-			page = productService.findByPriceSortDESC(pageable);
-			model.addAttribute("sortValue", false);
+			page = productDAO.findByPriceSortDESC(pageable);
+		}
+		for (Product product : page) {
+			System.out.println(product.getName());
 		}
 		model.addAttribute("page", page);
 		// Category
-		List<Category> categoryLst = categoryService.getAllCategory();
+		List<Category> categoryLst = categoryDAO.findAll();
 		model.addAttribute("categoryLst", categoryLst);
 		// Page Active
 		model.addAttribute("pageActive", "shop");
@@ -295,10 +294,10 @@ public class ShopController {
 	public String searchProductByPrice(Model model, @RequestParam("startPrice") Double startPrice,
 			@RequestParam("endPrice") Double endPrice, @RequestParam("p") Optional<Integer> p) {
 		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = productService.findByPrice(startPrice, endPrice, pageable);
+		Page<Product> page = productDAO.findByPriceBetween(startPrice, endPrice, pageable);
 		model.addAttribute("page", page);
 		// Add category list to model for display
-		List<Category> categoryLst = categoryService.getAllCategory();
+		List<Category> categoryLst = categoryDAO.findAll();
 		model.addAttribute("categoryLst", categoryLst);
 		// Page Active
 		model.addAttribute("pageActive", "shop");
@@ -312,10 +311,10 @@ public class ShopController {
 		Product item = new Product();
 		model.addAttribute("item", item);
 		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = productService.findByName("%" + kw + "%", pageable);
+		Page<Product> page = productDAO.findByNameLike("%" + kw + "%", pageable);
 		model.addAttribute("page", page);
 		// Category
-		List<Category> categoryLst = categoryService.getAllCategory();
+		List<Category> categoryLst = categoryDAO.findAll();
 		model.addAttribute("categoryLst", categoryLst);
 		// Page Active
 		model.addAttribute("pageActive", "shop");

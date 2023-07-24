@@ -20,6 +20,8 @@ public interface ProductService {
 
 	Page<Product> findByCategoryName(String name, Pageable pageable);
 
+	List<Product> findByProductCategogy(String categoryID, Integer productID);
+
 	Page<Product> findByPrice(double minPrice, double maxPrice, Pageable pageable);
 
 	Page<Product> findByName(String name, Pageable pageable);
@@ -27,4 +29,8 @@ public interface ProductService {
 	Page<Product> findByPriceSortASC(Pageable pageable);
 
 	Page<Product> findByPriceSortDESC(Pageable pageable);
+
+	List<Product> findTop10BestSellingProducts();
+
+	List<Product> findTop10ByOrderByCreateDateDesc();
 }

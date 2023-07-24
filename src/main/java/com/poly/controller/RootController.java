@@ -32,10 +32,6 @@ public class RootController {
 		if (session.get("account") == null) {
 			session.set("totalCart", 0);
 		}
-
-		// <%=session.getAttribute("totalCart")%>
-		model.addAttribute("totalCart", session.get("totalCart"));
-
 		List<Product> items = productDAO.findTop10BestSellingProducts();
 		model.addAttribute("items", items);
 		model.addAttribute("pageActive", "index");

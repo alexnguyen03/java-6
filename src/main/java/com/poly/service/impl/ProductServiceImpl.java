@@ -39,6 +39,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public List<Product> findByProductCategogy(String categoryID, Integer productID) {
+		return productDAO.findByProductCategogy(categoryID, productID);
+	}
+
+	@Override
 	public Page<Product> findByPrice(double minPrice, double maxPrice, Pageable pageable) {
 		return productDAO.findByPriceBetween(minPrice, maxPrice, pageable);
 	}
@@ -56,6 +61,16 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Page<Product> findByPriceSortDESC(Pageable pageable) {
 		return productDAO.findByPriceSortDESC(pageable);
+	}
+
+	@Override
+	public List<Product> findTop10BestSellingProducts() {
+		return productDAO.findTop10BestSellingProducts();
+	}
+
+	@Override
+	public List<Product> findTop10ByOrderByCreateDateDesc() {
+		return productDAO.findTop10ByOrderByCreateDateDesc();
 	}
 
 	@Override

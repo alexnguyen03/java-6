@@ -38,6 +38,7 @@ public class Account implements Serializable {
 
 	private String photo;
 	private Boolean activated;
+	private Boolean admin;
 	@OneToMany(mappedBy = "account")
 	private List<Order> orders;
 	@OneToMany(mappedBy = "account")

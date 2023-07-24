@@ -31,8 +31,8 @@ import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
 import com.poly.repository.ProductDAO;
 import com.poly.service.ParamService;
+import com.poly.service.PhoneNumberValidator;
 import com.poly.service.SessionService;
-import com.poly.utils.PhoneNumberValidator;
 
 @Controller
 @RequestMapping("shop/checkout")

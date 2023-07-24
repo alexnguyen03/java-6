@@ -19,6 +19,7 @@ import com.poly.repository.CartDAO;
 import com.poly.repository.CartDetailDAO;
 import com.poly.repository.ProductDAO;
 import com.poly.repository.ReviewDAO;
+import com.poly.service.ProductService;
 import com.poly.service.SessionService;
 
 @Controller
@@ -32,11 +33,14 @@ public class ShopDetailController {
 	@Autowired
 	CartDAO cartDAO;
 
+	@Autowired
+	ProductService productService;
+
 	@GetMapping("")
 	public String index(Model model, @RequestParam("id") Integer productId) {
-		Product product = productDao.findById(productId).get();
+		Product product = productService.findById(productId);
 		List<Review> reviews = product.getReviews();
-		List<Product> product_similars = productDao.findByProductCategogy(product.getCategory().getId(),
+		List<Product> product_similars = productService.findByProductCategogy(product.getCategory().getId(),
 				product.getId());
 		float sum_Rating = 0;
 		
@@ -53,6 +57,6 @@ public class ShopDetailController {
 		model.addAttribute("product_similars", product_similars);
 		model.addAttribute("pageActive", "shop");
 
-		return "/client/shop-details";
+		return "client/shop-details";
 	}
 }
