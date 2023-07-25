@@ -47,60 +47,58 @@
 
   <body>
     <!-- Page Preloder -->
-    <div id="preloder">
+    <!-- <div id="preloder">
       <div class="loader"></div>
-    </div>
+    </div> -->
 
-    <!-- Header -->
-    <header th:insert="~{/client/header::header}"></header>
-    <!-- Header Section End -->
-
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-option" style="margin-bottom: 100px">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="breadcrumb__text">
-              <h4>Sản phẩm</h4>
-              <div class="breadcrumb__links">
-                <a href="/">Trang chủ</a> <a href="/shop">Sản phẩm</a>
-                <span>Chi tiết sản phẩm</span>
+    <!-- Start Main Concept -->
+    <main>
+      <!-- Breadcrumb Section Begin -->
+      <section class="breadcrumb-option" style="margin-bottom: 100px">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="breadcrumb__text">
+                <h4>Sản phẩm</h4>
+                <div class="breadcrumb__links">
+                  <a href="/">Trang chủ</a> <a href="/shop">Sản phẩm</a>
+                  <span>Chi tiết sản phẩm</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+      </section>
+      <!-- Breadcrumb Section End -->
 
-    <!-- Main concept start-->
-    <section class="shop-details">
-      <div class="container bg-white">
-        <div class="row">
-          <!-- Left image product -->
-          <div
-            class="col-lg-4 d-flex justify-content-center align-items-center"
-            style="
-              background-color: #ebebeb;
-              border-radius: 15px;
-              height: 350px;
-            "
-          >
-            <img
-              th:src="@{/img/product/{image}(image=${product.image})}"
-              class="card-img-top"
-            />
-          </div>
-          <!-- Right info product -->
-          <div class="col-lg-7">
-            <!-- Name -->
-            <h4
-              class="name-product d-flex font-weight-bold justify-content-start mb-3 text-truncate"
-              th:text="${product.name}"
-            ></h4>
-            <!-- Rating -->
-            <div class="rating d-flex mb-2">
-              <!-- <c:forEach begin="1" end="5">
+      <!-- Main concept start-->
+      <section class="shop-details">
+        <div class="container bg-white">
+          <div class="row">
+            <!-- Left image product -->
+            <div
+              class="col-lg-4 d-flex justify-content-center align-items-center"
+              style="
+                background-color: #ebebeb;
+                border-radius: 15px;
+                height: 350px;
+              "
+            >
+              <img
+                th:src="@{/img/product/{image}(image=${product.image})}"
+                class="card-img-top"
+              />
+            </div>
+            <!-- Right info product -->
+            <div class="col-lg-7">
+              <!-- Name -->
+              <h4
+                class="name-product d-flex font-weight-bold justify-content-start mb-3 text-truncate"
+                th:text="${product.name}"
+              ></h4>
+              <!-- Rating -->
+              <div class="rating d-flex mb-2">
+                <!-- <c:forEach begin="1" end="5">
                 <c:choose>
                   <c:when test="${count_rating >= 1}">
                     <i
@@ -117,334 +115,338 @@
                   </c:otherwise>
                 </c:choose>
               </c:forEach> -->
-              <th:block th:each="i: ${#numbers.sequence(1, 5)}">
-                <th:block th:if="${count_rating >= i}">
-                  <i
-                    class="fa fa-star text-warning"
-                    style="font-size: 20px"
-                  ></i>
-                  <th:block
-                    th:with="count_rating=${count_rating - 1}"
-                  ></th:block>
+                <th:block th:each="i: ${#numbers.sequence(1, 5)}">
+                  <th:block th:if="${count_rating >= i}">
+                    <i
+                      class="fa fa-star text-warning"
+                      style="font-size: 20px"
+                    ></i>
+                    <th:block
+                      th:with="count_rating=${count_rating - 1}"
+                    ></th:block>
+                  </th:block>
+                  <th:block th:unless="${count_rating >= i}">
+                    <i
+                      class="fa fa-star-o text-warning"
+                      style="font-size: 20px"
+                    ></i>
+                  </th:block>
                 </th:block>
-                <th:block th:unless="${count_rating >= i}">
-                  <i
-                    class="fa fa-star-o text-warning"
-                    style="font-size: 20px"
-                  ></i>
-                </th:block>
-              </th:block>
-              <!-- <span> - [[${ reviews.size()} ]] đánh giá</span> -->
-            </div>
-            <br />
-            <h5 class="my-2 d-flex justify-content-start">
-              <!-- <span
+                <!-- <span> - [[${ reviews.size()} ]] đánh giá</span> -->
+              </div>
+              <br />
+              <h5 class="my-2 d-flex justify-content-start">
+                <!-- <span
                 class="font-weight-bold"
                 th:text="'Tình trạng: ' + ${product.available?'Còn hàng':'Hết hàng'}"
               ></span>
               <span class="mx-3">|</span> -->
-              <strong
-                >Danh mục:
-                <a
-                  class="text-secondary"
-                  th:href="@{'/shop/sort-by-category/' + ${product.category.name}}"
-                  >[[${product.category.name}]]</a
-                ></strong
-              >
-            </h5>
-            <strong class="d-flex justify-content-start">MÔ TẢ:</strong>
-            <p class="details text-justify">
-              Là chiếc tai nghe chống ồn mới nhất trên thị trường của hãng âm
-              thanh Đan Mạch. Được trang bị nhiều công nghệ tiên tiến giúp cho
-              chiếc tai nghe có được một khả năng chơi nhạc và chống ồn vô cùng
-              ấn tượng, hứa hẹn sẽ là đối thủ nặng ký của những chiếc tai nghe
-              chống ồn đầu bảng hiện tại.
-            </p>
-            <!-- 					<h5 class="float-left mr-4 mt-2">Giá:</h5> -->
-            <!-- 					<h3 class="text-danger"> -->
-            <!-- 												<fmt:formatNumber value="${ product.price }" type="currency" -->
-            <!-- 													currencySymbol="" /> -->
-            <!-- 						₫ -->
-            <!-- 					</h3> -->
-            <h5 th:inline="text">
-              Giá:
-              <span class="font-weight-bold" style="font-size: 1.5rem"
-                >[[${#numbers.formatDecimal(product.price, 0, 'COMMA', 2,
-                'POINT')}]]</span
-              >
-              <span class="text-danger" style="text-decoration: underline"
-                >đ</span
-              >
-            </h5>
+                <strong
+                  >Danh mục:
+                  <a
+                    class="text-secondary"
+                    th:href="@{'/shop/sort-by-category/' + ${product.category.name}}"
+                    >[[${product.category.name}]]</a
+                  ></strong
+                >
+              </h5>
+              <strong class="d-flex justify-content-start">MÔ TẢ:</strong>
+              <p class="details text-justify">
+                Là chiếc tai nghe chống ồn mới nhất trên thị trường của hãng âm
+                thanh Đan Mạch. Được trang bị nhiều công nghệ tiên tiến giúp cho
+                chiếc tai nghe có được một khả năng chơi nhạc và chống ồn vô
+                cùng ấn tượng, hứa hẹn sẽ là đối thủ nặng ký của những chiếc tai
+                nghe chống ồn đầu bảng hiện tại.
+              </p>
+              <!-- 					<h5 class="float-left mr-4 mt-2">Giá:</h5> -->
+              <!-- 					<h3 class="text-danger"> -->
+              <!-- 												<fmt:formatNumber value="${ product.price }" type="currency" -->
+              <!-- 													currencySymbol="" /> -->
+              <!-- 						₫ -->
+              <!-- 					</h3> -->
+              <h5 th:inline="text">
+                Giá:
+                <span class="font-weight-bold" style="font-size: 1.5rem"
+                  >[[${#numbers.formatDecimal(product.price, 0, 'COMMA', 2,
+                  'POINT')}]]</span
+                >
+                <span class="text-danger" style="text-decoration: underline"
+                  >đ</span
+                >
+              </h5>
 
-            <!-- quantity form  -->
-            <form th:action="@{/shop/cart-detail/add}" method="post">
-              <div class="container p-0 mb-3 float-left">
-                <div class="row mt-3">
-                  <div class="col-lg-2 mt-2">
-                    <h5>Số lượng:</h5>
-                  </div>
-                  <div class="col-lg-3">
-                    <div class="input-group mb-3" style="cursor: pointer">
-                      <i
-                        class="fa fa-minus border p-2 text-dark decrease"
-                        aria-hidden="true"
-                      ></i>
-                      <input
-                        type="text"
-                        class="form-control text-center"
-                        th:value="1"
-                        id="quantity"
-                        name="quantity"
-                      />
-                      <i
-                        class="fa fa-plus text-dark border p-2 increase"
-                        aria-hidden="true"
-                      ></i>
+              <!-- quantity form  -->
+              <form th:action="@{/shop/cart-detail/add}" method="post">
+                <div class="container p-0 mb-3 float-left">
+                  <div class="row mt-3">
+                    <div class="col-lg-2 mt-2">
+                      <h5>Số lượng:</h5>
                     </div>
-                  </div>
-                  <div
-                    th:text="${product.quantity} + ' Sản phẩm có sẵn'"
-                    class="col-lg-2 mt-2 text-secondary"
-                    style="min-width: 200px"
-                  ></div>
-                </div>
-                <input hidden="" name="productId" th:value="${ product.id }" />
-                <input
-                  hidden=""
-                  id="maxQuantity"
-                  th:value="${ product.quantity }"
-                />
-              </div>
-              <button
-                type="submit"
-                class="primary-btn font-weight-bold float-right"
-              >
-                Thêm vào giỏ hàng
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Main concept end-->
-
-    <!-- Rating ception start-->
-    <div class="evaluate-wrapper my-5">
-      <div class="container p-0">
-        <div class="row">
-          <!-- Review title-->
-          <div class="col-lg-12 d-flex">
-            <h4 class="font-weight-bold">ĐÁNH GIÁ SẢN PHẨM</h4>
-            <span class="mx-3">|</span>
-            <h6 class="mt-1 text-secondary">[[${ reviews.size()}]] đánh giá</h6>
-          </div>
-          <div class="col-lg-12 mb-3">
-            <hr />
-          </div>
-          <!-- Review Form -->
-          <div class="col-lg-12">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-12 bg-light mb-3">
-                  <form th:action="@{/admin/review/create}" method="post">
-                    <div class="rating-wrap">
-                      <!-- <h5 class="mt-2">Đánh giá sao ???</h5> -->
-                      <fieldset class="rating mt-2">
+                    <div class="col-lg-3">
+                      <div class="input-group mb-3" style="cursor: pointer">
+                        <i
+                          class="fa fa-minus border p-2 text-dark decrease"
+                          aria-hidden="true"
+                        ></i>
                         <input
-                          type="radio"
-                          id="star5"
-                          name="ratting"
-                          th:value="5"
-                        /><label
-                          for="star5"
-                          class="full"
-                          title="Awesome"
-                        ></label>
-                        <input
-                          type="radio"
-                          id="star4"
-                          name="ratting"
-                          th:value="4"
-                        /><label for="star4" class="full"></label>
-                        <input
-                          type="radio"
-                          id="star3"
-                          name="ratting"
-                          th:value="3"
-                        /><label for="star3" class="full"></label>
-                        <input
-                          type="radio"
-                          id="star2"
-                          name="ratting"
-                          th:value="2"
-                        /><label for="star2" class="full"></label>
-                        <input
-                          type="radio"
-                          id="star1"
-                          name="ratting"
+                          type="text"
+                          class="form-control text-center"
                           th:value="1"
-                        /><label for="star1" class="full"></label>
-                      </fieldset>
-                      <input
-                        id="rating-value"
-                        class="mt-3"
-                        name="rating"
-                        hidden
-                        th:value="0"
-                        readonly
-                      />
-                      <input
-                        name="productId"
-                        hidden
-                        th:value="${ product.id }"
-                      />
+                          id="quantity"
+                          name="quantity"
+                        />
+                        <i
+                          class="fa fa-plus text-dark border p-2 increase"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
                     </div>
-                    <br />
-                    <br />
-                    <div class="mb-3 mt-3">
-                      <label for="evaluate" class="form-label fw-bold"
-                        >Viết đánh giá</label
-                      >
-                      <textarea
-                        class="form-control"
-                        id="evaluate"
-                        rows="3"
-                        name="textReview"
-                      ></textarea>
-                    </div>
-                    <button type="submit" class="primary-btn">
-                      GỬI ĐÁNH GIÁ
-                    </button>
-                  </form>
-                </div>
-                <div class="col-lg-12 mb-3">
-                  <hr />
-                </div>
-                <!-- 							<c:forEach var="review" items="${ reviews }"> -->
-                <!-- 								<div class="col-lg-1 d-flex justify-content-center"> -->
-                <!-- 									<img -->
-                <!-- 										src="${pageContext.request.contextPath }/img/user-management/${ review.account.photo }" -->
-                <!-- 										class="rounded-circle border" width="80px" height="70px" /> -->
-                <!-- 								</div> -->
-                <!-- 								<div class="col-lg-11 mb-3"> -->
-                <!-- 									<strong>${ review.account.fullname }</strong> <span> <fmt:formatDate -->
-                <!-- 											type="both" dateStyle="short" timeStyle="short" -->
-                <!-- 											value="${ review.dateReview}" pattern="dd-MM-yyyy hh:mm:ss" /> -->
-                <!-- 									</span><br /> -->
-                <!-- 									<c:forEach begin="1" end="${ review.rating }"> -->
-                <!-- 										<i class="fa fa-star text-warning"></i> -->
-                <!-- 									</c:forEach> -->
-                <!-- 									<p class="fw-light">${ review.textReview }</p> -->
-                <!-- 								</div> -->
-                <!-- 							</c:forEach> -->
-
-                <!-- Reviewed section -->
-                <th:block th:each="review : ${reviews}">
-                  <div class="col-lg-1 d-flex justify-content-center">
-                    <img
-                      th:src="@{'/img/user-management/'+${review.account.photo}}"
-                      class="rounded-circle border"
-                      th:alt="${ review.account.fullname }"
-                      style="width: 80px; height: 80px"
-                    />
+                    <div
+                      th:text="${product.quantity} + ' Sản phẩm có sẵn'"
+                      class="col-lg-2 mt-2 text-secondary"
+                      style="min-width: 200px"
+                    ></div>
                   </div>
-                  <div class="col-lg-11 mb-3">
-                    <strong th:text="${ review.account.fullname }"></strong>
-                    <span
-                      th:text="${#dates.format(review.dateReview, 'dd/MM/yyyy')}"
-                    >
-                    </span
-                    ><br />
-                    <th:block
-                      th:each="i : ${#numbers.sequence(1, review.rating)}"
-                    >
-                      <i class="fa fa-star text-warning"></i>
-                    </th:block>
-                    <p class="fw-light" th:text="${ review.textReview }"></p>
-                  </div>
-                </th:block>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Rating ception end-->
-
-    <!-- Related Section Begin -->
-    <section class="related spad">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h3 class="related-title">Sản Phẩm Cùng Loại</h3>
-          </div>
-        </div>
-        <div class="row">
-          <!-- 				<c:forEach var="product_similar" items="${ product_similars }"> -->
-          <!-- 					Item -->
-          <!-- 					<div class="col-lg-4 col-md-6 col-sm-6"> -->
-          <!-- 						<div class="product__item sale"> -->
-          <!-- 							<div class="product__item__pic"> -->
-          <!-- 								<a href="/shop/product-detail?id=${ product_similar.id }"> <img -->
-          <!-- 									src="${pageContext.request.contextPath }/img/product/${product_similar.image}" -->
-          <!-- 									class="img-fluid" /></a> -->
-          <!-- 							</div> -->
-          <!-- 							<div class="product__item__text"> -->
-          <!-- 								<h6>${ product_similar.name }</h6> -->
-          <!-- 								<a href="/shop/cart-detail/add/${product_similar.id}" -->
-          <!-- 									class="add-cart">+ Thêm vào giỏ hàng</a> -->
-          <!-- 																<div class="rating mr-3"> -->
-          <!-- 																	<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i -->
-          <!-- 																		class="fa fa-star"></i> <i class="fa fa-star"></i> <i -->
-          <!-- 																		class="fa fa-star-o"></i> -->
-          <!-- 																</div> -->
-          <!-- 								<h5> -->
-          <!-- 									${ product_similar.price } <span class="text-danger">đ</span> -->
-          <!-- 								</h5> -->
-          <!-- 							</div> -->
-          <!-- 						</div> -->
-          <!-- 					</div> -->
-          <!-- 				</c:forEach> -->
-
-          <!-- Item -->
-          <div
-            class="col-lg-4 col-md-6 col-sm-6"
-            th:each="product_similar : ${product_similars}"
-          >
-            <div class="product__item sale">
-              <div class="product__item__pic">
-                <a
-                  th:href="@{/shop/product-detail?id={id}(id=${ product_similar.id })}"
-                >
-                  <img
-                    th:src="@{/img/product/{image}(image = ${product_similar.image})}"
-                    class="img-fluid"
+                  <input
+                    hidden=""
+                    name="productId"
+                    th:value="${ product.id }"
                   />
-                </a>
-              </div>
-              <div class="product__item__text">
-                <h6 th:text="${ product_similar.name }"></h6>
-                <a
-                  th:href="@{/shop/cart-detail/add/{id}(id=${product_similar.id})}"
-                  class="add-cart"
-                  >+ Thêm vào giỏ hàng</a
+                  <input
+                    hidden=""
+                    id="maxQuantity"
+                    th:value="${ product.quantity }"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="primary-btn font-weight-bold float-right"
                 >
-                <h5>
-                  [[${#numbers.formatDecimal(product_similar.price, 0, 'COMMA',
-                  2, 'POINT')}]] <span class="text-danger">đ</span>
-                </h5>
+                  Thêm vào giỏ hàng
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Main concept end-->
+
+      <!-- Rating ception start-->
+      <div class="evaluate-wrapper my-5">
+        <div class="container p-0">
+          <div class="row">
+            <!-- Review title-->
+            <div class="col-lg-12 d-flex">
+              <h4 class="font-weight-bold">ĐÁNH GIÁ SẢN PHẨM</h4>
+              <span class="mx-3">|</span>
+              <h6 class="mt-1 text-secondary">
+                [[${ reviews.size()}]] đánh giá
+              </h6>
+            </div>
+            <div class="col-lg-12 mb-3">
+              <hr />
+            </div>
+            <!-- Review Form -->
+            <div class="col-lg-12">
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-12 bg-light mb-3">
+                    <form th:action="@{/admin/review/create}" method="post">
+                      <div class="rating-wrap">
+                        <!-- <h5 class="mt-2">Đánh giá sao ???</h5> -->
+                        <fieldset class="rating mt-2">
+                          <input
+                            type="radio"
+                            id="star5"
+                            name="ratting"
+                            th:value="5"
+                          /><label
+                            for="star5"
+                            class="full"
+                            title="Awesome"
+                          ></label>
+                          <input
+                            type="radio"
+                            id="star4"
+                            name="ratting"
+                            th:value="4"
+                          /><label for="star4" class="full"></label>
+                          <input
+                            type="radio"
+                            id="star3"
+                            name="ratting"
+                            th:value="3"
+                          /><label for="star3" class="full"></label>
+                          <input
+                            type="radio"
+                            id="star2"
+                            name="ratting"
+                            th:value="2"
+                          /><label for="star2" class="full"></label>
+                          <input
+                            type="radio"
+                            id="star1"
+                            name="ratting"
+                            th:value="1"
+                          /><label for="star1" class="full"></label>
+                        </fieldset>
+                        <input
+                          id="rating-value"
+                          class="mt-3"
+                          name="rating"
+                          hidden
+                          th:value="0"
+                          readonly
+                        />
+                        <input
+                          name="productId"
+                          hidden
+                          th:value="${ product.id }"
+                        />
+                      </div>
+                      <br />
+                      <br />
+                      <div class="mb-3 mt-3">
+                        <label for="evaluate" class="form-label fw-bold"
+                          >Viết đánh giá</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="evaluate"
+                          rows="3"
+                          name="textReview"
+                        ></textarea>
+                      </div>
+                      <button type="submit" class="primary-btn">
+                        GỬI ĐÁNH GIÁ
+                      </button>
+                    </form>
+                  </div>
+                  <div class="col-lg-12 mb-3">
+                    <hr />
+                  </div>
+                  <!-- 							<c:forEach var="review" items="${ reviews }"> -->
+                  <!-- 								<div class="col-lg-1 d-flex justify-content-center"> -->
+                  <!-- 									<img -->
+                  <!-- 										src="${pageContext.request.contextPath }/img/user-management/${ review.account.photo }" -->
+                  <!-- 										class="rounded-circle border" width="80px" height="70px" /> -->
+                  <!-- 								</div> -->
+                  <!-- 								<div class="col-lg-11 mb-3"> -->
+                  <!-- 									<strong>${ review.account.fullname }</strong> <span> <fmt:formatDate -->
+                  <!-- 											type="both" dateStyle="short" timeStyle="short" -->
+                  <!-- 											value="${ review.dateReview}" pattern="dd-MM-yyyy hh:mm:ss" /> -->
+                  <!-- 									</span><br /> -->
+                  <!-- 									<c:forEach begin="1" end="${ review.rating }"> -->
+                  <!-- 										<i class="fa fa-star text-warning"></i> -->
+                  <!-- 									</c:forEach> -->
+                  <!-- 									<p class="fw-light">${ review.textReview }</p> -->
+                  <!-- 								</div> -->
+                  <!-- 							</c:forEach> -->
+
+                  <!-- Reviewed section -->
+                  <th:block th:each="review : ${reviews}">
+                    <div class="col-lg-1 d-flex justify-content-center">
+                      <img
+                        th:src="@{'/img/user-management/'+${review.account.photo}}"
+                        class="rounded-circle border"
+                        th:alt="${ review.account.fullname }"
+                        style="width: 80px; height: 80px"
+                      />
+                    </div>
+                    <div class="col-lg-11 mb-3">
+                      <strong th:text="${ review.account.fullname }"></strong>
+                      <span
+                        th:text="${#dates.format(review.dateReview, 'dd/MM/yyyy')}"
+                      >
+                      </span
+                      ><br />
+                      <th:block
+                        th:each="i : ${#numbers.sequence(1, review.rating)}"
+                      >
+                        <i class="fa fa-star text-warning"></i>
+                      </th:block>
+                      <p class="fw-light" th:text="${ review.textReview }"></p>
+                    </div>
+                  </th:block>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-    <!-- Related Section end -->
+      <!-- Rating ception end-->
 
-    <!-- Footer Section Begin -->
-    <footer th:replace="~{/client/footer::footer}"></footer>
-    <!-- Footer end -->
+      <!-- Related Section Begin -->
+      <section class="related spad">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <h3 class="related-title">Sản Phẩm Cùng Loại</h3>
+            </div>
+          </div>
+          <div class="row">
+            <!-- 				<c:forEach var="product_similar" items="${ product_similars }"> -->
+            <!-- 					Item -->
+            <!-- 					<div class="col-lg-4 col-md-6 col-sm-6"> -->
+            <!-- 						<div class="product__item sale"> -->
+            <!-- 							<div class="product__item__pic"> -->
+            <!-- 								<a href="/shop/product-detail?id=${ product_similar.id }"> <img -->
+            <!-- 									src="${pageContext.request.contextPath }/img/product/${product_similar.image}" -->
+            <!-- 									class="img-fluid" /></a> -->
+            <!-- 							</div> -->
+            <!-- 							<div class="product__item__text"> -->
+            <!-- 								<h6>${ product_similar.name }</h6> -->
+            <!-- 								<a href="/shop/cart-detail/add/${product_similar.id}" -->
+            <!-- 									class="add-cart">+ Thêm vào giỏ hàng</a> -->
+            <!-- 																<div class="rating mr-3"> -->
+            <!-- 																	<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i -->
+            <!-- 																		class="fa fa-star"></i> <i class="fa fa-star"></i> <i -->
+            <!-- 																		class="fa fa-star-o"></i> -->
+            <!-- 																</div> -->
+            <!-- 								<h5> -->
+            <!-- 									${ product_similar.price } <span class="text-danger">đ</span> -->
+            <!-- 								</h5> -->
+            <!-- 							</div> -->
+            <!-- 						</div> -->
+            <!-- 					</div> -->
+            <!-- 				</c:forEach> -->
+
+            <!-- Item -->
+            <div
+              class="col-lg-4 col-md-6 col-sm-6"
+              th:each="product_similar : ${product_similars}"
+            >
+              <div class="product__item sale">
+                <div class="product__item__pic">
+                  <a
+                    th:href="@{/shop/product-detail?id={id}(id=${ product_similar.id })}"
+                  >
+                    <img
+                      th:src="@{/img/product/{image}(image = ${product_similar.image})}"
+                      class="img-fluid"
+                    />
+                  </a>
+                </div>
+                <div class="product__item__text">
+                  <h6 th:text="${ product_similar.name }"></h6>
+                  <a
+                    th:href="@{/shop/cart-detail/add/{id}(id=${product_similar.id})}"
+                    class="add-cart"
+                    >+ Thêm vào giỏ hàng</a
+                  >
+                  <h5>
+                    [[${#numbers.formatDecimal(product_similar.price, 0,
+                    'COMMA', 2, 'POINT')}]] <span class="text-danger">đ</span>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Related Section end -->
+    </main>
+    <!-- End Main Concept -->
 
     <!-- Search Begin -->
     <div class="search-model">
