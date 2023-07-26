@@ -23,7 +23,7 @@ import lombok.Data;
 public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_order")
+	@Column(name = "id")
 	Long id;
 	String address;
 	@Column(name = "user_phone")

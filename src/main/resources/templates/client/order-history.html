@@ -11,15 +11,22 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
 	rel="stylesheet" />
+
 <!-- Css Styles -->
-<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="/css/elegant-icons.css" type="text/css" />
-<link rel="stylesheet" href="/css/magnific-popup.css" type="text/css" />
-<link rel="stylesheet" href="/css/nice-select.css" type="text/css" />
-<link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css" />
-<link rel="stylesheet" href="/css/slicknav.min.css" type="text/css" />
-<link rel="stylesheet" href="/css/style.css" type="text/css" />
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/elegant-icons.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/magnific-popup.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/nice-select.css}" type="text/css" />
+<link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/slicknav.min.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
 </head>
 
 <body>
@@ -32,363 +39,369 @@
 	<!-- 	<header th:insert="~{/client/header::header}"></header> -->
 	<!-- Header Section End -->
 
-	<!-- Shop Details Section Begin -->
-	<section class="breadcrumb-option">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="breadcrumb__text">
-						<h4>Lịch sử đơn hàng</h4>
-						<div class="breadcrumb__links">
-							<a href="/">Trang chủ</a> <a href="/shop">Sản phẩm</a> <span>Lịch
-								sử đơn hàng</span>
+	<!-- main concept -->
+	<main>
+		<!-- Shop Details Section Begin -->
+		<section class="breadcrumb-option">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="breadcrumb__text">
+							<h4>Lịch sử đơn hàng</h4>
+							<div class="breadcrumb__links">
+								<a href="/">Trang chủ</a> <a href="/shop">Sản phẩm</a> <span>Lịch
+									sử đơn hàng</span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<div class="order-history-wrapper mt-4">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 m-auto mt-4">
-					<!-- <h4>Lịch Sử Đặt Hàng</h4> -->
-					<!-- 					<c:if test="${not empty success}"> -->
-					<!-- 						<div class="alert alert-success alert-dismissible fade show" -->
-					<!-- 							role="alert"> -->
-					<!-- 							<button type="button" class="close" data-dismiss="alert" -->
-					<!-- 								aria-label="Close"> -->
-					<!-- 								<span aria-hidden="true">&times;</span> -->
-					<!-- 							</button> -->
-					<!-- 							${success} -->
-					<!-- 						</div> -->
-					<!-- 					</c:if> -->
-					<div th:if="${not #strings.isEmpty(success)}"
-						class="alert alert-success alert-dismissible fade show"
-						role="alert">
-						<button type="button" class="close" data-dismiss="alert"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<span th:text="${success}"></span>
-					</div>
+		</section>
 
-					<hr />
-
-					<!-- form action  -->
-					<div class="d-flex mt-3 mb-3">
-						<form action="/shop/order-history/search" method="post"
-							class="d-flex justify-content-center">
-							<div class="p-0">
-								<div class="input-group" style="width: 230px;">
-									<div class="input-group-prepend">
-										<label class="input-group-text" for="inputGroupSelect01">Tìm
-											theo</label>
-									</div>
-									<!-- 									<select class="custom-select" id="inputGroupSelect01" -->
-									<!-- 										name="search" onchange="handleSearchChange()"> -->
-									<!-- 										<option value="select">Chọn</option> -->
-									<!-- 										<option value="id"${ -->
-									<!-- 													isId -->
-									<!-- 													? 'selected' -->
-									<!-- 													: '' -->
-									<!-- 													}>Mã -->
-									<!-- 											đơn hàng</option> -->
-									<!-- 										<option value="date"${ -->
-									<!-- 													isCreateDate -->
-									<!-- 													? 'selected' -->
-									<!-- 													: '' -->
-									<!-- 													}>Ngày -->
-									<!-- 											đặt</option> -->
-									<!-- 									</select> -->
-									<select class="custom-select" id="inputGroupSelect01"
-										name="search" onchange="handleSearchChange()">
-										<option value="select">Chọn</option>
-										<option value="id" th:selected="${isId}">Mã đơn hàng</option>
-										<option value="date" th:selected="${isCreateDate}">Ngày
-											đặt</option>
-									</select>
-								</div>
-							</div>
-							<div class="pl-2">
-								<!-- ${ isSuscess ? 'disabled' : '' }  -->
-								<input class="search-bar bg-white text-dark form-control"
-									th:disabled="${isSuccess}" placeholder="Search..." type="text"
-									style="height: 40px;" id="searchInput" name="keyword">
-							</div>
-							<div class="mr-auto pl-2">
-								<button type="submit" class="btn btn-primary"
-									style="height: 42px;">Tìm</button>
-							</div>
-						</form>
-						<div class="mr-auto pl-2">
-							<a href="/shop/order-history"
-								class="btn btn-secondary btn-lg active font-weight-bold px-4 ml-5"
-								role="button" aria-pressed="true" style="height: 42px;">Làm
-								mới</a>
+		<!-- Wrapper order history -->
+		<div class="order-history-wrapper mt-4">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 m-auto mt-4">
+						<!-- <h4>Lịch Sử Đặt Hàng</h4> -->
+						<!-- 					<c:if test="${not empty success}"> -->
+						<!-- 						<div class="alert alert-success alert-dismissible fade show" -->
+						<!-- 							role="alert"> -->
+						<!-- 							<button type="button" class="close" data-dismiss="alert" -->
+						<!-- 								aria-label="Close"> -->
+						<!-- 								<span aria-hidden="true">&times;</span> -->
+						<!-- 							</button> -->
+						<!-- 							${success} -->
+						<!-- 						</div> -->
+						<!-- 					</c:if> -->
+						<div th:if="${not #strings.isEmpty(success)}"
+							class="alert alert-success alert-dismissible fade show"
+							role="alert">
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<span th:text="${success}"></span>
 						</div>
-						<div class="pr-2 d-flex justify-content-center ">
-							<form action="/shop/order-history/filter" method="post"
+
+						<hr />
+
+						<!-- form action  -->
+						<div class="d-flex mt-3 mb-3">
+							<form th:action="@{/shop/order-history/search}" method="post"
 								class="d-flex justify-content-center">
-								<div class="input-group" style="width: 250px;">
-									<div class="input-group-prepend">
-										<label class="input-group-text" for="inputGroupSelect01"
-											style="height: 40px;">Lọc theo</label>
+								<div class="p-0">
+									<div class="input-group" style="width: 230px;">
+										<div class="input-group-prepend">
+											<label class="input-group-text" for="inputGroupSelect01">Tìm
+												theo</label>
+										</div>
+										<!-- 									<select class="custom-select" id="inputGroupSelect01" -->
+										<!-- 										name="search" onchange="handleSearchChange()"> -->
+										<!-- 										<option value="select">Chọn</option> -->
+										<!-- 										<option value="id"${ -->
+										<!-- 													isId -->
+										<!-- 													? 'selected' -->
+										<!-- 													: '' -->
+										<!-- 													}>Mã -->
+										<!-- 											đơn hàng</option> -->
+										<!-- 										<option value="date"${ -->
+										<!-- 													isCreateDate -->
+										<!-- 													? 'selected' -->
+										<!-- 													: '' -->
+										<!-- 													}>Ngày -->
+										<!-- 											đặt</option> -->
+										<!-- 									</select> -->
+										<select class="custom-select" id="inputGroupSelect01"
+											name="search" onchange="handleSearchChange()">
+											<option value="select">Chọn</option>
+											<option value="id" th:selected="${isId}">Mã đơn hàng</option>
+											<option value="date" th:selected="${isCreateDate}">Ngày
+												đặt</option>
+										</select>
 									</div>
-									<!-- 									<select class="custom-select mr-2" id="inputGroupSelect01" -->
-									<!-- 										name="status" style="height: 40px;"> -->
-									<!-- 										<option value="select">Chọn trạng thái</option> -->
-									<!-- 										<option value="C"${ -->
-									<!-- 													isC -->
-									<!-- 													? 'selected' -->
-									<!-- 													: '' -->
-									<!-- 													}>Đang -->
-									<!-- 											chờ</option> -->
-									<!-- 										<option value="XL"${ -->
-									<!-- 													isXl -->
-									<!-- 													? 'selected' -->
-									<!-- 													: '' -->
-									<!-- 													}>Đang -->
-									<!-- 											xử lý</option> -->
-									<!-- 										<option value="G"${ -->
-									<!-- 													isG -->
-									<!-- 													? 'selected' -->
-									<!-- 													: '' -->
-									<!-- 													}>Đang -->
-									<!-- 											giao</option> -->
-									<!-- 										<option value="DG"${ -->
-									<!-- 													isDg -->
-									<!-- 													? 'selected' -->
-									<!-- 													: '' -->
-									<!-- 													}>Đã -->
-									<!-- 											giao</option> -->
-									<!-- 										<option value="H"${ -->
-									<!-- 													isH -->
-									<!-- 													? 'selected' -->
-									<!-- 													: '' -->
-									<!-- 													}>Đã -->
-									<!-- 											hủy</option> -->
-									<!-- 									</select> -->
-									<select class="custom-select mr-2" id="inputGroupSelect01"
-										name="status" style="height: 40px;">
-										<option value="select">Chọn trạng thái</option>
-										<option value="C" th:selected="${isC}">Đang chờ</option>
-										<option value="XL" th:selected="${isXl}">Đang xử lý</option>
-										<option value="G" th:selected="${isG}">Đang giao</option>
-										<option value="DG" th:selected="${isDg}">Đã giao</option>
-										<option value="H" th:selected="${isH}">Đã hủy</option>
-									</select>
 								</div>
-								<button type="submit" class="btn btn-primary"
-									style="height: 40px;">Lọc</button>
+								<div class="pl-2">
+									<!-- ${ isSuscess ? 'disabled' : '' }  -->
+									<input class="search-bar bg-white text-dark form-control"
+										th:disabled="${isSuccess}" placeholder="Search..." type="text"
+										style="height: 40px;" id="searchInput" name="keyword">
+								</div>
+								<div class="mr-auto pl-2">
+									<button type="submit" class="btn btn-primary"
+										style="height: 42px;">Tìm</button>
+								</div>
 							</form>
+							<div class="mr-auto pl-2">
+								<a th:href="@{/shop/order-history}"
+									class="btn btn-secondary btn-lg active font-weight-bold px-4 ml-5"
+									role="button" aria-pressed="true" style="height: 42px;">Làm
+									mới</a>
+							</div>
+							<div class="pr-2 d-flex justify-content-center ">
+								<form th:action="@{/shop/order-history/filter}" method="post"
+									class="d-flex justify-content-center">
+									<div class="input-group" style="width: 250px;">
+										<div class="input-group-prepend">
+											<label class="input-group-text" for="inputGroupSelect01"
+												style="height: 40px;">Lọc theo</label>
+										</div>
+										<!-- 									<select class="custom-select mr-2" id="inputGroupSelect01" -->
+										<!-- 										name="status" style="height: 40px;"> -->
+										<!-- 										<option value="select">Chọn trạng thái</option> -->
+										<!-- 										<option value="C"${ -->
+										<!-- 													isC -->
+										<!-- 													? 'selected' -->
+										<!-- 													: '' -->
+										<!-- 													}>Đang -->
+										<!-- 											chờ</option> -->
+										<!-- 										<option value="XL"${ -->
+										<!-- 													isXl -->
+										<!-- 													? 'selected' -->
+										<!-- 													: '' -->
+										<!-- 													}>Đang -->
+										<!-- 											xử lý</option> -->
+										<!-- 										<option value="G"${ -->
+										<!-- 													isG -->
+										<!-- 													? 'selected' -->
+										<!-- 													: '' -->
+										<!-- 													}>Đang -->
+										<!-- 											giao</option> -->
+										<!-- 										<option value="DG"${ -->
+										<!-- 													isDg -->
+										<!-- 													? 'selected' -->
+										<!-- 													: '' -->
+										<!-- 													}>Đã -->
+										<!-- 											giao</option> -->
+										<!-- 										<option value="H"${ -->
+										<!-- 													isH -->
+										<!-- 													? 'selected' -->
+										<!-- 													: '' -->
+										<!-- 													}>Đã -->
+										<!-- 											hủy</option> -->
+										<!-- 									</select> -->
+										<select class="custom-select mr-2" id="inputGroupSelect01"
+											name="status" style="height: 40px;">
+											<option value="select">Chọn trạng thái</option>
+											<option value="C" th:selected="${isC}">Đang chờ</option>
+											<option value="XL" th:selected="${isXl}">Đang xử lý</option>
+											<option value="G" th:selected="${isG}">Đang giao</option>
+											<option value="DG" th:selected="${isDg}">Đã giao</option>
+											<option value="H" th:selected="${isH}">Đã hủy</option>
+										</select>
+									</div>
+									<button type="submit" class="btn btn-primary"
+										style="height: 40px;">Lọc</button>
+								</form>
+							</div>
 						</div>
-					</div>
-					<div class="table-responsive">
-						<table class="table text-center">
-							<thead class="bg-dark text-white">
-								<tr>
-									<th scope="col">Mã Đơn Hàng</th>
-									<th scope="col">Ngày Đặt</th>
-									<th scope="col">Tổng Tiền</th>
-									<th scope="col">Giảm Giá</th>
-									<th scope="col">Địa Chỉ</th>
-									<th scope="col">Số Điện Thoại</th>
-									<th scope="col">Trạng Thái</th>
-									<th scope="col">Ghi Chú</th>
-									<th scope="col">Chi Tiết</th>
-								</tr>
-							</thead>
-							<tbody>
-								<th:block th:each="order : ${orders}">
+						<!-- Table -->
+						<div class="table-responsive">
+							<table class="table text-center">
+								<thead class="bg-dark text-white">
 									<tr>
-										<th class="pt-4">[[${ order.id }]]</th>
-										<td class="pt-4">[[${ order.createDate }]]</td>
-										<td class="pt-4">[[${#numbers.formatDecimal(order.totalPrice,
-											0, 'COMMA', 2, 'POINT')}]]<sup>đ</sup>
-										</td>
-										<td class="pt-4">
-											[[${#numbers.formatDecimal((order.totalPrice / (1 -
-											order.coupon.discountAmount / 100)) *
-											(order.coupon.discountAmount / 100), 0, 'COMMA', 2,
-											'POINT')}]] <sup>đ</sup>
-										</td>
-										<td class="pt-4">${ order.address }</td>
-										<td class="pt-4">${ order.phone }</td>
-										<td class="pt-4">
-											<!-- 											<c:choose> --> <!-- 												<c:when test="${order.status == 'C'}"> -->
-											<!-- 														Đang chờ --> <!-- 													</c:when> -->
-											<!-- 												<c:when test="${order.status == 'XL'}"> -->
-											<!-- 														Đang xử lý --> <!-- 													</c:when> -->
-											<!-- 												<c:when test="${order.status == 'G'}"> --> <!-- 														Đang giao -->
-											<!-- 													</c:when> --> <!-- 												<c:when test="${order.status == 'DG'}"> -->
-											<!-- 														Đã giao --> <!-- 													</c:when> -->
-											<!-- 												<c:when test="${order.status == 'H'}"> --> <!-- 														Đã hủy -->
-											<!-- 													</c:when> --> <!-- 											</c:choose> -->
-											<th:block th:switch="${order.status}">
-												<th:block th:case="'C'">Đang chờ</th:block>
-												<th:block th:case="'XL'">Đang xử lý</th:block>
-												<th:block th:case="'G'">Đang giao</th:block>
-												<th:block th:case="'DG'">Đã giao</th:block>
-												<th:block th:case="'H'">Đã hủy</th:block>
-											</th:block>
-										</td>
-										<td class="pt-4">${ order.notes }</td>
-										<td class="pt-3">
-											<h5>
-												<!-- Button to Open the Modal -->
-												<!-- 												<button type="button" -->
-												<!-- 													class="btn btn-light bg-white border-0" data-toggle="modal" -->
-												<!-- 													data-target="#myModal${ order.id }"> -->
-												<!-- 													<h4> -->
-												<!-- 														<i class="fa fa-eye text-info mr-2" aria-hidden="true"></i> -->
-												<!-- 													</h4> -->
-												<!-- 												</button> -->
-												<button type="button"
-													class="btn btn-light bg-white border-0"
-													th:data-toggle="'modal'"
-													th:data-target="'#myModal' + ${order.id}">
-													<h4>
-														<i class="fa fa-eye text-info mr-2" aria-hidden="true"></i>
-													</h4>
-												</button>
-											</h5>
-										</td>
+										<th scope="col">Mã Đơn Hàng</th>
+										<th scope="col">Ngày Đặt</th>
+										<th scope="col">Tổng Tiền</th>
+										<th scope="col">Giảm Giá</th>
+										<th scope="col">Địa Chỉ</th>
+										<th scope="col">Số Điện Thoại</th>
+										<th scope="col">Trạng Thái</th>
+										<th scope="col">Ghi Chú</th>
+										<th scope="col">Chi Tiết</th>
 									</tr>
-								</th:block>
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									<th:block th:each="order : ${orders}">
+										<tr>
+											<th class="pt-4">[[${ order.id }]]</th>
+											<td class="pt-4">[[${ order.createDate }]]</td>
+											<td class="pt-4">[[${#numbers.formatDecimal(order.totalPrice,
+												0, 'COMMA', 2, 'POINT')}]]<sup>đ</sup>
+											</td>
+											<td class="pt-4">
+												[[${#numbers.formatDecimal((order.totalPrice / (1 -
+												order.coupon.discountAmount / 100)) *
+												(order.coupon.discountAmount / 100), 0, 'COMMA', 2,
+												'POINT')}]] <sup>đ</sup>
+											</td>
+											<td class="pt-4" th:text="${ order.address }"></td>
+											<td class="pt-4" th:text="${ order.phone }"></td>
+											<td class="pt-4">
+												 <th:block
+													th:switch="${order.status}">
+													<th:block th:case="'C'">Đang chờ</th:block>
+													<th:block th:case="'XL'">Đang xử lý</th:block>
+													<th:block th:case="'G'">Đang giao</th:block>
+													<th:block th:case="'DG'">Đã giao</th:block>
+													<th:block th:case="'H'">Đã hủy</th:block>
+												</th:block>
+											</td>
+											<td class="pt-4" th:text="${ order.notes }"></td>
+											<td class="pt-3">
+												<h5>
+													<button type="button"
+														class="btn btn-light bg-white border-0"
+														th:data-toggle="'modal'"
+														th:data-target="'#myModal' + ${order.id}">
+														<h4>
+															<i class="fa fa-eye text-info mr-2" aria-hidden="true"></i>
+														</h4>
+													</button>
+												</h5>
+											</td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<th:block th:each="order, loopStatus : ${orders}">
-		<!-- The Modal -->
-		<div class="modal fade" id="myModal${ order.id }">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<!-- Modal Header -->
-					<div class="modal-header">
-						<h4 class="modal-title">CHI TIẾT ĐƠN HÀNG</h4>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-					<!-- Modal body -->
-					<div class="modal-body">
-						<h5 class="mb-3">
-							Mã đơn hàng: <strong>${ order.id }</strong>
-						</h5>
-						<table class="table font-weight-bold">
-							<thead class="bg-dark text-white text-center">
-								<tr>
-									<th scope="col" class="p-0">STT</th>
-									<th scope="col" class="p-0">Ảnh</th>
-									<th scope="col" class="p-0">Tên Sản Phẩm</th>
-									<th scope="col" class="p-0">Đơn Giá</th>
-									<th scope="col" class="p-0">Số Lượng</th>
-									<th scope="col" class="p-0">Tổng Tiền</th>
-								</tr>
-							</thead>
-							<!-- foreach -->
-							<tbody style="font-size: 15px;" class="text-center">
-								<th:block
-									th:each="orderdetail, loopStatus : ${order.orderDetails}">
-									<tr class="align-middle">
-										<th class="pt-4" th:text="${loopStatus.count}">1</th>
-										<td><img
-											th:src="@{'/img/product/' + ${orderdetail.product.image}}"
-											class="card-img-top" height="50px"></td>
-										<td class="pt-4">
-											<p th:text="${orderdetail.product.name}">Product Name</p>
-										</td>
-										<td class="pt-4"><span
-											th:text="${#numbers.formatCurrency(orderdetail.product.price, 'VND', 0, ' ')}"></span><sup>đ</sup></td>
-										<td class="pt-4" th:text="${orderdetail.quantity}">1</td>
-										<td class="pt-4"><span
-											th:text="${#numbers.formatCurrency(orderdetail.product.price * orderdetail.quantity, 'VND', 0, ' ')}"></span><sup>đ</sup></td>
+		<!-- 	The Modal for order-history details -->
+		<th:block th:each="order, loopStatus : ${orders}">
+			<!-- The Modal -->
+			<div class="modal fade" th:id="'myModal'+${ order.id }">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">CHI TIẾT ĐƠN HÀNG</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<!-- Modal body -->
+						<div class="modal-body">
+							<h5 class="mb-3">
+								Mã đơn hàng: <strong>${ order.id }</strong>
+							</h5>
+							<table class="table font-weight-bold">
+								<thead class="bg-dark text-white text-center">
+									<tr>
+										<th scope="col" class="p-0">STT</th>
+										<th scope="col" class="p-0">Ảnh</th>
+										<th scope="col" class="p-0">Tên Sản Phẩm</th>
+										<th scope="col" class="p-0">Đơn Giá</th>
+										<th scope="col" class="p-0">Số Lượng</th>
+										<th scope="col" class="p-0">Tổng Tiền</th>
 									</tr>
-								</th:block>
-							</tbody>
-						</table>
-					</div>
-					<!-- Modal footer -->
-					<div class="modal-footer">
-						<div class="container">
-							<div class="row">
-								<div class="col-6">
-									<h4 class="mb-0">
-										<!-- 										Tổng số lượng: <strong> <c:set var="totalQuantity" -->
-										<!-- 												value="0" /> <c:forEach var="detail" -->
-										<!-- 												items="${order.orderDetails}"> -->
-										<!-- 												<c:set var="totalQuantity" -->
-										<!-- 													value="${totalQuantity + detail.quantity}" /> -->
-										<!-- 											</c:forEach> ${totalQuantity} -->
-										<!-- 										</strong> -->
+								</thead>
+								<!-- foreach -->
+								<tbody style="font-size: 15px;" class="text-center">
+									<th:block
+										th:each="orderdetail, loopStatus : ${order.orderDetails}">
+										<tr class="align-middle">
+											<th class="pt-4" th:text="${loopStatus.count}">1</th>
+											<td><img
+												th:src="@{'/img/product/' + ${orderdetail.product.image}}"
+												class="card-img-top" height="50px"></td>
+											<td class="pt-4">
+												<p th:text="${orderdetail.product.name}">Product Name</p>
+											</td>
+											<td class="pt-4"><span
+												th:text="${#numbers.formatCurrency(orderdetail.product.price, 'VND', 0, ' ')}"></span><sup>đ</sup></td>
+											<td class="pt-4" th:text="${orderdetail.quantity}">1</td>
+											<td class="pt-4"><span
+												th:text="${#numbers.formatCurrency(orderdetail.product.price * orderdetail.quantity, 'VND', 0, ' ')}"></span><sup>đ</sup></td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<div class="container">
+								<div class="row">
+									<div class="col-6">
+										<h4 class="mb-0">
+											<!-- 										Tổng số lượng: <strong> <c:set var="totalQuantity" -->
+											<!-- 												value="0" /> <c:forEach var="detail" -->
+											<!-- 												items="${order.orderDetails}"> -->
+											<!-- 												<c:set var="totalQuantity" -->
+											<!-- 													value="${totalQuantity + detail.quantity}" /> -->
+											<!-- 											</c:forEach> ${totalQuantity} -->
+											<!-- 										</strong> -->
 
-										Tổng số lượng: <strong> <th:block
-												th:with="totalQuantity = 0">
-												<th:block th:each="detail : ${order.orderDetails}">
-													<th:block
-														th:with="totalQuantity = ${totalQuantity + detail.quantity}"></th:block>
+											Tổng số lượng: <strong> <th:block
+													th:with="totalQuantity = 0">
+													<th:block th:each="detail : ${order.orderDetails}">
+														<th:block
+															th:with="totalQuantity = ${totalQuantity + detail.quantity}"></th:block>
+													</th:block>
+													<span th:text="${totalQuantity}"></span>
 												</th:block>
-												<span th:text="${totalQuantity}"></span>
-											</th:block>
-										</strong>
-									</h4>
-								</div>
-								<div class="col-6 text-right">
-									<h4 class="mb-0">
-										<!-- 										 <c:set var="total" value="0" /> -->
-										<!-- 											<c:forEach var="detail" items="${order.orderDetails}"> -->
-										<!-- 												<c:set var="total" -->
-										<!-- 													value="${total + (detail.product.price  * detail.quantity)}" /> -->
-										<!-- 											</c:forEach> <fmt:formatNumber value="${ total }" type="currency" -->
-										<!-- 												currencySymbol="" /><sup>đ</sup> -->
-										Tổng tiền : <strong> <th:block th:with="total = 0">
-												<th:block th:each="detail : ${order.orderDetails}">
-													<th:block
-														th:with="total = ${total + (detail.product.price * detail.quantity)}"></th:block>
+											</strong>
+										</h4>
+									</div>
+									<div class="col-6 text-right">
+										<h4 class="mb-0">
+											<!-- 										 <c:set var="total" value="0" /> -->
+											<!-- 											<c:forEach var="detail" items="${order.orderDetails}"> -->
+											<!-- 												<c:set var="total" -->
+											<!-- 													value="${total + (detail.product.price  * detail.quantity)}" /> -->
+											<!-- 											</c:forEach> <fmt:formatNumber value="${ total }" type="currency" -->
+											<!-- 												currencySymbol="" /><sup>đ</sup> -->
+											Tổng tiền : <strong> <th:block th:with="total = 0">
+													<th:block th:each="detail : ${order.orderDetails}">
+														<th:block
+															th:with="total = ${total + (detail.product.price * detail.quantity)}"></th:block>
+													</th:block>
+													<span
+														th:text="${#numbers.formatCurrency(total, 'VND', 0, ' ')}"></span>
+													<sup>đ</sup>
 												</th:block>
-												<span
-													th:text="${#numbers.formatCurrency(total, 'VND', 0, ' ')}"></span>
-												<sup>đ</sup>
-											</th:block>
-										</strong>
-									</h4>
+											</strong>
+										</h4>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 
-					<!-- 										<div class="modal-footer"> -->
-					<!-- 											<h4> -->
-					<!-- 					<%-- 							Tổng số lượng: <strong> <c:set var="totalQuantity" --%> -->
-					<!-- 					<%-- 									value="0" /> <c:forEach var="detail" --%> -->
-					<!-- 					<%-- 									items="${order.orderDetails}"> --%> -->
-					<!-- 					<%-- 									<c:set var="totalQuantity" --%> -->
-					<!-- 					<%-- 										value="${totalQuantity + detail.quantity}" /> --%> -->
-					<!-- 					<%-- 								</c:forEach> ${totalQuantity} --%> -->
-					<!-- 												</strong> -->
-					<!-- 											</h4> -->
-					<!-- 											<h4> -->
-					<!-- 					<%-- 							Tổng tiền : <strong> <c:set var="total" value="0" /> <c:forEach --%> -->
-					<!-- 					<%-- 									var="detail" items="${order.orderDetails}"> --%> -->
-					<!-- 					<%-- 									<c:set var="total" --%> -->
-					<!-- 					<%-- 										value="${total + (detail.product.price  * detail.quantity)}" /> --%> -->
-					<!-- 					<%-- 								</c:forEach> <fmt:formatNumber value="${ total }" type="currency" --%> -->
-					<!-- 					<%-- 									currencySymbol="" /><sup>đ</sup> --%> -->
-					<!-- 					</strong> -->
-					<!-- 					</h4> -->
+						<!-- 										<div class="modal-footer"> -->
+						<!-- 											<h4> -->
+						<!-- 					<%-- 							Tổng số lượng: <strong> <c:set var="totalQuantity" --%> -->
+						<!-- 					<%-- 									value="0" /> <c:forEach var="detail" --%> -->
+						<!-- 					<%-- 									items="${order.orderDetails}"> --%> -->
+						<!-- 					<%-- 									<c:set var="totalQuantity" --%> -->
+						<!-- 					<%-- 										value="${totalQuantity + detail.quantity}" /> --%> -->
+						<!-- 					<%-- 								</c:forEach> ${totalQuantity} --%> -->
+						<!-- 												</strong> -->
+						<!-- 											</h4> -->
+						<!-- 											<h4> -->
+						<!-- 					<%-- 							Tổng tiền : <strong> <c:set var="total" value="0" /> <c:forEach --%> -->
+						<!-- 					<%-- 									var="detail" items="${order.orderDetails}"> --%> -->
+						<!-- 					<%-- 									<c:set var="total" --%> -->
+						<!-- 					<%-- 										value="${total + (detail.product.price  * detail.quantity)}" /> --%> -->
+						<!-- 					<%-- 								</c:forEach> <fmt:formatNumber value="${ total }" type="currency" --%> -->
+						<!-- 					<%-- 									currencySymbol="" /><sup>đ</sup> --%> -->
+						<!-- 					</strong> -->
+						<!-- 					</h4> -->
+					</div>
 				</div>
 			</div>
-		</div>
-	</th:block>
-
+		</th:block>
+	</main>
+	<!-- 	Main concept end -->
 
 	<!-- Footer Section Begin -->
+	<!-- Footer Section End -->
 
+	<!-- Js Plugins -->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+
+	<script src="/js/main.js"></script>
+	<script type="text/javascript" th:src="@{/js/main.js}"></script>
+
+	<!-- Custom JS search by day - id -->
 	<script>
+		console.log('Hello')
 		function handleSearchChange() {
 			const searchInput = document.getElementById("searchInput");
 			const searchOption = document.getElementById("inputGroupSelect01").value;
@@ -400,25 +413,5 @@
 			}
 		}
 	</script>
-
-	<!-- Js Plugins -->
-	<!-- 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" -->
-	<!-- 		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" -->
-	<!-- 		crossorigin="anonymous"></script> -->
-	<!-- 	<script -->
-	<!-- 		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" -->
-	<!-- 		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" -->
-	<!-- 		crossorigin="anonymous"></script> -->
-	<script src="/js/jquery-3.3.1.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/jquery.nice-select.min.js"></script>
-	<script src="/js/jquery.nicescroll.min.js"></script>
-	<script src="/js/jquery.magnific-popup.min.js"></script>
-	<script src="/js/jquery.countdown.min.js"></script>
-	<script src="/js/jquery.slicknav.js"></script>
-	<script src="/js/mixitup.min.js"></script>
-	<script src="/js/owl.carousel.min.js"></script>
-	<script src="/js/main.js"></script>
-
 </body>
 </html>

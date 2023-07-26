@@ -43,13 +43,21 @@ public class OrderHistoryController {
 //            return "redirect:/account/login";
 //        }
 
-//		Account account = sessionService.get("account");
-//		List<Order> orders = orderDao.findByAccountName(account.getUsername());
-//		model.addAttribute("orders", orders);
+		Account account = new Account();
+		account.setUsername("hoainam");
+		account.setPassword("123456");
+		account.setFullname("Hoài Nam update");
+		account.setEmail("namnhpc03517@fpt.edu.vn");
+//		account.setActivated(true);
+		sessionService.set("account", account);
+
+		Account account2 = sessionService.get("account");
+		List<Order> orders = orderDao.findByAccountName(account2.getUsername());
+		model.addAttribute("orders", orders);
 		model.addAttribute("pageActive", "order-history");
 
-		return "/client/order-history";
-	}
+		return "client/order-history"; 
+	} 
 
 	@PostMapping("search")
 	public String search(Model model, @RequestParam("search") String search, @RequestParam("keyword") String keyword) {
@@ -65,7 +73,7 @@ public class OrderHistoryController {
 					model.addAttribute("orders", orders);
 					model.addAttribute("isCreateDate", true);
 					model.addAttribute("isSuscess", true);
-				}else {
+				} else {
 					model.addAttribute("success", "Không tìm thấy ngày đặt hàng là : " + keyword);
 					model.addAttribute("isSuscess", true);
 				}
@@ -89,7 +97,7 @@ public class OrderHistoryController {
 		}
 		model.addAttribute("pageActive", "order-history");
 
-		return "/client/order-history";
+		return "client/order-history";
 	}
 
 	@PostMapping("filter")
@@ -140,13 +148,13 @@ public class OrderHistoryController {
 				model.addAttribute("success", "Đã tìm thấy đơn hàng có trạng thái là Đã hủy");
 			} else {
 				model.addAttribute("success", "Không tìm thấy đơn hàng có trạng thái là Đã hủy");
-			}
+			} 
 
 		} else if (status.equals("select")) {
 			model.addAttribute("success", "Bạn chưa chọn trạng thái !!! ");
 		}
 		model.addAttribute("pageActive", "order-history");
 
-		return "/client/order-history";
+		return "client/order-history";
 	}
 }
