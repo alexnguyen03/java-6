@@ -85,7 +85,7 @@ public class UserManagementController {
     @PostMapping("/user/delete/{id}")
     public String disableUser(@PathVariable("id") String id) {
         Account account = accountDAO.findById(id).get();
-        account.setActivated(false);
+        // account.setActivated(false);
         accountDAO.save(account);
         sessionService.set("isUpdated", true);
         return "redirect:/admin/user";
@@ -94,7 +94,7 @@ public class UserManagementController {
     @PostMapping("/user/restore/{id}")
     public String restoreUser(@PathVariable("id") String id) {
         Account account = accountDAO.findById(id).get();
-        account.setActivated(true);
+        // account.setActivated(true);
         accountDAO.save(account);
         sessionService.set("isUpdated", true);
         return "redirect:/admin/user";

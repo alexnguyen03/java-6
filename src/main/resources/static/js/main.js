@@ -76,7 +76,7 @@
 	    	alert("Số lượng tối đa cho sản phẩm này là " + maxQuantity);
 	    	quantityInput.value = maxQuantity;
 	    }else if (quantity <= 0) {
-			alert("Số lượng phải lớn hơn 0 !!!");
+			alert("Số lượng tối thiểu của sản phẩm là 1 !");
 			quantityInput.value = 1;
 		}
   	});

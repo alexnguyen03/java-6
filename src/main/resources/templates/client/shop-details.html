@@ -355,11 +355,20 @@
                     </div>
                     <div class="col-lg-11 mb-3">
                       <strong th:text="${ review.account.fullname }"></strong>
-                      <span
-                        th:text="${#dates.format(review.dateReview, 'dd/MM/yyyy')}"
-                      >
-                      </span
-                      ><br />
+                      |
+                      <!-- Display Date review -->
+                      <span th:if="${monthsAgoMap[review] < 1}">
+                        <span
+                          th:text="${#dates.format(review.dateReview, 'MMM d, yyyy h:mm a')}"
+                        ></span>
+                      </span>
+                      <span th:if="${monthsAgoMap[review] >= 1}">
+                        <span
+                          th:text="${monthsAgoMap[review]} + ' month(s) ago'"
+                        ></span>
+                      </span>
+
+                      <br />
                       <th:block
                         th:each="i : ${#numbers.sequence(1, review.rating)}"
                       >

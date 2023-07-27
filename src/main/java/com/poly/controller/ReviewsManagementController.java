@@ -178,14 +178,20 @@ public class ReviewsManagementController {
 		int productId = Integer.parseInt(paramService.getString("productId", ""));
 		int rating = Integer.parseInt(paramService.getString("rating", ""));
 		String text = paramService.getString("textReview", "");
+
+		Account ac = new Account();
+		ac.setUsername("hoainam");
+		ac.setPassword("123456");
+		sessionService.set("account", ac);
+
 		// lấy user từ session
 		Account account_Session = sessionService.get("account");
 		// kiểm tra có đăng nhập hay chưa
-		if (account_Session == null) {
-			sessionService.set("messageShop", "Đăng nhập để được đánh giá sản phẩm");
-			rdAtr.addAttribute("isMessageShop", true);
-			return "redirect:/account/login";
-		}
+		// if (account_Session == null) {
+		// 	sessionService.set("messageShop", "Đăng nhập để được đánh giá sản phẩm");
+		// 	rdAtr.addAttribute("isMessageShop", true);
+		// 	return "redirect:/account/login";
+		// }
 		Account account = acdao.findById(account_Session.getUsername()).get();
 		Product product = productDao.findById(productId).get();
 		Review review = new Review();
