@@ -1,417 +1,307 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8" />
-<meta name="description" content="Male_Fashion Template" />
-<meta name="keywords" content="Male_Fashion, unica, creative, html" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>4Mems - Shop</title>
-<!-- Google Font -->
-<link
-	href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-	rel="stylesheet" />
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Male_Fashion Template" />
+    <meta name="keywords" content="Male_Fashion, unica, creative, html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>4MEMS - Team</title>
 
-<!-- Css Styles -->
-<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"
-	type="text/css" />
-<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"
-	type="text/css" />
-<link rel="stylesheet" th:href="@{/css/elegant-icons.css}"
-	type="text/css" />
-<link rel="stylesheet" th:href="@{/css/magnific-popup.css}"
-	type="text/css" />
-<link rel="stylesheet" th:href="@{/css/nice-select.css}" type="text/css" />
-<link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}"
-	type="text/css" />
-<link rel="stylesheet" th:href="@{/css/slicknav.min.css}"
-	type="text/css" />
-<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
-</head>
+    <!-- Css Styles -->
+    <link
+      rel="stylesheet"
+      th:href="@{/css/font-awesome.min.css}"
+      type="text/css"
+    />
 
-<body>
-	<!-- Page Preloder -->
-	<!-- 	<div id="preloder"> -->
-	<!-- 		<div class="loader"></div> -->
-	<!-- 	</div> -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
 
-	<!-- Header -->
-	<!-- 	<header th:insert="~{/client/header::header}"></header> -->
-	<!-- Header Section End -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
+  </head>
 
-	<!-- main concept -->
-	<main>
-		<!-- Shop Details Section Begin -->
-		<section class="breadcrumb-option">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="breadcrumb__text">
-							<h4>Lịch sử đơn hàng</h4>
-							<div class="breadcrumb__links">
-								<a href="/">Trang chủ</a> <a href="/shop">Sản phẩm</a> <span>Lịch
-									sử đơn hàng</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+  <body>
+    <!-- Shop Details Section Begin -->
+    <section class="breadcrumb-option">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="breadcrumb__text">
+              <h4>Lịch sử đơn hàng</h4>
+              <div class="breadcrumb__links">
+                <a href="/">Trang chủ</a> <a href="/shop">Sản phẩm</a>
+                <span>Lịch sử đơn hàng</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-		<!-- Wrapper order history -->
-		<div class="order-history-wrapper mt-4">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12 m-auto mt-4">
-						<!-- <h4>Lịch Sử Đặt Hàng</h4> -->
-						<!-- 					<c:if test="${not empty success}"> -->
-						<!-- 						<div class="alert alert-success alert-dismissible fade show" -->
-						<!-- 							role="alert"> -->
-						<!-- 							<button type="button" class="close" data-dismiss="alert" -->
-						<!-- 								aria-label="Close"> -->
-						<!-- 								<span aria-hidden="true">&times;</span> -->
-						<!-- 							</button> -->
-						<!-- 							${success} -->
-						<!-- 						</div> -->
-						<!-- 					</c:if> -->
-						<div th:if="${not #strings.isEmpty(success)}"
-							class="alert alert-success alert-dismissible fade show"
-							role="alert">
-							<button type="button" class="close" data-dismiss="alert"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<span th:text="${success}"></span>
-						</div>
+    <!-- table and filter section -->
+    <div class="order-history-wrapper mt-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 m-auto mt-4">
+            <!-- Header -->
+            <div
+              th:if="${success}"
+              class="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <span th:text="${success}"></span>
+            </div>
+            <hr />
 
-						<hr />
+            <!-- Search area -->
+            <div class="d-flex mt-3 mb-3">
+              <form
+                th:action="@{/shop/order-history/search}"
+                method="post"
+                class="d-flex justify-content-center"
+              >
+                <div class="p-0">
+                  <div class="input-group" style="width: 230px">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01"
+                        >Tìm theo</label
+                      >
+                    </div>
+                    <select
+                      class="custom-select"
+                      id="inputGroupSelect01"
+                      name="search"
+                      onchange="handleSearchChange()"
+                    >
+                      <option value="select">Chọn</option>
+                      <option value="id" th:selected="${isId}">
+                        Mã đơn hàng
+                      </option>
+                      <option value="date" th:selected="${isCreateDate}">
+                        Ngày đặt
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="pl-2">
+                  <input
+                    class="search-bar bg-white text-dark form-control"
+                    th:disabled="${isSuscess}"
+                    placeholder="Search..."
+                    type="text"
+                    style="height: 40px"
+                    id="searchInput"
+                    name="keyword"
+                  />
+                </div>
+                <div class="mr-auto pl-2">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="height: 42px"
+                  >
+                    Tìm
+                  </button>
+                </div>
+              </form>
 
-						<!-- form action  -->
-						<div class="d-flex mt-3 mb-3">
-							<form th:action="@{/shop/order-history/search}" method="post"
-								class="d-flex justify-content-center">
-								<div class="p-0">
-									<div class="input-group" style="width: 230px;">
-										<div class="input-group-prepend">
-											<label class="input-group-text" for="inputGroupSelect01">Tìm
-												theo</label>
-										</div>
-										<!-- 									<select class="custom-select" id="inputGroupSelect01" -->
-										<!-- 										name="search" onchange="handleSearchChange()"> -->
-										<!-- 										<option value="select">Chọn</option> -->
-										<!-- 										<option value="id"${ -->
-										<!-- 													isId -->
-										<!-- 													? 'selected' -->
-										<!-- 													: '' -->
-										<!-- 													}>Mã -->
-										<!-- 											đơn hàng</option> -->
-										<!-- 										<option value="date"${ -->
-										<!-- 													isCreateDate -->
-										<!-- 													? 'selected' -->
-										<!-- 													: '' -->
-										<!-- 													}>Ngày -->
-										<!-- 											đặt</option> -->
-										<!-- 									</select> -->
-										<select class="custom-select" id="inputGroupSelect01"
-											name="search" onchange="handleSearchChange()">
-											<option value="select">Chọn</option>
-											<option value="id" th:selected="${isId}">Mã đơn hàng</option>
-											<option value="date" th:selected="${isCreateDate}">Ngày
-												đặt</option>
-										</select>
-									</div>
-								</div>
-								<div class="pl-2">
-									<!-- ${ isSuscess ? 'disabled' : '' }  -->
-									<input class="search-bar bg-white text-dark form-control"
-										th:disabled="${isSuccess}" placeholder="Search..." type="text"
-										style="height: 40px;" id="searchInput" name="keyword">
-								</div>
-								<div class="mr-auto pl-2">
-									<button type="submit" class="btn btn-primary"
-										style="height: 42px;">Tìm</button>
-								</div>
-							</form>
-							<div class="mr-auto pl-2">
-								<a th:href="@{/shop/order-history}"
-									class="btn btn-secondary btn-lg active font-weight-bold px-4 ml-5"
-									role="button" aria-pressed="true" style="height: 42px;">Làm
-									mới</a>
-							</div>
-							<div class="pr-2 d-flex justify-content-center ">
-								<form th:action="@{/shop/order-history/filter}" method="post"
-									class="d-flex justify-content-center">
-									<div class="input-group" style="width: 250px;">
-										<div class="input-group-prepend">
-											<label class="input-group-text" for="inputGroupSelect01"
-												style="height: 40px;">Lọc theo</label>
-										</div>
-										<!-- 									<select class="custom-select mr-2" id="inputGroupSelect01" -->
-										<!-- 										name="status" style="height: 40px;"> -->
-										<!-- 										<option value="select">Chọn trạng thái</option> -->
-										<!-- 										<option value="C"${ -->
-										<!-- 													isC -->
-										<!-- 													? 'selected' -->
-										<!-- 													: '' -->
-										<!-- 													}>Đang -->
-										<!-- 											chờ</option> -->
-										<!-- 										<option value="XL"${ -->
-										<!-- 													isXl -->
-										<!-- 													? 'selected' -->
-										<!-- 													: '' -->
-										<!-- 													}>Đang -->
-										<!-- 											xử lý</option> -->
-										<!-- 										<option value="G"${ -->
-										<!-- 													isG -->
-										<!-- 													? 'selected' -->
-										<!-- 													: '' -->
-										<!-- 													}>Đang -->
-										<!-- 											giao</option> -->
-										<!-- 										<option value="DG"${ -->
-										<!-- 													isDg -->
-										<!-- 													? 'selected' -->
-										<!-- 													: '' -->
-										<!-- 													}>Đã -->
-										<!-- 											giao</option> -->
-										<!-- 										<option value="H"${ -->
-										<!-- 													isH -->
-										<!-- 													? 'selected' -->
-										<!-- 													: '' -->
-										<!-- 													}>Đã -->
-										<!-- 											hủy</option> -->
-										<!-- 									</select> -->
-										<select class="custom-select mr-2" id="inputGroupSelect01"
-											name="status" style="height: 40px;">
-											<option value="select">Chọn trạng thái</option>
-											<option value="C" th:selected="${isC}">Đang chờ</option>
-											<option value="XL" th:selected="${isXl}">Đang xử lý</option>
-											<option value="G" th:selected="${isG}">Đang giao</option>
-											<option value="DG" th:selected="${isDg}">Đã giao</option>
-											<option value="H" th:selected="${isH}">Đã hủy</option>
-										</select>
-									</div>
-									<button type="submit" class="btn btn-primary"
-										style="height: 40px;">Lọc</button>
-								</form>
-							</div>
-						</div>
-						<!-- Table -->
-						<div class="table-responsive">
-							<table class="table text-center">
-								<thead class="bg-dark text-white">
-									<tr>
-										<th scope="col">Mã Đơn Hàng</th>
-										<th scope="col">Ngày Đặt</th>
-										<th scope="col">Tổng Tiền</th>
-										<th scope="col">Giảm Giá</th>
-										<th scope="col">Địa Chỉ</th>
-										<th scope="col">Số Điện Thoại</th>
-										<th scope="col">Trạng Thái</th>
-										<th scope="col">Ghi Chú</th>
-										<th scope="col">Chi Tiết</th>
-									</tr>
-								</thead>
-								<tbody>
-									<th:block th:each="order : ${orders}">
-										<tr>
-											<th class="pt-4">[[${ order.id }]]</th>
-											<td class="pt-4">[[${ order.createDate }]]</td>
-											<td class="pt-4">[[${#numbers.formatDecimal(order.totalPrice,
-												0, 'COMMA', 2, 'POINT')}]]<sup>đ</sup>
-											</td>
-											<td class="pt-4">
-												[[${#numbers.formatDecimal((order.totalPrice / (1 -
-												order.coupon.discountAmount / 100)) *
-												(order.coupon.discountAmount / 100), 0, 'COMMA', 2,
-												'POINT')}]] <sup>đ</sup>
-											</td>
-											<td class="pt-4" th:text="${ order.address }"></td>
-											<td class="pt-4" th:text="${ order.phone }"></td>
-											<td class="pt-4">
-												 <th:block
-													th:switch="${order.status}">
-													<th:block th:case="'C'">Đang chờ</th:block>
-													<th:block th:case="'XL'">Đang xử lý</th:block>
-													<th:block th:case="'G'">Đang giao</th:block>
-													<th:block th:case="'DG'">Đã giao</th:block>
-													<th:block th:case="'H'">Đã hủy</th:block>
-												</th:block>
-											</td>
-											<td class="pt-4" th:text="${ order.notes }"></td>
-											<td class="pt-3">
-												<h5>
-													<button type="button"
-														class="btn btn-light bg-white border-0"
-														th:data-toggle="'modal'"
-														th:data-target="'#myModal' + ${order.id}">
-														<h4>
-															<i class="fa fa-eye text-info mr-2" aria-hidden="true"></i>
-														</h4>
-													</button>
-												</h5>
-											</td>
-										</tr>
-									</th:block>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+              <!-- New Web -->
+              <div class="mr-auto pl-2">
+                <a
+                  th:href="@{/shop/order-history}"
+                  class="btn btn-secondary btn-lg active font-weight-bold px-4 ml-5"
+                  role="button"
+                  aria-pressed="true"
+                  style="height: 42px"
+                  >Làm mới</a
+                >
+              </div>
 
-		<!-- 	The Modal for order-history details -->
-		<th:block th:each="order, loopStatus : ${orders}">
-			<!-- The Modal -->
-			<div class="modal fade" th:id="'myModal'+${ order.id }">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<!-- Modal Header -->
-						<div class="modal-header">
-							<h4 class="modal-title">CHI TIẾT ĐƠN HÀNG</h4>
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div>
-						<!-- Modal body -->
-						<div class="modal-body">
-							<h5 class="mb-3">
-								Mã đơn hàng: <strong>${ order.id }</strong>
-							</h5>
-							<table class="table font-weight-bold">
-								<thead class="bg-dark text-white text-center">
-									<tr>
-										<th scope="col" class="p-0">STT</th>
-										<th scope="col" class="p-0">Ảnh</th>
-										<th scope="col" class="p-0">Tên Sản Phẩm</th>
-										<th scope="col" class="p-0">Đơn Giá</th>
-										<th scope="col" class="p-0">Số Lượng</th>
-										<th scope="col" class="p-0">Tổng Tiền</th>
-									</tr>
-								</thead>
-								<!-- foreach -->
-								<tbody style="font-size: 15px;" class="text-center">
-									<th:block
-										th:each="orderdetail, loopStatus : ${order.orderDetails}">
-										<tr class="align-middle">
-											<th class="pt-4" th:text="${loopStatus.count}">1</th>
-											<td><img
-												th:src="@{'/img/product/' + ${orderdetail.product.image}}"
-												class="card-img-top" height="50px"></td>
-											<td class="pt-4">
-												<p th:text="${orderdetail.product.name}">Product Name</p>
-											</td>
-											<td class="pt-4"><span
-												th:text="${#numbers.formatCurrency(orderdetail.product.price, 'VND', 0, ' ')}"></span><sup>đ</sup></td>
-											<td class="pt-4" th:text="${orderdetail.quantity}">1</td>
-											<td class="pt-4"><span
-												th:text="${#numbers.formatCurrency(orderdetail.product.price * orderdetail.quantity, 'VND', 0, ' ')}"></span><sup>đ</sup></td>
-										</tr>
-									</th:block>
-								</tbody>
-							</table>
-						</div>
-						<!-- Modal footer -->
-						<div class="modal-footer">
-							<div class="container">
-								<div class="row">
-									<div class="col-6">
-										<h4 class="mb-0">
-											<!-- 										Tổng số lượng: <strong> <c:set var="totalQuantity" -->
-											<!-- 												value="0" /> <c:forEach var="detail" -->
-											<!-- 												items="${order.orderDetails}"> -->
-											<!-- 												<c:set var="totalQuantity" -->
-											<!-- 													value="${totalQuantity + detail.quantity}" /> -->
-											<!-- 											</c:forEach> ${totalQuantity} -->
-											<!-- 										</strong> -->
+              <!-- Filter area -->
+              <div class="pr-2 d-flex justify-content-center">
+                <form
+                  th:action="@{/shop/order-history/filter}"
+                  method="post"
+                  class="d-flex justify-content-center"
+                >
+                  <div class="input-group" style="width: 250px">
+                    <div class="input-group-prepend">
+                      <label
+                        class="input-group-text"
+                        for="inputGroupSelect01"
+                        style="height: 40px"
+                        >Lọc theo</label
+                      >
+                    </div>
+                    <select
+                      class="custom-select mr-2"
+                      id="inputGroupSelect01"
+                      name="status"
+                      style="height: 40px"
+                    >
+                      <option value="select">Chọn trạng thái</option>
+                      <option value="C" th:selected="${isC}">Đang chờ</option>
+                      <option value="XL" th:selected="${isXl}">
+                        Đang xử lý
+                      </option>
+                      <option value="G" th:selected="${isG}">Đang giao</option>
+                      <option value="DG" th:selected="${isDg}">Đã giao</option>
+                      <option value="H" th:selected="${isH}">Đã hủy</option>
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="height: 40px"
+                  >
+                    Lọc
+                  </button>
+                </form>
+              </div>
+            </div>
 
-											Tổng số lượng: <strong> <th:block
-													th:with="totalQuantity = 0">
-													<th:block th:each="detail : ${order.orderDetails}">
-														<th:block
-															th:with="totalQuantity = ${totalQuantity + detail.quantity}"></th:block>
-													</th:block>
-													<span th:text="${totalQuantity}"></span>
-												</th:block>
-											</strong>
-										</h4>
-									</div>
-									<div class="col-6 text-right">
-										<h4 class="mb-0">
-											<!-- 										 <c:set var="total" value="0" /> -->
-											<!-- 											<c:forEach var="detail" items="${order.orderDetails}"> -->
-											<!-- 												<c:set var="total" -->
-											<!-- 													value="${total + (detail.product.price  * detail.quantity)}" /> -->
-											<!-- 											</c:forEach> <fmt:formatNumber value="${ total }" type="currency" -->
-											<!-- 												currencySymbol="" /><sup>đ</sup> -->
-											Tổng tiền : <strong> <th:block th:with="total = 0">
-													<th:block th:each="detail : ${order.orderDetails}">
-														<th:block
-															th:with="total = ${total + (detail.product.price * detail.quantity)}"></th:block>
-													</th:block>
-													<span
-														th:text="${#numbers.formatCurrency(total, 'VND', 0, ' ')}"></span>
-													<sup>đ</sup>
-												</th:block>
-											</strong>
-										</h4>
-									</div>
-								</div>
-							</div>
-						</div>
+            <!-- Table area -->
+            <div class="table-responsive">
+              <table
+                class="table table-striped table-hover table-bordered text-center"
+              >
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">Mã Đơn Hàng</th>
+                    <th scope="col">Ngày Đặt</th>
+                    <th scope="col">Tổng Tiền</th>
+                    <th scope="col">Giảm Giá</th>
+                    <th scope="col">Địa Chỉ</th>
+                    <th scope="col">Số Điện Thoại</th>
+                    <th scope="col">Trạng Thái</th>
+                    <th scope="col">Ghi Chú</th>
+                    <th scope="col">Chi Tiết</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="order : ${orders}">
+                    <th class="pt-4" th:text="${order.id}"></th>
+                    <td class="pt-4" th:text="${order.createDate}"></td>
+                    <td class="pt-4">
+                      [[${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA',
+                      2, 'POINT')}]]<sup>đ</sup>
+                    </td>
+                    <td class="pt-4">
+                      [[${#numbers.formatDecimal((order.totalPrice / (1 -
+                      order.coupon.discountAmount / 100)) *
+                      (order.coupon.discountAmount / 100), 0, 'COMMA', 2,
+                      'POINT')}]] <sup>đ</sup>
+                    </td>
+                    <td class="pt-4" th:text="${order.address}"></td>
+                    <td class="pt-4" th:text="${order.phone}"></td>
+                    <td class="pt-4">
+                      <span th:switch="${order.status}">
+                        <span th:case="'C'">Đang chờ</span>
+                        <span th:case="'XL'">Đang xử lý</span>
+                        <span th:case="'G'">Đang giao</span>
+                        <span th:case="'DG'">Đã giao</span>
+                        <span th:case="'H'">Đã hủy</span>
+                      </span>
+                    </td>
+                    <td class="pt-4" th:text="${order.notes}"></td>
+                    <td class="pt-3">
+                      <button
+                        type="button"
+                        class="btn btn-block"
+                        data-bs-toggle="modal"
+                        th:data-target="'#orderHistory_' + ${order.id}"
+                      >
+                        <i
+                          class="fa fa-eye text-info mr-2"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-						<!-- 										<div class="modal-footer"> -->
-						<!-- 											<h4> -->
-						<!-- 					<%-- 							Tổng số lượng: <strong> <c:set var="totalQuantity" --%> -->
-						<!-- 					<%-- 									value="0" /> <c:forEach var="detail" --%> -->
-						<!-- 					<%-- 									items="${order.orderDetails}"> --%> -->
-						<!-- 					<%-- 									<c:set var="totalQuantity" --%> -->
-						<!-- 					<%-- 										value="${totalQuantity + detail.quantity}" /> --%> -->
-						<!-- 					<%-- 								</c:forEach> ${totalQuantity} --%> -->
-						<!-- 												</strong> -->
-						<!-- 											</h4> -->
-						<!-- 											<h4> -->
-						<!-- 					<%-- 							Tổng tiền : <strong> <c:set var="total" value="0" /> <c:forEach --%> -->
-						<!-- 					<%-- 									var="detail" items="${order.orderDetails}"> --%> -->
-						<!-- 					<%-- 									<c:set var="total" --%> -->
-						<!-- 					<%-- 										value="${total + (detail.product.price  * detail.quantity)}" /> --%> -->
-						<!-- 					<%-- 								</c:forEach> <fmt:formatNumber value="${ total }" type="currency" --%> -->
-						<!-- 					<%-- 									currencySymbol="" /><sup>đ</sup> --%> -->
-						<!-- 					</strong> -->
-						<!-- 					</h4> -->
-					</div>
-				</div>
-			</div>
-		</th:block>
-	</main>
-	<!-- 	Main concept end -->
+    <!-- Modal -->
+    <div
+      th:each="order, loopStatus : ${orders}"
+      class="modal fade"
+      th:id="'orderHistory_' + ${order.id}"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">CHI TIẾT ĐƠN HÀNG</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-	<!-- Footer Section Begin -->
-	<!-- Footer Section End -->
+    <!-- Js Plugins -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+      crossorigin="anonymous"
+    ></script>
 
-	<!-- Js Plugins -->
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-		crossorigin="anonymous"></script>
+    <script th:src="@{/js/main.js}"></script>
 
-	<script src="/js/main.js"></script>
-	<script type="text/javascript" th:src="@{/js/main.js}"></script>
-
-	<!-- Custom JS search by day - id -->
-	<script>
-		console.log('Hello')
-		function handleSearchChange() {
-			const searchInput = document.getElementById("searchInput");
-			const searchOption = document.getElementById("inputGroupSelect01").value;
-			if (searchOption === "date") {
-				searchInput.setAttribute("type", "date");
-			}
-			if (searchOption === "id") {
-				searchInput.setAttribute("type", "text");
-			}
-		}
-	</script>
-</body>
+    <script>
+      function handleSearchChange() {
+        const searchInput = document.getElementById("searchInput");
+        const searchOption =
+          document.getElementById("inputGroupSelect01").value;
+        if (searchOption === "date") {
+          searchInput.setAttribute("type", "date");
+        }
+        if (searchOption === "id") {
+          searchInput.setAttribute("type", "text");
+        }
+      }
+    </script>
+  </body>
 </html>
