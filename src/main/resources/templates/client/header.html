@@ -27,7 +27,8 @@
 								<li ng-class="{ 'active' : cart.path == 'shop'}"><a href="/shop">Sản phẩm
 									</a></li>
 								<li ng-class="{ 'active' : cart.path == 'order'}"><a href="/shop/order-history">Đơn
-										hàng </a></li>
+										hàng | </a></li>
+								<span th:object="${session.username}"></span>
 							</ul>
 						</nav>
 					</div>
@@ -40,7 +41,7 @@
 									 width="20px" /><span class="badge badge-danger position-absolute"
 									  style="top: -2px"> {{cart.countTotal}}
 								</span></a>
-							<th:block th:if="${account}">
+							<th:block th:if="${session.username != null}">
 								<div class="dropdown d-inline">
 									<div class="btn btn-white dropdown-toggle btn-sm"
 										 type="button"
@@ -61,7 +62,7 @@
 									</div>
 								</div>
 							</th:block>
-							<th:block th:if="${account == false}">
+							<th:block th:if="${session.username == null}">
 								<a href="/account/login"
 								   class="btn btn-outline-dark font-weight-bold"> ĐĂNG NHẬP</a>
 							</th:block>
