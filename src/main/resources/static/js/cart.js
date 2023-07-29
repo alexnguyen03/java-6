@@ -5,6 +5,9 @@ app.controller('cartCtrl', function ($scope, $http) {
 		currentPath: '',
 		checkAll: false,
 		selectedItems: [],
+		quantityInDetail: 1,
+		isQuantityValid: true,
+		isOutOfProduct: false,
 		plus(id) {
 			var item = this.items.find((item) => item.id == id);
 			item.quantity++;
@@ -17,6 +20,33 @@ app.controller('cartCtrl', function ($scope, $http) {
 			}
 			item.quantity--;
 			this.saveToLocalStorage();
+		},
+		checkQuantity(totalProduct) {
+			console.log(totalProduct);
+			if (this.quantityInDetail > totalProduct) {
+				// alert('Bạn không được chọn số lượng sản phẩm quá số lượng có sẵn !!');
+				// this.quantityInDetail = 1;
+				this.isQuantityValid = false;
+			} else {
+				this.isQuantityValid = true;
+			}
+		},
+		addInDetail(id) {
+			var item = this.items.find((item) => item.id == id);
+			if (item) {
+				item.quantity += this.quantityInDetail;
+				this.saveToLocalStorage();
+				this.quantityInDetail = 1;
+			} else {
+				$http.get(`../rest/products/${id}`).then((resp) => {
+					console.log(resp.data);
+					resp.data.quantity = this.quantityInDetail;
+
+					this.items.push(resp.data);
+					this.saveToLocalStorage();
+					this.quantityInDetail = 1;
+				});
+			}
 		},
 		add(id) {
 			var item = this.items.find((item) => item.id == id);

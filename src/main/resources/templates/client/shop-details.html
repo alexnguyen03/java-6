@@ -182,11 +182,12 @@
                         aria-hidden="true"
                       ></i>
                       <input
-                        type="text"
+                        type="number"
                         class="form-control text-center"
-                        th:value="1"
                         id="quantity"
-                        name="quantity"
+                         th:attr="ng-change=@{|cart.checkQuantity(${product.quantity})|}"
+                        ng-model="cart.quantityInDetail"
+
                       />
                       <i
                         class="fa fa-plus text-dark border p-2 increase"
@@ -200,17 +201,14 @@
                     style="min-width: 200px"
                   ></div>
                 </div>
-                <input hidden="" name="productId" th:value="${ product.id }" />
-                <input
-                  hidden=""
-                  id="maxQuantity"
-                  th:value="${ product.quantity }"
-                />
+              
               </div>
+              <button ng-if="!cart.isQuantityValid"
+                   class="primary-btn font-weight-bold float-right ">Số lượng bạn chọn không đúng. Vui lòng chọn lại</button>
               <button
-               
+               ng-if="cart.isQuantityValid"
                 class="primary-btn font-weight-bold float-right myBtn"
-                 th:attr="ng-click=@{|cart.add(${product.id})|}"
+                 th:attr="ng-click=@{|cart.addInDetail(${product.id})|}"
               >
                 Thêm vào giỏ hàng
               </button>

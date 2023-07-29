@@ -77,11 +77,11 @@ public class LoginController {
 		Account account = dao.findById(session.get("username")).get();
 		session.set("account", account);
 
-		if (account.getAdmin()) {
-			session.set("adminImg", account.getPhoto());
+		// if (account.getAdmin()) {
+		// session.set("adminImg", account.getPhoto());
 
-			return "redirect:/admin";
-		}
+		// return "redirect:/admin";
+		// }
 
 		Cart cart = cartDAO.findByUserName(account.getUsername());
 		List<CartDetail> cartDetails = cart.getCartDetails();
