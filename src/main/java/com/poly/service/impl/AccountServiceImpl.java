@@ -1,19 +1,32 @@
 package com.poly.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.poly.model.Account;
+import com.poly.model.Category;
+import com.poly.repository.AccountDAO;
+import com.poly.repository.CategoryDAO;
+import com.poly.service.AccountService;
+import com.poly.service.CategoryService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import com.poly.model.Account;
 import com.poly.repository.AccountDAO;
 import com.poly.service.AccountService;
 import org.springframework.ui.Model;
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService{
+	
+	@Autowired
+	AccountDAO accountDAO;
+
+	@Override
+	public Account findById(String id) {
+		return accountDAO.findById(id).get();
+  }
 
 	@Autowired
 	AccountDAO adao;
@@ -43,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Account update(Account account) {
-		return adao.save(account);
+		return accountDAO.save(account);
 	}
 
 	@Override

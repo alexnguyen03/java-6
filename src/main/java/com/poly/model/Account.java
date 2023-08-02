@@ -2,9 +2,9 @@ package com.poly.model;
 
 import java.io.Serializable;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "Accounts")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 public class Account implements Serializable {
 	@Id
 	@NotBlank(message = "{NotBlank.account.username}")
@@ -41,9 +42,7 @@ public class Account implements Serializable {
 	private String email;
 
 	private String photo;
-	private Boolean activated;
 	private String token;
-
 	@OneToMany(mappedBy = "account")
 	private List<Order> orders;
 
@@ -52,7 +51,7 @@ public class Account implements Serializable {
 
 	@OneToMany(mappedBy = "account")
 	private List<Cart> carts;
-
+  
 	// @JsonIgnore
 	// @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
 	// List<Authority> authorities;
