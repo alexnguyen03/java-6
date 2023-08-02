@@ -36,7 +36,7 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	Page<Product> findByPriceBetween(double minPrice, double maxPrice, Pageable pageable);
 
 	// Select By Category name like
-	@Query("SELECT p FROM Product p WHERE p.category.name like ?1 AND available = True")
+	@Query("SELECT p FROM Product p WHERE p.category.name like ?1")
 	Page<Product> findByCategoryNameLike(String name, Pageable pageable);
 
 	// DSL Select By Name

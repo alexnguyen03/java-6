@@ -2,8 +2,12 @@ const app = angular.module('app', []);
 app.controller('cartCtrl', function ($scope, $http) {
 	$scope.cart = {
 		items: [],
+		currentPath: '',
 		checkAll: false,
 		selectedItems: [],
+		quantityInDetail: 1,
+		isQuantityValid: true,
+		isOutOfProduct: false,
 		plus(id) {
 			var item = this.items.find((item) => item.id == id);
 			item.quantity++;
@@ -16,6 +20,33 @@ app.controller('cartCtrl', function ($scope, $http) {
 			}
 			item.quantity--;
 			this.saveToLocalStorage();
+		},
+		checkQuantity(totalProduct) {
+			console.log(totalProduct);
+			if (this.quantityInDetail > totalProduct) {
+				// alert('Bạn không được chọn số lượng sản phẩm quá số lượng có sẵn !!');
+				// this.quantityInDetail = 1;
+				this.isQuantityValid = false;
+			} else {
+				this.isQuantityValid = true;
+			}
+		},
+		addInDetail(id) {
+			var item = this.items.find((item) => item.id == id);
+			if (item) {
+				item.quantity += this.quantityInDetail;
+				this.saveToLocalStorage();
+				this.quantityInDetail = 1;
+			} else {
+				$http.get(`../rest/products/${id}`).then((resp) => {
+					console.log(resp.data);
+					resp.data.quantity = this.quantityInDetail;
+
+					this.items.push(resp.data);
+					this.saveToLocalStorage();
+					this.quantityInDetail = 1;
+				});
+			}
 		},
 		add(id) {
 			var item = this.items.find((item) => item.id == id);
@@ -30,6 +61,17 @@ app.controller('cartCtrl', function ($scope, $http) {
 					this.saveToLocalStorage();
 				});
 			}
+		},
+		//set active page
+		get path() {
+			let path = '';
+			if (window.location.href.includes('shop')) {
+				path = 'shop';
+			}
+			if (window.location.href.includes('cart-detail')) {
+				path = 'order';
+			}
+			return path;
 		},
 		setSelected(id) {
 			let itemFound = this.items.find((item) => item.id == id);
@@ -69,6 +111,9 @@ app.controller('cartCtrl', function ($scope, $http) {
 		},
 		get count() {
 			return this.selectedItems.map((item) => item.quantity).reduce((total, quantity) => (total += quantity), 0);
+		},
+		get countTotal() {
+			return this.items.map((item) => item.quantity).reduce((total, quantity) => (total += quantity), 0);
 		},
 		get amount() {
 			return this.selectedItems.map((item) => item.quantity * item.price).reduce((total, quantity) => (total += quantity), 0);
