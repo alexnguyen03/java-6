@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -23,6 +26,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "Accounts")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 public class Account implements Serializable {
 	@Id
 	@NotBlank(message = "{NotBlank.account.username}")
@@ -37,13 +41,10 @@ public class Account implements Serializable {
 	private String email;
 
 	private String photo;
-	private Boolean activated;
 	@OneToMany(mappedBy = "account")
 	private List<Order> orders;
 	@OneToMany(mappedBy = "account")
 	private List<Review> reviews;
-	@OneToMany(mappedBy = "account")
-	private List<Cart> carts;
 
 	@Override
 	public String toString() {
