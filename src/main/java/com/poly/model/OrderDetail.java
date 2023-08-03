@@ -3,6 +3,8 @@ package com.poly.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class OrderDetail implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	Product product;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "order_id")
 	Order order;

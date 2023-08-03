@@ -1,22 +1,19 @@
 package com.poly.model;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.hibernate.validator.constraints.Length;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+
+import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Getter
@@ -38,11 +35,14 @@ public class Account implements Serializable {
 
 	private String photo;
 	private Boolean activated;
-	private Boolean admin;
+	//	private Boolean admin;
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Order> orders;
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Review> reviews;
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Cart> carts;
 

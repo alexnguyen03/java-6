@@ -1,216 +1,387 @@
-import {faBoxOpen, faCartArrowDown, faChartPie, faChevronDown, faClipboard, faCommentDots, faFileAlt, faPlus, faRocket, faStore} from '@fortawesome/free-solid-svg-icons';
+import {faList, faUser} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {Button, Col, Dropdown, Row} from '@themesberg/react-bootstrap';
-import React from 'react';
-import {GeneralInfoForm} from '../components/Forms';
-
+import {Button, Card, Col, Form, Modal, Row, Table, Toast} from '@themesberg/react-bootstrap';
+import React, {useEffect, useState, useRef} from 'react';
 import DataTable from 'react-data-table-component';
+import images from '../assets/img/products/0000.jpg';
+const ROOT_URL = 'http://localhost:8080/admin/orders';
 
 export default () => {
+	const [showCard, setShowCard] = useState(false);
+	const [showToast, setShowToast] = useState(false);
+	const [showUpdateBtn, setShowUpdateBtn] = useState(false);
+	const [orderDetails, setOrderDetails] = useState([]);
+	const [showNote, setShowNote] = useState(false);
+	const handleCloseModal = () => setShowModal(false);
+	const [loading, setLoading] = useState(true);
+	const [newStatus, setNewStatus] = useState('');
+	const [user, setUser] = useState([]);
+	const [notes, setNotes] = useState('');
+	const [showModal, setShowModal] = useState(false);
+	const [orders, setOrders] = useState([{}]);
 	const columns = [
 		{
-			name: 'Title',
-			selector: (row) => row.title,
+			name: 'Mã đơn hàng',
+			selector: (row) => row.id,
+		},
+		{
+			name: 'Tổng tiền',
+			sortable: true,
+			selector: (row) => row.totalPrice,
+		},
+		{
+			name: 'Ngày đặt',
+			selector: (row) => row.createDate,
 			sortable: true,
 		},
 		{
-			name: 'Year',
-			selector: (row) => row.year,
+			name: 'Trạng thái',
+			selector: (row) => displayStatus(row.status),
 			sortable: true,
 		},
+		// {
+		// 	button: true,
+		// 	cell: (row) => <button className='btn btn-warning btn-xs'>Edit</button>,
+		// },
 	];
 
-	const data = [
-		{
-			id: 1,
-			title: 'Beetlejuice',
-			year: '1988',
-		},
-		{
-			id: 2,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 3,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 4,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 5,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 6,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 7,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 8,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 9,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 10,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 11,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-		{
-			id: 12,
-			title: 'Ghostbusters',
-			year: '1984',
-		},
-	];
-
-	const handleRowClicked = (row) => {
-		console.log(row.title);
+	const [order, setOrder] = useState({
+		address: '',
+		createDate: '',
+		id: -1,
+		notes: '',
+		phone: '',
+		status: '',
+		totalPrice: 0,
+	});
+	const getData = async () => {
+		try {
+			const resp = await fetch(ROOT_URL);
+			const data = await resp.json();
+			{
+				setLoading(false);
+				console.log(data);
+				setOrders(data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
+	const handleGetOrderDetails = async (row) => {
+		setShowNote(false);
+		setShowCard(true);
+		if (row.id === order.id) {
+			return;
+		}
+		try {
+			const resp = await fetch(ROOT_URL + `/users/${row.id}`);
+			const data = await resp.json();
+			setShowCard(true);
+			setUser(data);
+			setOrder(row);
+		} catch (error) {
+			console.log(error);
+		}
+		console.log(images);
+		try {
+			const resp = await fetch(ROOT_URL + `/detail/${row.id}`);
+			const od = await resp.json();
+			setOrderDetails(od);
+		} catch (error) {
+			console.log(error);
+		}
+		if (row.status === 'H' || row.status === 'G') {
+			setShowUpdateBtn(false);
+		} else {
+			setShowUpdateBtn(true);
+		}
+	};
+	const displayStatus = (status) => {
+		switch (status) {
+			case 'H':
+				return 'Đã hủy';
+				break;
+			case 'XL':
+				return 'Đang chờ xử lý';
+				break;
+			case 'DG':
+				return 'Đang giao';
+				break;
+			case 'G':
+				return 'Đã giao';
+				break;
+			default:
+				return 'Không có ';
+				break;
+		}
+	};
+
+	const handleShowModal = () => setShowModal(true);
+
+	const renderSelect = (status) => {
+		switch (status) {
+			case 'XL':
+				return (
+					<>
+						<option value='Xl'>Chờ xử lý</option>
+						<option value='DG'>Đang giao</option>
+						<option value='H'>Hủy</option>
+					</>
+				);
+				break;
+			case 'DG':
+				return (
+					<>
+						<option value='DG'>Đang giao</option>
+						<option value='G'>Đã giao</option>
+						<option value='H'>Hủy</option>
+					</>
+				);
+				break;
+
+			default:
+				break;
+		}
+	};
+	const displayBadgeStatus = (status) => {
+		switch (status) {
+			case 'H':
+				return 'danger';
+				break;
+			case 'XL':
+				return 'secondary';
+				break;
+			case 'DG':
+				return 'success';
+				break;
+			case 'G':
+				return 'success';
+				break;
+			default:
+				break;
+		}
+	};
+
+	const handleOnChangeSelect = (e) => {
+		if (e.target.value === order.status) {
+			setShowUpdateBtn(false);
+			setShowNote(false);
+		} else if (e.target.value === 'H') {
+			setShowNote(true);
+			setShowUpdateBtn(true);
+		} else {
+			setShowNote(false);
+			setShowUpdateBtn(true);
+		}
+		setNewStatus(e.target.value);
+	};
+
+	const handleSubmitForm = async (e) => {
+		e.preventDefault();
+		handleCloseModal();
+		setShowNote(false);
+		setShowUpdateBtn(false);
+		Object.assign(order, {status: newStatus});
+		if (notes !== '') {
+			Object.assign(order, {notes: notes});
+		}
+		console.log(order);
+
+		try {
+			const resp = await fetch(ROOT_URL + `/${order.id}`, {
+				method: 'PUT',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(order),
+			});
+			const data = resp.json();
+			setNotes('');
+		} catch (error) {
+			console.log(error);
+		}
+		setShowToast(true);
+	};
+
+	const handleChangeTextarea = (e) => {
+		setNotes(e.target.value);
+	};
+
+	useEffect(() => {
+		getData();
+	}, []);
 
 	return (
 		<>
-			<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4'>
-				<Dropdown>
-					<Dropdown.Toggle
-						as={Button}
-						variant='secondary'
-						className='text-dark me-2'>
-						<FontAwesomeIcon
-							icon={faPlus}
-							className='me-2'
-						/>
-						<span>orders</span>
-					</Dropdown.Toggle>
-					<Dropdown.Menu className='dashboard-dropdown dropdown-menu-left mt-2'>
-						<Dropdown.Item>
-							<FontAwesomeIcon
-								icon={faFileAlt}
-								className='me-2'
-							/>{' '}
-							Document
-						</Dropdown.Item>
-						<Dropdown.Item>
-							<FontAwesomeIcon
-								icon={faCommentDots}
-								className='me-2'
-							/>{' '}
-							Message
-						</Dropdown.Item>
-						<Dropdown.Item>
-							<FontAwesomeIcon
-								icon={faBoxOpen}
-								className='me-2'
-							/>{' '}
-							Product
-						</Dropdown.Item>
-
-						<Dropdown.Divider />
-
-						<Dropdown.Item>
-							<FontAwesomeIcon
-								icon={faRocket}
-								className='text-danger me-2'
-							/>{' '}
-							Subscription Plan
-						</Dropdown.Item>
-					</Dropdown.Menu>
-				</Dropdown>
-
-				<div className='d-flex'>
-					<Dropdown>
-						<Dropdown.Toggle
-							as={Button}
-							variant='primary'>
-							<FontAwesomeIcon
-								icon={faClipboard}
-								className='me-2'
-							/>{' '}
-							Reports
-							<span className='icon icon-small ms-1'>
-								<FontAwesomeIcon icon={faChevronDown} />
-							</span>
-						</Dropdown.Toggle>
-						<Dropdown.Menu className='dashboard-dropdown dropdown-menu-left mt-1'>
-							<Dropdown.Item>
-								<FontAwesomeIcon
-									icon={faBoxOpen}
-									className='me-2'
-								/>{' '}
-								Products
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<FontAwesomeIcon
-									icon={faStore}
-									className='me-2'
-								/>{' '}
-								Customers
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<FontAwesomeIcon
-									icon={faCartArrowDown}
-									className='me-2'
-								/>{' '}
-								Orders
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<FontAwesomeIcon
-									icon={faChartPie}
-									className='me-2'
-								/>{' '}
-								Console
-							</Dropdown.Item>
-
-							<Dropdown.Divider />
-
-							<Dropdown.Item>
-								<FontAwesomeIcon
-									icon={faRocket}
-									className='text-success me-2'
-								/>{' '}
-								All Reports
-							</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
-				</div>
-			</div>
-
-			<Row>
-				<Col
-					xs={12}
-					xl={12}>
-					<GeneralInfoForm />
-				</Col>
+			<Row className='mb-3'>
+				{showCard && (
+					<>
+						<Col xl={3}>
+							<Card className={`position-relative  border-2 border-${displayBadgeStatus(order.status)}`}>
+								<Toast
+									onClose={() => setShowToast(false)}
+									show={showToast}
+									autohide
+									className='position-absolute top-0 start-50 translate-middle-x z-3 bg-success'>
+									<Toast.Header>
+										<strong className='me-auto'>4MEMS - Thông báo</strong>
+									</Toast.Header>
+									<Toast.Body className='text-white'>Cập nhật trạng thái đơn hàng thành công !</Toast.Body>
+								</Toast>
+								<Card.Body>
+									<Card.Title className='text-center fw-bold'>
+										{' '}
+										<FontAwesomeIcon
+											icon={faUser}
+											className={`text-${displayBadgeStatus(order.status)}`}
+										/>
+										<span className='mx-2'>Thông tin khách hàng</span>
+									</Card.Title>
+									<div className='mb-2'>
+										Họ và tên: <strong>{user.fullname}</strong>
+									</div>
+									<div className='mb-2'>
+										Địa chi: <strong>{order.address}</strong>
+									</div>
+									<div className='mb-2'>
+										Số điện thoại: <strong>{order.phone}</strong>
+									</div>
+									<div className='mb-2'>
+										Tổng tiền thanh toán: <strong>{order.totalPrice}</strong>
+									</div>
+									<div className='mb-2'>
+										Trạng thái đơn hàng: <strong className={`badge  bg-${displayBadgeStatus(order.status)}`}> {displayStatus(order.status)}</strong>
+										{(order.status === 'XL' || order.status === 'DG') && (
+											<Form.Select
+												onChange={handleOnChangeSelect}
+												aria-label='Default select example'
+												size='sm'
+												defaultValue={order.status}>
+												{renderSelect(order.status)}
+											</Form.Select>
+										)}
+										{showNote && (
+											<>
+												<Form.Control
+													onChange={handleChangeTextarea}
+													as='textarea'
+													value={notes}
+													className='mt-2'
+													placeholder='Lý do hủy đơn hàng'
+													style={{height: '50px'}}
+												/>
+											</>
+										)}
+									</div>
+									{order.status === 'H' && (
+										<div className='mb-2'>
+											Lý đo hủy: <u>{order.notes}</u>
+										</div>
+									)}
+									{showUpdateBtn && (order.status !== 'H' || order.status !== 'G') && (
+										<>
+											<Row>
+												<Col xl={6}>
+													<Button
+														disabled={newStatus === '' || (showNote && notes === '')}
+														onClick={handleShowModal}
+														variant='primary'
+														size='sm'>
+														Cập nhật trạng thái
+													</Button>
+												</Col>
+											</Row>
+											<Modal
+												show={showModal}
+												onHide={handleCloseModal}
+												backdrop='static'
+												keyboard={false}>
+												<Modal.Header closeButton>
+													<Modal.Title>Xác nhận câp nhật trạng thái đơn hàng</Modal.Title>
+												</Modal.Header>
+												<Modal.Body>
+													Bạn có chắc chắn cập nhật lại trạng thái của đơn hàng có mã là <strong className='fw-bold badge bg-info'> {order.id} </strong>từ <strong className='fw-bold badge bg-info'>{displayStatus(order.status)}</strong> thành <strong className='fw-bold badge bg-info'> {displayStatus(newStatus)}</strong> không ??
+												</Modal.Body>
+												<Modal.Footer>
+													<Button
+														variant='secondary'
+														size='sm'
+														onClick={handleCloseModal}>
+														Không, hủy
+													</Button>
+													<Button
+														onClick={handleSubmitForm}
+														variant='primary'
+														size='sm'>
+														Có, cập nhật
+													</Button>
+												</Modal.Footer>
+											</Modal>
+										</>
+									)}
+								</Card.Body>
+							</Card>
+						</Col>
+						<Col
+							xl={9}
+							className='position-relative'>
+							<Card>
+								<Card.Body>
+									<Card.Title className='text-center fw-bold'>
+										<FontAwesomeIcon icon={faList} />
+										<span className='mx-2'>Thông tin chi tiết đơn hàng</span>
+									</Card.Title>
+									{order.id !== -1 && (
+										<Card.Title className='text-center fw-bold alert alert-info'>
+											<span className='mx-2'>Mã đơn hàng {order.id}</span>
+										</Card.Title>
+									)}
+									<Table
+										striped
+										bordered
+										hover>
+										<thead>
+											<tr>
+												<th>Mã Sản phẩm</th>
+												<th>Giá</th>
+												<th>Tên sản phẩm</th>
+												<th>Số lượng</th>
+											</tr>
+										</thead>
+										<tbody>
+											{orderDetails.map((od) => {
+												const {id, name, image} = od.product;
+												return (
+													<tr key={id}>
+														<td>{id}</td>
+														<td>{od.price}</td>
+														<td>{name}</td>
+														<td>{od.quantity}</td>
+													</tr>
+												);
+											})}
+										</tbody>
+									</Table>
+									<ul></ul>
+								</Card.Body>
+							</Card>
+						</Col>
+					</>
+				)}
 			</Row>
 			<Row>
-				<Col
-					xs={12}
-					xl={12}>
+				<Col xl={12}>
 					<DataTable
+						// expandableRows
 						columns={columns}
-						data={data}
+						data={orders}
 						pagination
 						highlightOnHover
-						onRowDoubleClicked={handleRowClicked}
+						progressPending={loading}
+						onRowDoubleClicked={handleGetOrderDetails}
+						fixedHeader
+						fixedHeaderScrollHeight='500px'
 					/>
 				</Col>
 			</Row>

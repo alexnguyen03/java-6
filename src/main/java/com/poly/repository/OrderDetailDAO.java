@@ -84,4 +84,6 @@ public interface OrderDetailDAO extends JpaRepository<OrderDetail, Long> {
 	// get transaction
 	@Query("SELECT o FROM OrderDetail o WHERE o.order.status != 'H' ORDER BY o.order.createDate DESC")
 	List<OrderDetail> getTop10OrderDetail(Pageable pageable);
+
+	List<OrderDetail> findAllByOrder_Id(Long id);
 }
