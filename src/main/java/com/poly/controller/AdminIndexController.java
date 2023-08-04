@@ -31,15 +31,6 @@ import com.poly.service.SessionService;
 @RequestMapping("/admin")
 public class AdminIndexController {
 	@Autowired
-	ProductDAO productDAO;
-
-	@Autowired
-	OrderDAO orderDAO;
-
-	@Autowired
-	OrderDetailDAO orderDetailDAO;
-
-	@Autowired
 	SessionService session;
 
 	@Autowired

@@ -1,39 +1,102 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCog, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Form, Button, ButtonGroup, Breadcrumb, InputGroup, Dropdown } from '@themesberg/react-bootstrap';
 
 import { TransactionsTable } from "../components/Tables";
 
-const url = 'http://localhost:8080';
+const url = 'http://localhost:8080/admin/index';
 
 export default () => {
   const [topTenOrderDetails, setTopTenOrderDetails] = useState([]);
   const [bestSellingProduct, setBestSellingProduct] = useState([]);
+  const [statusProduct, setStatusProduct] = useState([]);
+  const [productNewest, setProductNewest] = useState([]);
+  const [totalReneue, setTotalReneue] = useState([]);
+  const [totalProductSoldToday, setTotalProductSoldToday] = useState([]);
 
-  const fetchTopTenOrderDetails = useCallback(async () => {
+  // fetchBestingSelling
+  const fetchBestSellingProduct = async () => {
     try {
-      const response = await fetch(`${url}/getTopTenOrderDetails`)
+      const response = await fetch(`${url}/bestSellingProduct`)
       const data = await response.json()
-      const { topTen } = data
-      if (topTen) {
-        const newTopTen = topTen.map((item) => {
-          const { productName, createDate, orderStatus, orderID } = item
+      const bestSelling = data
+
+      if (bestSelling) {
+        const newbestSelling = bestSelling.map((item) => {
+          const { id, name, image, price, createDate, avaialable, quantity } = item
           return {
-            id: orderID,
-            name: productName,
+            id: id,
+            name: name,
+            image: image,
+            price: price,
             createDate: createDate,
-            status: orderStatus,
+            available: avaialable,
+            quantity: quantity,
           }
         })
-        setTopTenOrderDetails(newTopTen);
+        setBestSellingProduct(newbestSelling);
       } else {
-        setTopTenOrderDetails([]);
+        setBestSellingProduct([]);
       }
     } catch (error) {
-      console.log(error)
+      console.log('Error: ' + error)
     }
-  })
+  }
+
+  // ProductNewset
+  const fetchProductNewest = async () => {
+    try {
+      const response = await fetch(`${url}/selectProductNewest`)
+      const data = await response.json()
+      const newproductNewest = data
+      if (newproductNewest.length === 0) {
+        setProductNewest(0);
+        console.log(productNewest);
+      } else {
+        setProductNewest(newproductNewest);
+      }
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
+  }
+
+  // TotalRenue
+  const fetchtotalRenue = async () => {
+    try {
+      const response = await fetch(`${url}/totalRevenue`)
+      const data = await response.json()
+      const newTotalRenue = data
+      if (newTotalRenue === null) {
+        setTotalReneue(0);
+        console.log(totalReneue);
+      } else {
+        setTotalReneue(newTotalRenue);
+      }
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
+  }
+
+  // TotalRenue
+  const fetchTotalProductsSoldToday = async () => {
+    try {
+      const response = await fetch(`${url}/totalProductsSoldToday`)
+      const data = await response.json()
+      const newTotalProductSoldToday = data
+      setTotalProductSoldToday(newTotalProductSoldToday);
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
+  }
+
+  useEffect(() => {
+    fetchBestSellingProduct();
+    fetchProductNewest();
+    fetchtotalRenue();
+    fetchTotalProductsSoldToday();
+  }, [])
+
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -59,22 +122,22 @@ export default () => {
         {/* Item */}
         <div className="card text-center col-3" style={{ background: "#effcef" }}>
           <div className="card-body">
-            <h3 className="card-title fw-bold">5</h3>
-            <p className="text-dark fw-bolder">Sản phẩm vừa thêm</p>
+            <h3 className="card-title fw-bold fs-3">{productNewest}</h3>
+            <p className="text-dark fw-semibold">Sản phẩm vừa thêm</p>
           </div>
         </div>
         {/* Item */}
         <div className="card text-center col-3" style={{ background: "#e6f5f9" }}>
           <div className="card-body">
-            <h3 className="card-title fw-bold">3.000.000$</h3>
-            <p className="text-dark fw-bolder">Tổng doanh thu</p>
+            <h3 className="card-title fw-bold fs-3">{totalReneue}$</h3>
+            <p className="text-dark fw-semibold">Tổng doanh thu</p>
           </div>
         </div>
         {/* Item */}
         <div className="card text-center col-3" style={{ background: "#f4f6fa" }}>
           <div className="card-body">
-            <h3 className="card-title fw-bold">10</h3>
-            <p className="text-dark fw-bolder">Tổng sản phẩm bán được</p>
+            <h3 className="card-title fw-bold fs-3">{totalProductSoldToday}</h3>
+            <p className="text-dark fw-semibold">Tổng sản phẩm bán được trong ngày</p>
           </div>
         </div>
       </div>
@@ -128,7 +191,7 @@ export default () => {
                 <h5 className="card-title mb-4 font-weight-bold">
                   <i className='bx bx-trophy mr-2' style={{ color: '#dc3545' }}></i>Sản phẩm bán chạy nhất
                 </h5>
-                {/* {bestSellingProduct.map((p) => (
+                {bestSellingProduct.map((p) => (
                   <div className="row my-2" key={p.id}>
                     <div className="col-12 text-truncate text-dark">
                       <h6>
@@ -136,7 +199,7 @@ export default () => {
                       </h6>
                     </div>
                   </div>
-                ))} */}
+                ))}
               </div>
             </div>
           </div>
