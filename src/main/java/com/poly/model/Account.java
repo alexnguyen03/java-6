@@ -19,6 +19,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -43,15 +47,17 @@ public class Account implements Serializable {
 
 	private String photo;
 	private String token;
+	Boolean activated;
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Order> orders;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Review> reviews;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Cart> carts;
-  
+
 	// @JsonIgnore
 	// @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
 	// List<Authority> authorities;

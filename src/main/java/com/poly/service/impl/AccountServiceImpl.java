@@ -1,38 +1,25 @@
 package com.poly.service.impl;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.poly.model.Account;
-import com.poly.model.Category;
-import com.poly.repository.AccountDAO;
-import com.poly.repository.CategoryDAO;
-import com.poly.service.AccountService;
-import com.poly.service.CategoryService;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
+
 import com.poly.model.Account;
 import com.poly.repository.AccountDAO;
 import com.poly.service.AccountService;
-import org.springframework.ui.Model;
 
 @Service
-public class AccountServiceImpl implements AccountService{
-	
+public class AccountServiceImpl implements AccountService {
+
 	@Autowired
 	AccountDAO accountDAO;
-
-	@Override
-	public Account findById(String id) {
-		return accountDAO.findById(id).get();
-  }
 
 	@Autowired
 	AccountDAO adao;
 
-//	@Autowired
-//	PasswordEncoder pe;
+	// @Autowired
+	// PasswordEncoder pe;
 
 	@Override
 	public Account findById(String username) {
@@ -44,10 +31,10 @@ public class AccountServiceImpl implements AccountService{
 		return adao.findAll();
 	}
 
-//	@Override
-//	public List<Account> getAdministrators() {
-//		return adao.getAdministrators();
-//	}
+	// @Override
+	// public List<Account> getAdministrators() {
+	// return adao.getAdministrators();
+	// }
 
 	@Override
 	public Account create(Account account) {
@@ -64,16 +51,18 @@ public class AccountServiceImpl implements AccountService{
 		adao.deleteById(username);
 	}
 
-//	@Override
-//	public void loginFromOAuth2(OAuth2AuthenticationToken oauth2) {
-//		// String fullname = oauth2.getPrincipal().getAttribute("name");
-//		String email = oauth2.getPrincipal().getAttribute("email");
-//		String password = Long.toHexString(System.currentTimeMillis());
-//
-//		UserDetails user = User.withUsername(email).password(pe.encode(password)).roles("CUST").build();
-//		Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-//		SecurityContextHolder.getContext().setAuthentication(auth);
-//	}
+	// @Override
+	// public void loginFromOAuth2(OAuth2AuthenticationToken oauth2) {
+	// // String fullname = oauth2.getPrincipal().getAttribute("name");
+	// String email = oauth2.getPrincipal().getAttribute("email");
+	// String password = Long.toHexString(System.currentTimeMillis());
+	//
+	// UserDetails user =
+	// User.withUsername(email).password(pe.encode(password)).roles("CUST").build();
+	// Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
+	// user.getAuthorities());
+	// SecurityContextHolder.getContext().setAuthentication(auth);
+	// }
 
 	@Override
 	public void updateToken(String token, String email) throws Exception {

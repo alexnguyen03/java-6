@@ -6,7 +6,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,11 +43,14 @@ public class Order implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "create_date")
 	Date createDate = new Date();
+	// @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "username")
 	Account account;
+	@JsonIgnore
 	@OneToMany(mappedBy = "order")
 	List<OrderDetail> orderDetails;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "coupon_id")
 	Coupon coupon;
