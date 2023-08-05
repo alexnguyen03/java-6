@@ -23,8 +23,8 @@ import './scss/volt.scss';
 // vendor styles
 import 'react-datetime/css/react-datetime.css';
 
-import HomePage from './pages/HomePage';
 import ScrollToTop from './components/ScrollToTop';
+import HomePage from './pages/HomePage';
 
 ReactDOM.render(
 	<HashRouter>
