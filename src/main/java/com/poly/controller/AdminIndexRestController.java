@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.poly.model.Account;
 import com.poly.model.Order;
 import com.poly.model.OrderDetail;
 import com.poly.model.Product;
 import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
 import com.poly.repository.ProductDAO;
+import com.poly.service.SessionService;
 
 @CrossOrigin("*")
 @RestController
@@ -30,6 +32,9 @@ public class AdminIndexRestController {
 
     @Autowired
     OrderDetailDAO orderDetailDAO;
+
+    @Autowired
+    SessionService sessionService;
 
     @GetMapping("/admin/index/findByStatusC")
     public List<Order> getFindByStatusC() {
@@ -58,7 +63,14 @@ public class AdminIndexRestController {
 
     @GetMapping("/admin/index/getPageTopTenOrderDetails")
     public List<OrderDetail> getPageTopTenOrderDetails() {
-        return orderDetailDAO.getTop10OrderDetail(PageRequest.of(0, 10));
+        Account ac = new Account();
+        ac.setUsername("hoainam");
+        ac.setPassword("123456");
+        ac.setFullname("Hoài Nam");
+        ac.setEmail("namnhpc03517@fpt.edu.vn");
+
+        sessionService.set("account", ac);
+        return orderDetailDAO.getTop10OrderDetailNonePageAble();
     }
 
     @GetMapping("/admin/index/bestSellingProduct")

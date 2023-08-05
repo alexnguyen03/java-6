@@ -78,7 +78,7 @@ export default () => {
     }
   }
 
-  // TotalRenue
+  // TotalProductSoldToday
   const fetchTotalProductsSoldToday = async () => {
     try {
       const response = await fetch(`${url}/totalProductsSoldToday`)
@@ -90,11 +90,40 @@ export default () => {
     }
   }
 
+  // StatusProduct
+  const fetchStatusProduct = async () => {
+    try {
+      const response = await fetch(`${url}/findByStatusC`)
+      const data = await response.json()
+      const newStatusProduct = data
+      if (newStatusProduct.length === 0) {
+        setStatusProduct(0)
+      }
+      setStatusProduct(newStatusProduct.length)
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
+  }
+
+  // StatusProduct
+  const fetchPageTopTenOrderDetails = async () => {
+    try {
+      const response = await fetch(`${url}/getPageTopTenOrderDetails`)
+      const data = await response.json()
+      const newTopTenOrder = data
+      setTopTenOrderDetails(newTopTenOrder)
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
+  }
+
   useEffect(() => {
     fetchBestSellingProduct();
     fetchProductNewest();
     fetchtotalRenue();
     fetchTotalProductsSoldToday();
+    fetchStatusProduct();
+    fetchPageTopTenOrderDetails();
   }, [])
 
   return (
@@ -105,7 +134,7 @@ export default () => {
             <Breadcrumb.Item><FontAwesomeIcon icon={faHome} /></Breadcrumb.Item>
             <Breadcrumb.Item active>Trang Chủ</Breadcrumb.Item>
           </Breadcrumb>
-          <h3>Chào mừng trở lại, <strong>YourAdminName</strong></h3>
+          <h3>Chào mừng trở lại, <span className="fs-3 fw-bold">YourAdminName</span></h3>
           {/* <p className="mb-0">Your web analytics dashboard template.</p> */}
         </div>
 
@@ -118,26 +147,33 @@ export default () => {
       </div>
 
       {/* statistic concept*/}
-      <div className="row gap-2">
+      <div className="d-flex justify-content-between gap-3">
         {/* Item */}
-        <div className="card text-center col-3" style={{ background: "#effcef" }}>
+        <div className="card text-center col-xl-3 col-lg-3 col-md-6 col-sm-12" style={{ background: "#effcef" }}>
           <div className="card-body">
             <h3 className="card-title fw-bold fs-3">{productNewest}</h3>
             <p className="text-dark fw-semibold">Sản phẩm vừa thêm</p>
           </div>
         </div>
         {/* Item */}
-        <div className="card text-center col-3" style={{ background: "#e6f5f9" }}>
+        <div className="card text-center col-xl-3 col-lg-3 col-md-6 col-sm-12" style={{ background: "#e6f5f9" }}>
           <div className="card-body">
-            <h3 className="card-title fw-bold fs-3">{totalReneue}$</h3>
+            <h3 className="card-title fw-bold fs-3">{totalReneue}</h3>
             <p className="text-dark fw-semibold">Tổng doanh thu</p>
           </div>
         </div>
         {/* Item */}
-        <div className="card text-center col-3" style={{ background: "#f4f6fa" }}>
+        <div className="card text-center col-xl-3 col-lg-3 col-md-6 col-sm-12" style={{ background: "#f4f6fa" }}>
           <div className="card-body">
             <h3 className="card-title fw-bold fs-3">{totalProductSoldToday}</h3>
             <p className="text-dark fw-semibold">Tổng sản phẩm bán được trong ngày</p>
+          </div>
+        </div>
+        {/* Item */}
+        <div className="card text-center col-xl-3 col-lg-3 col-md-6 col-sm-12" style={{ background: "#f4f6fa" }}>
+          <div className="card-body">
+            <h3 className="card-title fw-bold fs-3">{statusProduct}</h3>
+            <p className="text-dark fw-semibold">Tổng sản phẩm chờ xác nhận</p>
           </div>
         </div>
       </div>
@@ -145,14 +181,15 @@ export default () => {
       {/* Content */}
       <div className="main-content mt-4">
         <div className="row">
+          <h3>Tổng Giao dịch trong ngày: <strong>5</strong></h3>
           {/* Item */}
           <div className="col-8">
             <div className="card-full-height">
               <div className="card h-100">
                 <div className="card-body">
-                  <h5 className="card-title font-weight-bold mb-4">
-                    <i className='bx bxs-right-arrow mr-2'></i>Giao dịch
-                  </h5>
+                  <h4 className="card-title fw-bold mb-4">
+                    <i class="fas fa-play"></i> Giao dịch
+                  </h4>
                   <div className="row">
                     {/* {TopTenOrderDetails.map((orderDetail) => (
                       <div className="col-12 mb-4" key={orderDetail.order.id}>
@@ -188,14 +225,14 @@ export default () => {
           <div className="col-4">
             <div className="card h-100">
               <div className="card-body">
-                <h5 className="card-title mb-4 font-weight-bold">
-                  <i className='bx bx-trophy mr-2' style={{ color: '#dc3545' }}></i>Sản phẩm bán chạy nhất
-                </h5>
-                {bestSellingProduct.map((p) => (
+                <h4 className="card-title mb-4 fw-bold">
+                  <i class="fas fa-play"></i> Sản phẩm bán chạy nhất
+                </h4>
+                {bestSellingProduct.map((p, index) => (
                   <div className="row my-2" key={p.id}>
                     <div className="col-12 text-truncate text-dark">
                       <h6>
-                        <i className='bx bxs-star-half'></i> {p.name}
+                        {index + 1}. {p.name}
                       </h6>
                     </div>
                   </div>
