@@ -24,15 +24,10 @@ export default () => {
 
       if (bestSelling) {
         const newbestSelling = bestSelling.map((item) => {
-          const { id, name, image, price, createDate, avaialable, quantity } = item
+          const { id, name } = item
           return {
             id: id,
             name: name,
-            image: image,
-            price: price,
-            createDate: createDate,
-            available: avaialable,
-            quantity: quantity,
           }
         })
         setBestSellingProduct(newbestSelling);
@@ -52,7 +47,6 @@ export default () => {
       const newproductNewest = data
       if (newproductNewest.length === 0) {
         setProductNewest(0);
-        console.log(productNewest);
       } else {
         setProductNewest(newproductNewest);
       }
@@ -118,12 +112,17 @@ export default () => {
   }
 
   useEffect(() => {
-    fetchBestSellingProduct();
-    fetchProductNewest();
-    fetchtotalRenue();
-    fetchTotalProductsSoldToday();
-    fetchStatusProduct();
-    fetchPageTopTenOrderDetails();
+    try {
+      fetchBestSellingProduct();
+      fetchProductNewest();
+      fetchtotalRenue();
+      fetchTotalProductsSoldToday();
+      fetchStatusProduct();
+      fetchPageTopTenOrderDetails();
+    } catch (error) {
+      console.log('error: ' + error);
+    }
+    // SetLoading False
   }, [])
 
   return (
@@ -138,12 +137,12 @@ export default () => {
           {/* <p className="mb-0">Your web analytics dashboard template.</p> */}
         </div>
 
-        <div className="btn-toolbar mb-2 mb-md-0">
-          <ButtonGroup>
-            <Button variant="outline-primary" size="sm">Share</Button>
-            <Button variant="outline-primary" size="sm">Export</Button>
-          </ButtonGroup>
-        </div>
+        {/* <div className="btn-toolbar mb-2 mb-md-0">
+            <ButtonGroup>
+              <Button variant="outline-primary" size="sm">Share</Button>
+              <Button variant="outline-primary" size="sm">Export</Button>
+            </ButtonGroup>
+          </div> */}
       </div>
 
       {/* statistic concept*/}
@@ -178,10 +177,10 @@ export default () => {
         </div>
       </div>
 
-      {/* Content */}
+      {/* Content Transaction */}
       <div className="main-content mt-4">
         <div className="row">
-          <h3>Tổng Giao dịch trong ngày: <strong>5</strong></h3>
+          <h3>Tổng Giao dịch trong ngày: <strong>{topTenOrderDetails.length}</strong></h3>
           {/* Item */}
           <div className="col-8">
             <div className="card-full-height">
@@ -191,29 +190,58 @@ export default () => {
                     <i class="fas fa-play"></i> Giao dịch
                   </h4>
                   <div className="row">
-                    {/* {TopTenOrderDetails.map((orderDetail) => (
-                      <div className="col-12 mb-4" key={orderDetail.order.id}>
-                        <div className="d-flex justify-content-between align-items-center flex-wrap">
-                          <div className="p-2 d-flex justify-content-center align-items-center" style={{ background: '#dc3545', width: '35px', height: '35px', borderRadius: '50%' }}>
-                            <i className='bx bx-headphone' style={{ color: '#fff' }}></i>
+                    {/* {topTenOrderDetails.map((orderDetail) => (
+                        <div className="col-12 mb-4" key={orderDetail.id}>
+                          <div className="d-flex justify-content-between align-items-center flex-wrap">
+                            <div className="p-2 d-flex justify-content-center align-items-center" style={{ background: '#dc3545', width: '35px', height: '35px', borderRadius: '50%' }}>
+                              <i class="fa fa-headphones" aria-hidden="true" style={{ color: "#fff" }}></i>
+                            </div>
+                            <div className="font-weight-bold d-flex flex-column">
+                              <h6 className="text-truncate" style={{ maxWidth: '250px' }}>{orderDetail.product.name}</h6>
+                              <p className="text-muted">{orderDetail.product.createDate}</p>
+                            </div>
+                            <div className="font-weight-bold d-flex flex-column">
+                              <h6 style={{ color: '#dc3545' }}>
+                                {orderDetail.price} | {orderDetail.quantity}
+                              </h6>
+                              <p className="text-muted">{orderDetail.id}</p>
+                            </div>
                           </div>
-                          <div className="font-weight-bold d-flex flex-column">
-                            <h6 className="text-truncate" style={{ maxWidth: '250px' }}>{orderDetail.product.name}</h6>
-                            <p className="text-muted">{orderDetail.order.createDate}</p>
-                          </div>
-                          <div className="font-weight-bold d-flex flex-column">
-                            <h6 style={{ color: '#dc3545' }}>
-                              {orderDetail.order.status === 'C' ? 'Đang chờ' : ''}
-                              {orderDetail.order.status === 'XL' ? 'Đang xử lý' : ''}
-                              {orderDetail.order.status === 'G' ? 'Đang giao' : ''}
-                              {orderDetail.order.status === 'ĐG' ? 'Đã giao' : ''}
-                            </h6>
-                            <p className="text-muted">{orderDetail.order.id}</p>
-                          </div>
+                          <hr className="m-0 p-0" />
                         </div>
-                        <hr className="m-0 p-0" />
-                      </div>
-                    ))} */}
+                      ))} */}
+                    <div class="table-responsive">
+                      <table class="table table-striped
+                        table-hover
+                        align-middle">
+                        <thead class="">
+                          <caption>Transaction</caption>
+                          <tr style={{ background: "#e6f5f9" }}>
+                            <th>ID</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá sản phẩm</th>
+                            <th>Tổng tiền</th>
+                            <th>Số lượng</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                          {
+                            topTenOrderDetails.map((o) => (
+                              <tr key={o.id}>
+                                <td>{o.id}</td>
+                                <td>{o.product.image}</td>
+                                <td>{o.product.name}</td>
+                                <td>{o.product.price}</td>
+                                <td>{o.price}</td>
+                                <td>{o.quantity}</td>
+                              </tr>
+                            ))
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+
                   </div>
                   {/* Item */}
                 </div>
@@ -246,28 +274,28 @@ export default () => {
 
       {/* Setting Table  */}
       {/* <div className="table-settings mb-4">
-        <Row className="justify-content-between align-items-center">
-          <Col xs={12} md={12} xl={12} className="ps-md-0 text-end">
-            <Dropdown as={ButtonGroup}>
-              <Dropdown.Toggle split as={Button} variant="link" className="text-dark m-0 p-0">
-                <span className="icon icon-sm icon-gray">
-                  <FontAwesomeIcon icon={faCog} />
-                </span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu-xs dropdown-menu-right">
-                <Dropdown.Item className="fw-bold text-dark">Show</Dropdown.Item>
-                <Dropdown.Item className="d-flex fw-bold">
-                  10 <span className="icon icon-small ms-auto"><FontAwesomeIcon icon={faCheck} /></span>
-                </Dropdown.Item>
-                <Dropdown.Item className="fw-bold">20</Dropdown.Item>
-                <Dropdown.Item className="fw-bold">30</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-        </Row>
-      </div> */}
+          <Row className="justify-content-between align-items-center">
+            <Col xs={12} md={12} xl={12} className="ps-md-0 text-end">
+              <Dropdown as={ButtonGroup}>
+                <Dropdown.Toggle split as={Button} variant="link" className="text-dark m-0 p-0">
+                  <span className="icon icon-sm icon-gray">
+                    <FontAwesomeIcon icon={faCog} />
+                  </span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu-xs dropdown-menu-right">
+                  <Dropdown.Item className="fw-bold text-dark">Show</Dropdown.Item>
+                  <Dropdown.Item className="d-flex fw-bold">
+                    10 <span className="icon icon-small ms-auto"><FontAwesomeIcon icon={faCheck} /></span>
+                  </Dropdown.Item>
+                  <Dropdown.Item className="fw-bold">20</Dropdown.Item>
+                  <Dropdown.Item className="fw-bold">30</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Row>
+        </div> */}
 
       {/* <TransactionsTable /> */}
     </>
   );
-};
+}
