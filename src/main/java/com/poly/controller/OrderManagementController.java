@@ -12,13 +12,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.poly.model.Account;
 import com.poly.model.Order;
@@ -30,6 +35,9 @@ import com.poly.repository.ProductDAO;
 import com.poly.service.EmailServiceImpl;
 import com.poly.service.ParamService;
 import com.poly.service.SessionService;
+import com.poly.service.impl.OrderDetailImpl;
+import com.poly.service.impl.OrderServiceImpl;
+import com.poly.service.impl.ProductServiceImpl;
 import com.poly.utils.EmailDetail;
 
 @Controller
@@ -38,9 +46,11 @@ public class OrderManagementController {
     @Autowired
     OrderDetailDAO orderDetailDAO;
     @Autowired
-    ProductDAO productDAO;
+    OrderDetailImpl orderDetailService;
     @Autowired
-    OrderDAO orderDAO;
+    ProductServiceImpl productService;
+    @Autowired
+    OrderServiceImpl orderService;
     @Autowired
     EmailServiceImpl emailServiceImpl;
     @Autowired
@@ -48,78 +58,34 @@ public class OrderManagementController {
     @Autowired
     ParamService paramService;
 
-    @GetMapping("order")
-    public String orderManagementView(Model model,
-            @RequestParam("eop") Optional<Integer> eop,
-            @RequestParam("p") Optional<Integer> p, @RequestParam("d") Optional<Boolean> direc) {
-        int defaultPage = 0;
-        int defaultElementOfPage = 5;
-        List<Order> filterByStatus = null;
-        // get param status
-        String status = paramService.getString("status", "");
-        Pageable pageable = PageRequest.of(p.orElse(defaultPage), eop.orElse(defaultElementOfPage));
-        System.out.println(status.isBlank());
-        Page<Order> page = orderDAO.findOrderActive(pageable);
-        if (!status.isBlank()) {
-            model.addAttribute("status", status);
-            if (status.equals("All")) {
-                page = orderDAO.findOrderActive(pageable);
-                model.addAttribute("isFilterByStatusEmpty", true);
-            } else {
-                filterByStatus = orderDAO.findByStatus(status);
-                if (filterByStatus.size() > 0) {
-                    model.addAttribute("filterByStatus", filterByStatus);
-                    model.addAttribute("isFilterByStatusEmpty", false);
-                } else {
-                    model.addAttribute("isFilterByStatusEmpty", true);
-                }
-            }
-        }
-        // List<Order> orders = orderDAO.findAll();
-        // ! dsl
-        // List<Order> orders = orderDAO.findOrderActive();
-        // get canceled orders
-        List<Order> orderCanceleds = orderDAO.findByStatus("H");
-        String searchKey = paramService.getString("searchKey", "");
-        if (!searchKey.isBlank()) {
-            Date searchVal = paramService.getDate("searchVal", "yyyy-MM");
-            LocalDate localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            int day = localDate.getDayOfMonth();
-            int month = localDate.getMonthValue();
-            int year = localDate.getYear();
-            if (searchKey.equals("date")) {
-                page = orderDAO.findAllByCreateddateDate(day, month, year, pageable);
-            }
-            if (searchKey.equals("month")) {
-                page = orderDAO.findAllByCreateddateMonth(month, year, pageable);
-            }
-            model.addAttribute("page", page);
-            model.addAttribute("searchVal", searchVal);
-            model.addAttribute("searchKey", searchKey);
-        }
-        System.out.println(page.getSize());
-        // System.out.println(page.getSize());
-        // System.out.println(filterByStatus.size());
-        model.addAttribute("eop", eop.orElse(defaultElementOfPage));
-        model.addAttribute("p", p.orElse(defaultPage));
-        model.addAttribute("title", "QUẢN LÝ ĐƠN HÀNG");
-        model.addAttribute("pageActive", "order");
-        model.addAttribute("page", page);
-        model.addAttribute("orderCanceleds", orderCanceleds);
-        model.addAttribute("isPageActive", "order");
-        if (sessionService.get("isUpdated") != null) {
-            model.addAttribute("isUpdated", true);
-            sessionService.remove("isUpdated");
-        }
-        System.out.println(page.getSize());
-        return "/admin/order";
+    @GetMapping("orders")
+    @ResponseBody
+    public List<Order> getAll() {
+        return orderService.findAll();
     }
 
-    @PostMapping("order")
+    @GetMapping("orders/detail/{orderID}")
+    @ResponseBody
+    public List<OrderDetail> getAllOrderDetailByOrderID(@PathVariable("orderID") Long id) {
+        return orderDetailService.findByOrderId(id);
+    }
+
+    @GetMapping("orders/users/{orderID}")
+    @ResponseBody
+    public Account getAllAccount(@PathVariable("orderID") Long id) {
+        return orderService.findAllAccount(id);
+    }
+
+    @PutMapping("orders/{orderID}")
+    public ResponseEntity<Object> updateOrder(@RequestBody Order order, @PathVariable("orderID") Long id) {
+
+        return ResponseEntity.ok(orderService.save(order));
+    }
+
     public String updateStatus(@RequestParam("id") Long id, @RequestParam("status") String status,
             @RequestParam("notes") Optional<String> notes) {
         System.out.println(id + " " + status);
-        Order order = orderDAO.findById(id).get();
+        Order order = orderService.findById(id);
         if (status.equals("H")) {
             order.setNotes(notes.get());
             // gui mail sau khi huy don hang
@@ -136,19 +102,17 @@ public class OrderManagementController {
                             "\n3MEMS thành thật xin lỗi quý khách vì đơn hàng đã bị hủy.\nMong quý khách luôn tin tưởng và ủng hộ 3MEMS trong thời gian sắp tới ! ");
             String sts = emailServiceImpl.sendSimpleMail(details);
             List<OrderDetail> ls = order.getOrderDetails();
-
             for (OrderDetail orderDetail : ls) {
                 Product prod = orderDetail.getProduct();
-
                 System.out.println("oldProd" + orderDetail.getProduct().getQuantity());
                 System.out.println("orderDetail " + orderDetail.getQuantity());
                 prod.setQuantity(prod.getQuantity() + orderDetail.getQuantity());
                 System.out.println("new Prod " + prod.getQuantity());
-                productDAO.save(prod);
+                productService.save(prod);
             }
         }
         order.setStatus(status);
-        orderDAO.save(order);
+        orderService.save(order);
         sessionService.set("isUpdated", true);
         return "redirect:/admin/order";
     }
