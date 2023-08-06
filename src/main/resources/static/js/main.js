@@ -186,12 +186,14 @@
 // Scroll top navbar
 var lastScroll = 0;
 var navbar = document.getElementById('header_scroll_top');
-window.addEventListener('scroll', function () {
-	var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-	if (scrollTop > lastScroll) {
-		navbar.style.top = '-150px';
-	} else {
-		navbar.style.top = '0';
-	}
-	lastScroll = scrollTop;
-});
+if (navbar) {
+	window.addEventListener('scroll', function () {
+		var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		if (scrollTop > lastScroll) {
+			navbar.style.top = '-150px';
+		} else {
+			navbar.style.top = '0';
+		}
+		lastScroll = scrollTop;
+	});
+}
