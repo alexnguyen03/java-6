@@ -1,5 +1,6 @@
 package com.poly.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -33,4 +34,6 @@ public interface ProductService {
 	List<Product> findTop10BestSellingProducts();
 
 	List<Product> findTop10ByOrderByCreateDateDesc();
+
+	List<Product> findByCreateDateBetween(Date start, Date end);
 }

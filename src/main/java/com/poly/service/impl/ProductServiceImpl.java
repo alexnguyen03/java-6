@@ -1,5 +1,6 @@
 package com.poly.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Page<Product> findAll(Pageable pageable) {
 		return productDAO.findAll(pageable);
+	}
+
+	@Override
+	public List<Product> findByCreateDateBetween(Date start, Date end) {
+		return productDAO.findByCreateDateBetween(start, end);
 	}
 
 }

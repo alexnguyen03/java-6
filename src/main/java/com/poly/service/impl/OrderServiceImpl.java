@@ -1,5 +1,6 @@
 package com.poly.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.poly.model.Account;
@@ -36,8 +37,6 @@ public class OrderServiceImpl implements OrderService {
        return  findAllCancel();
     }
 
-
-
     @Override
     public Account findAllAccount(Long id) {
         return orderDAO.findOrderById(id);
@@ -56,6 +55,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order save(Order order) {
         return orderDAO.save(order);
+    }
+
+    @Override
+    public Double getTotalRevenue() {
+        return orderDAO.getTotalRevenue();
+    }
+
+    @Override
+    public List<Order> findByStatus(String status) {
+        return orderDAO.findByStatus(status);
+    }
+
+    @Override
+    public Long countProductsSoldByDate(Date startDate, Date endDate) {
+        return orderDAO.countProductsSoldByDate(startDate, endDate);
     }
 
 }
