@@ -32,15 +32,15 @@ public class LoginController {
 	@Autowired
 	CartDAO cartDAO;
 
-	@RequestMapping("login")
-	public String logInForm(Model model, Account account) {
-		String username = cookieService.getValue("username");
-		if (username != null) {
-			session.set("username", username);
-			model.addAttribute("username", username);
-		}
-		return "account/login";
-	}
+	// @RequestMapping("login")
+	// public String logInForm(Model model, Account account) {
+	// String username = cookieService.getValue("username");
+	// if (username != null) {
+	// session.set("username", username);
+	// model.addAttribute("username", username);
+	// }
+	// return "account/login";
+	// }
 
 	@RequestMapping("login/success")
 	public String logInSuccess(Model model, Account account) {

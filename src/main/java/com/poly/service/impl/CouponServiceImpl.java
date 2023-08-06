@@ -18,17 +18,31 @@ import com.poly.service.ProductService;
 @Service
 public class CouponServiceImpl implements CouponService {
 
-	@Autowired
-	CouponDAO couponDAO;
+    @Autowired
+    CouponDAO couponDAO;
 
-	@Override
-	public Coupon findByIdActivated(String couponCode) {
-		return couponDAO.findByIdActivated(couponCode);
-	}
+    @Override
+    public Coupon findByIdActivated(String couponCode) {
+        return couponDAO.findByIdActivated(couponCode);
+    }
 
-	@Override
-	public Coupon findById(String couponCode) {
-		return couponDAO.findById(couponCode).get();
-	}
+    @Override
+    public Coupon findById(String couponCode) {
+        return couponDAO.findById(couponCode).get();
+    }
 
+    @Override
+    public List<Coupon> findAll() {
+        return couponDAO.findAll();
+    }
+
+    @Override
+    public Coupon findByIDActive(String id) {
+        return couponDAO.findByIdActivated(id);
+    }
+
+    @Override
+    public Coupon save(Coupon coupon) {
+        return couponDAO.save(coupon);
+    }
 }
