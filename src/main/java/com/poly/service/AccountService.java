@@ -8,11 +8,7 @@ import org.springframework.ui.Model;
 import com.poly.model.Account;
 
 public interface AccountService {
-
-	Account findById(String id);
-
-	Account update(Account account);
-  
+ 
 	Account findById(String username);
 
 	List<Account> findAll();

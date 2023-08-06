@@ -22,6 +22,7 @@ import com.poly.model.CartDetail;
 import com.poly.model.Coupon;
 import com.poly.model.Order;
 import com.poly.model.OrderDetail;
+import com.poly.model.Payment;
 import com.poly.model.Product;
 import com.poly.repository.AccountDAO;
 import com.poly.repository.CartDAO;
@@ -30,7 +31,9 @@ import com.poly.repository.CouponDAO;
 import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
 import com.poly.repository.ProductDAO;
+import com.poly.service.AccountService;
 import com.poly.service.ParamService;
+import com.poly.service.PaymentService;
 import com.poly.service.PhoneNumberValidator;
 import com.poly.service.SessionService;
 
@@ -38,96 +41,86 @@ import com.poly.service.SessionService;
 @RequestMapping("shop/checkout")
 public class CheckOutController {
 	@Autowired
-	OrderDAO orderDAO;
+	AccountService accountService;
 	@Autowired
-	OrderDetailDAO orderDetailDAO;
-	@Autowired
-	SessionService sessionService;
-	@Autowired
-	ParamService paramService;
-	@Autowired
-	AccountDAO accountDAO;
-	@Autowired
-	CouponDAO couponDAO;
-	@Autowired
-	CartDetailDAO cartDetailDAO;
-	@Autowired
-	CartDAO cartDAO;
-	@Autowired
-	ProductDAO productDAO;
+	PaymentService paymentService;
 
 	@GetMapping("")
 	public String index(Model model) {
 		// lấy account
-		Account account = sessionService.get("account");
-		Cart cart = cartDAO.findByUserName(account.getUsername());
+//		Account account = sessionService.get("account");
+//		Cart cart = cartDAO.findByUserName(account.getUsername());
 		// lấy product
-		List<CartDetail> listCartDetail = cart.getCartDetails();
+//		List<CartDetail> listCartDetail = cart.getCartDetails();
 		// tính tổng tiền
-		double toTal_Price = 0;
-		for (CartDetail od : listCartDetail) {
-			double toTal = od.getProduct().getPrice() * od.getQuantity();
-			toTal_Price += toTal;
-		}
-		model.addAttribute("cartDetails", listCartDetail);
-		model.addAttribute("provisional", toTal_Price);
+//		double toTal_Price = 0;
+//		for (CartDetail od : listCartDetail) {
+//			double toTal = od.getProduct().getPrice() * od.getQuantity();
+//			toTal_Price += toTal;
+//		}
+//		model.addAttribute("cartDetails", listCartDetail);
+//		model.addAttribute("provisional", toTal_Price);
+//		model.addAttribute("account", account);
+		Account account = accountService.findById("hoainam");
 		model.addAttribute("account", account);
-		return "/client/checkout";
+		List<Payment> payment = paymentService.findAll();
+		model.addAttribute("payment", payment);
+		return "/client/checkoutt";
 	}
 
 	@PostMapping("/create")
 	public String checkout(Model model) {
 		// Order
-		Order order = new Order();
-		double toTal_Price = 0;
-		Account account = sessionService.get("account");
-		Cart cart = cartDAO.findByUserName(account.getUsername());
+//		Order order = new Order();
+//		double toTal_Price = 0;
+//		Account account = sessionService.get("account");
+//		Cart cart = cartDAO.findByUserName(account.getUsername());
 		// lấy product
-		List<CartDetail> listCartDetail = cart.getCartDetails();
-		for (CartDetail od : listCartDetail) {
-			double toTal = od.getProduct().getPrice() * od.getQuantity();
-			toTal_Price += toTal;
-		}
-		String phone = paramService.getString("phone", "");
-		String address = paramService.getString("address", "");
-		Coupon coupon = sessionService.get("coupon");
-		double discountAmount = 0.0;
-		if (coupon != null) {
-			discountAmount = coupon.getDiscountAmount();
-		}
-		if (PhoneNumberValidator.validate(phone)) {
-			order.setCoupon(coupon);
-			order.setAccount(account);
-			order.setPhone(phone);
-			order.setAddress(address);
-			order.setTotalPrice(toTal_Price - (toTal_Price * discountAmount));
-			order.setStatus("C");
-			orderDAO.save(order);
-			sessionService.remove("coupon");
+//		List<CartDetail> listCartDetail = cart.getCartDetails();
+//		for (CartDetail od : listCartDetail) {
+//			double toTal = od.getProduct().getPrice() * od.getQuantity();
+//			toTal_Price += toTal;
+//		}
+//		String phone = paramService.getString("phone", "");
+//		String address = paramService.getString("address", "");
+//		Coupon coupon = sessionService.get("coupon");
+//		double discountAmount = 0.0;
+//		if (coupon != null) {
+//			discountAmount = coupon.getDiscountAmount();
+//		}
+//		if (PhoneNumberValidator.validate(phone)) {
+//			order.setCoupon(coupon);
+//			order.setAccount(account);
+//			order.setPhone(phone);
+//			order.setAddress(address);
+//			order.setTotalPrice(toTal_Price - (toTal_Price * discountAmount));
+//			order.setStatus("C");
+//			orderDAO.save(order);
+//			sessionService.remove("coupon");
 			// OrderDetail
-			for (CartDetail od : listCartDetail) {
-				OrderDetail orderDetail = new OrderDetail();
-				orderDetail.setOrder(order);
-				orderDetail.setProduct(od.getProduct());
-				orderDetail.setPrice(od.getProduct().getPrice());
-				orderDetail.setQuantity(od.getQuantity());
-				orderDetailDAO.save(orderDetail);
+//			for (CartDetail od : listCartDetail) {
+//				OrderDetail orderDetail = new OrderDetail();
+//				orderDetail.setOrder(order);
+//				orderDetail.setProduct(od.getProduct());
+//				orderDetail.setPrice(od.getProduct().getPrice());
+//				orderDetail.setQuantity(od.getQuantity());
+//				orderDetailDAO.save(orderDetail);
 				// xóa sản phẩm của cartdetail
-				int productId = od.getProduct().getId();
-				cartDetailDAO.deleteByProductId(productId);
+//				int productId = od.getProduct().getId();
+//				cartDetailDAO.deleteByProductId(productId);
 				// cập nhật lại số lượng của sản phẩm
-				productDAO.updateQuantityProduct(od.getQuantity(), productId);
-			}
-		} else if (phone.equals("")) {
-			model.addAttribute("success", "Bạn chưa nhập số điện thoại !!!");
-			return "/client/checkout";
-		} else if (address.equals("")) {
-			model.addAttribute("success", "Bạn chưa nhập địa chỉ !!!");
-			return "/client/checkout";
-		} else {
-			model.addAttribute("success", "Số điện thoại không hợp lệ !!!");
-			return "/client/checkout";
-		}
+//				productDAO.updateQuantityProduct(od.getQuantity(), productId);
+//			}
+//		} else if (phone.equals("")) {
+//			model.addAttribute("success", "Bạn chưa nhập số điện thoại !!!");
+//			return "/client/checkout";
+//		} else if (address.equals("")) {
+//			model.addAttribute("success", "Bạn chưa nhập địa chỉ !!!");
+//			return "/client/checkout";
+//		} else {
+//			model.addAttribute("success", "Số điện thoại không hợp lệ !!!");
+//			return "/client/checkout";
+//		}
 		return "redirect:/shop/order-history";
 	}
 }

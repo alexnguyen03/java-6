@@ -8,7 +8,6 @@ import com.poly.model.Category;
 import com.poly.repository.AccountDAO;
 import com.poly.repository.CategoryDAO;
 import com.poly.service.AccountService;
-import com.poly.service.CategoryService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,11 +21,6 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Autowired
 	AccountDAO accountDAO;
-
-	@Override
-	public Account findById(String id) {
-		return accountDAO.findById(id).get();
-  }
 
 	@Autowired
 	AccountDAO adao;
