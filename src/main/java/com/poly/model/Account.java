@@ -28,18 +28,11 @@ import lombok.NoArgsConstructor;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 public class Account implements Serializable {
 	@Id
-	@NotBlank(message = "{NotBlank.account.username}")
 	private String username;
-
-	@NotBlank(message = "{NotBlank.account.password}")
 	private String password;
-
-	@NotBlank(message = "{NotBlank.account.fullname}")
 	private String fullname;
-
-	@NotBlank(message = "{NotBlank.account.email}")
-	@Email(message = "{Email.account.email}")
 	private String email;
+	private Boolean activated;
 
 	private String photo;
 	private String token;
@@ -49,9 +42,6 @@ public class Account implements Serializable {
 	@OneToMany(mappedBy = "account")
 	private List<Review> reviews;
 
-	@OneToMany(mappedBy = "account")
-	private List<Cart> carts;
-  
 	// @JsonIgnore
 	// @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
 	// List<Authority> authorities;

@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +43,9 @@ public class Order implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "username")
 	Account account;
+	@ManyToOne
+	@JoinColumn(name = "id_paymemt")
+	Payment payment;
 	@OneToMany(mappedBy = "order")
 	List<OrderDetail> orderDetails;
 	@ManyToOne

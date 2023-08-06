@@ -26,14 +26,9 @@ import lombok.Data;
 public class Coupon implements Serializable {
     @Id
     @Column(name = "coupon_code")
-    @NotBlank(message = "{NotBlank.coupon.couponCode}")
-    @Size(min = 6, max = 6, message = "{Size.coupon.couponCode}")
     String couponCode;
 
     @Column(name = "discount_amount")
-    @NotNull(message = "{NotNull.coupon.discountAmount")
-    @Min(value = 0, message = "{Min.coupon.discountAmount}")
-    @Max(value = 100, message = "{Max.coupon.discountAmount}")
     Double discountAmount;
 
     @Temporal(TemporalType.DATE)
@@ -57,6 +52,7 @@ public class Coupon implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_date")
     Date createdDate = new Date();
+    
     @OneToMany(mappedBy = "coupon")
     private List<Order> orders;
 }

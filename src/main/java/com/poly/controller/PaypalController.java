@@ -1,6 +1,7 @@
 package com.poly.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
@@ -23,6 +27,7 @@ import com.poly.repository.CartDetailDAO;
 import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
 import com.poly.repository.ProductDAO;
+import com.poly.service.AccountService;
 import com.poly.service.ParamService;
 import com.poly.service.PaypalService;
 import com.poly.service.SessionService;
@@ -46,6 +51,8 @@ public class PaypalController {
 	ProductDAO productDAO;
 	@Autowired
 	OrderDetailDAO orderDetailDAO;
+	@Autowired
+	AccountService accountService;
 
 	public static final String SUCCESS_URL = "pay/success";
 	public static final String CANCEL_URL = "pay/cancel";
@@ -55,8 +62,6 @@ public class PaypalController {
 		double total = paramService.getDouble("total", 0);
 		String phone = paramService.getString("sdt", "");
 		String address = paramService.getString("dc", "");
-		sessionService.set("phone", phone);
-		sessionService.set("address", address);
 		try {
 			Payment payment = service.createPayment(total, "USD", "paypal", "sale", address,
 					"http://localhost:8080/" + CANCEL_URL, "http://localhost:8080/" + SUCCESS_URL);
@@ -80,54 +85,36 @@ public class PaypalController {
 
 	@GetMapping(value = SUCCESS_URL)
 	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
-		double toTal_Price = 0;
-		Account account = sessionService.get("account");
-		Cart cart = cartDAO.findByUserName(account.getUsername());
-		// lấy product
-		List<CartDetail> listCartDetail = cart.getCartDetails();
-		for (CartDetail od : listCartDetail) {
-			double toTal = od.getProduct().getPrice() * od.getQuantity();
-			toTal_Price += toTal;
-		}
-
-		Coupon coupon = sessionService.get("coupon");
-		String phone = sessionService.get("phone");
-		String address = sessionService.get("address");
-
-		double discountAmount = 0.0;
-		if (coupon != null) {
-			discountAmount = coupon.getDiscountAmount();
-		}
 
 		try {
 			Payment payment = service.executePayment(paymentId, payerId);
 			System.out.println(payment.toJSON());
 			if (payment.getState().equals("approved")) {
-				Order order = new Order();
-				order.setCoupon(coupon);
-				order.setAccount(account);
-				order.setPhone(phone);
-				order.setAddress(address);
-				order.setTotalPrice(toTal_Price - (toTal_Price * (discountAmount / 100)));
-				order.setStatus("C");
+				JsonNode orderData = sessionService.get("orderData");
 
-				orderDAO.save(order);
-				sessionService.remove("coupon");
+				ObjectMapper mapper = new ObjectMapper();
+				Order order = mapper.convertValue(orderData, Order.class);
+				if (order.getPayment().getIdPaymemt() == 1) {
+					if (order.getCoupon().getCouponCode() != null) {
+						orderDAO.save(order);
 
-				for (CartDetail od : listCartDetail) {
-					OrderDetail orderDetail = new OrderDetail();
-					orderDetail.setOrder(order);
-					orderDetail.setProduct(od.getProduct());
-					orderDetail.setPrice(od.getProduct().getPrice());
-					orderDetail.setQuantity(od.getQuantity());
-					orderDetailDAO.save(orderDetail);
-					// xóa sản phẩm của cartdetail
-					int productId = od.getProduct().getId();
-					cartDetailDAO.deleteByProductId(productId);
-					// cập nhật lại số lượng của sản phẩm
-					productDAO.updateQuantityProduct(od.getQuantity(), productId);
+						TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
+						};
+						List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
+								.peek(d -> d.setOrder(order)).collect(Collectors.toList());
+						orderDetailDAO.saveAll(details);
+					} else {
+						order.setCoupon(null);
+						orderDAO.save(order);
+
+						TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
+						};
+						List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
+								.peek(d -> d.setOrder(order)).collect(Collectors.toList());
+						orderDetailDAO.saveAll(details);
+					}
 				}
-				return "redirect:/shop/order-history";
+				return "redirect:/shop/checkout";
 			}
 		} catch (PayPalRESTException e) {
 			System.out.println(e.getMessage());
