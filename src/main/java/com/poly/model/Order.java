@@ -3,10 +3,9 @@ package com.poly.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,14 +39,17 @@ public class Order implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "create_date")
 	Date createDate = new Date();
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "username")
 	Account account;
 	@ManyToOne
 	@JoinColumn(name = "id_paymemt")
 	Payment payment;
+	@JsonIgnore
 	@OneToMany(mappedBy = "order")
 	List<OrderDetail> orderDetails;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "coupon_id")
 	Coupon coupon;
@@ -56,5 +58,4 @@ public class Order implements Serializable {
 	public String toString() {
 		return "Order [id=" + id + "]";
 	}
-
 }

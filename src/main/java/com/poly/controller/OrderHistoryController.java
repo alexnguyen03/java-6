@@ -38,10 +38,10 @@ public class OrderHistoryController {
 
 	@GetMapping("")
 	public String index(Model model) {
-		if (sessionService.get("account") == null) {
-            sessionService.set("messageShop", "Đăng nhập trước khi xem đơn hàng");
-            return "redirect:/account/login";
-        }
+		// if (sessionService.get("account") == null) {
+		// sessionService.set("messageShop", "Đăng nhập trước khi xem đơn hàng");
+		// return "redirect:/account/login";
+		// }
 
 		Account account = sessionService.get("account");
 		List<Order> orders = orderDao.findByAccountName(account.getUsername());
@@ -65,7 +65,7 @@ public class OrderHistoryController {
 					model.addAttribute("orders", orders);
 					model.addAttribute("isCreateDate", true);
 					model.addAttribute("isSuscess", true);
-				}else {
+				} else {
 					model.addAttribute("success", "Không tìm thấy ngày đặt hàng là : " + keyword);
 					model.addAttribute("isSuscess", true);
 				}
