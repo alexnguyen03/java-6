@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
-import {Routes} from '../routes';
+import React, { useEffect, useState } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { Routes } from '../routes';
 
 // pages
 import Settings from './Settings';
@@ -29,6 +29,7 @@ import Sidebar from '../components/Sidebar';
 
 import Dashboard from './Dashboard';
 import Orders from './Orders';
+import Product from "./Product";
 import Accordion from './components/Accordion';
 import Alerts from './components/Alerts';
 import Badges from './components/Badges';
@@ -46,7 +47,7 @@ import Tabs from './components/Tabs';
 import Toasts from './components/Toasts';
 import Tooltips from './components/Tooltips';
 
-const RouteWithLoader = ({component: Component, ...rest}) => {
+const RouteWithLoader = ({ component: Component, ...rest }) => {
 	const [loaded, setLoaded] = useState(false);
 
 	useEffect(() => {
@@ -67,7 +68,7 @@ const RouteWithLoader = ({component: Component, ...rest}) => {
 	);
 };
 
-const RouteWithSidebar = ({component: Component, ...rest}) => {
+const RouteWithSidebar = ({ component: Component, ...rest }) => {
 	const [loaded, setLoaded] = useState(false);
 
 	useEffect(() => {
@@ -165,6 +166,11 @@ export default () => (
 			exact
 			path={Routes.Orders.path}
 			component={Orders}
+		/>
+		<RouteWithSidebar
+			exact
+			path={Routes.Product.path}
+			component={Product}
 		/>
 		<RouteWithSidebar
 			exact
