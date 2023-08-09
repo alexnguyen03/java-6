@@ -23,9 +23,11 @@ export default () => {
 	const handleCloseModal = () => setShowModal(false);
 	const [loading, setLoading] = useState(true);
 	const [newStatus, setNewStatus] = useState('');
+	const [filterKey, setFilterKey] = useState('');
 	const [notes, setNotes] = useState('');
 	const [showModal, setShowModal] = useState(false);
 	const [coupons, setCoupons] = useState([{}]);
+	const [couponsFilter, setCouponsFilter] = useState([{}]);
 	const [update, setUpdate] = useState(false);
 	const [focusedInput, setFocusedInput] = useState(null);
 
@@ -108,7 +110,18 @@ export default () => {
 			),
 		},
 	];
+	const conditionalRowStyles = [
+		{
+			when: (row) => row.activated === false,
 
+			style: (row) => ({backgroundColor: row.activated ? 'inerit' : 'pink'}),
+		},
+		{
+			when: (row) => row.couponCode === coupon.couponCode,
+
+			style: (row) => ({border: '1px grey solid'}, {backgroundColor: 'rgb(109, 235, 198)'}),
+		},
+	];
 	const getData = async () => {
 		try {
 			const resp = await fetch(ROOT_URL);
@@ -117,13 +130,32 @@ export default () => {
 				setLoading(false);
 				console.log(data);
 				setCoupons(data);
+				setCouponsFilter(data);
 			}
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
+	const filter = (e) => {
+		const keyword = e.target.value;
+
+		if (keyword !== '') {
+			const results = coupons.filter((coupon) => {
+				return coupon.couponName.toLowerCase().startsWith(keyword.toLowerCase());
+				// Use the toLowerCase() method to make it case-insensitive
+			});
+			setCouponsFilter(results);
+		} else {
+			setCouponsFilter(coupons);
+			// If the text field is empty, show all users
+		}
+
+		setFilterKey(keyword);
+	};
 	const handleGetCouponDetails = (row) => {
+		// Object.assign(coupon, {couponCode: row.couponCode, discountAmount: row.discountAmount, expirationDate: moment(rangeDate[1].$d).format('yyyy-MM-DD'), startDate: moment(rangeDate[0].$d).format('yyyy-MM-DD'), activated: row.activated, couponName: row.couponName, createdDate: moment(row.createdDate).format('yyyy-MM-DD')});
+
 		setUpdate(true);
 		setCouponCode(row.couponCode);
 		setCouponName(row.couponName);
@@ -203,6 +235,11 @@ export default () => {
 		handleResetForm();
 		setShowToast(true);
 	};
+	const handleShowCard = () => {
+		setShowCard((pre) => !pre);
+
+		setShowAddBtn((pre) => !pre);
+	};
 	const handleResetForm = () => {
 		setUpdate(false);
 		setCouponCode('');
@@ -212,6 +249,7 @@ export default () => {
 		setExpirationDate('');
 		setActivated(true);
 		setRangeDate([dayjs(new Date()), dayjs(new Date())]);
+		setActivated((pre) => !pre);
 	};
 
 	const handleOnChangeSelect = (e) => {
@@ -236,19 +274,6 @@ export default () => {
 						</Toast.Header>
 						<Toast.Body className='text-white'>Cập nhật trạng thái đơn hàng thành công !</Toast.Body>
 					</Toast>
-					{showAddBtn && (
-						<Col xl={12}>
-							<Button
-								className='float-end'
-								onClick={() => {
-									setShowCard((pre) => !pre);
-									setShowAddBtn(false);
-								}}
-								variant='success'>
-								Thêm khuyến mãi
-							</Button>
-						</Col>
-					)}
 				</Row>
 				{showCard && (
 					<>
@@ -257,7 +282,24 @@ export default () => {
 								border='light'
 								className='bg-white shadow-sm mb-4'>
 								<Card.Body>
-									<h5 className='mb-4'>Thông tin khuyến mãi</h5>
+									<Row>
+										<Col xl={6}>
+											<h5 className='mb-4'>Thông tin khuyến mãi</h5>
+										</Col>
+										<Col xl={6}>
+											<Button
+												size='sm'
+												onClick={() => {
+													setShowCard((pre) => !pre);
+													setShowAddBtn((pre) => !pre);
+												}}
+												className='float-end'
+												variant='danger'>
+												X
+											</Button>
+										</Col>
+									</Row>
+
 									<Form>
 										<Row>
 											<Col
@@ -319,6 +361,7 @@ export default () => {
 													<Form.Label>Trạng thái</Form.Label>
 													<Form.Select
 														defaultValue={coupon.activated}
+														value={coupon.activated}
 														onChange={handleOnChangeSelect}>
 														<option value='true'>Đang hoạt động</option>
 														<option value='false'>Không hoạt động</option>
@@ -333,6 +376,7 @@ export default () => {
 													component='DateRangePicker'>
 													<DateRangePicker
 														value={rangeDate}
+														minDate={!update ? dayjs(new Date()) : ''}
 														// onChange={(newValue) => handleDateChange(newValue)}
 														onChange={(newValue) => setRangeDate(newValue)}
 													/>
@@ -375,18 +419,54 @@ export default () => {
 					</>
 				)}
 			</Row>
-
+			<Row>
+				<Col xl={5}>
+					{showAddBtn && !showCard && (
+						<Button
+							className=''
+							onClick={handleShowCard}
+							variant='success'>
+							Thêm khuyến mãi
+						</Button>
+					)}
+				</Col>
+				<Col
+					xl={3}
+					className='offset-3 mb-3'>
+					<Form.Group id='firstName'>
+						<Form.Control
+							onChange={filter}
+							required
+							value={filterKey}
+							maxLength={6}
+							type='text'
+							placeholder='Tìm kiếm'
+						/>
+					</Form.Group>
+				</Col>
+				<Col xl={1}>
+					<Button
+						variant='gray'
+						onClick={() => {
+							setFilterKey('');
+							setCouponsFilter(coupons);
+						}}>
+						X
+					</Button>
+				</Col>
+			</Row>
 			<Row>
 				<Col xl={12}>
 					<DataTable
-						// expandableRows
 						columns={columns}
-						data={coupons}
+						data={couponsFilter}
 						pagination
+						striped
 						highlightOnHover
 						progressPending={loading}
 						fixedHeader
 						fixedHeaderScrollHeight='500px'
+						conditionalRowStyles={conditionalRowStyles}
 					/>
 				</Col>
 			</Row>
