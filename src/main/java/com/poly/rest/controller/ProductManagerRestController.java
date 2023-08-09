@@ -12,38 +12,44 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poly.model.Product;
 import com.poly.repository.ProductDAO;
+import com.poly.service.ProductService;
+import com.poly.service.impl.ProductServiceImpl;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/admin/product")
+@RequestMapping("/admin/products")
 public class ProductManagerRestController {
     @Autowired
-    ProductDAO productDAO;
+    ProductServiceImpl productService;
 
     @GetMapping
     public List<Product> getAllList() {
-        return productDAO.findAll();
+        return productService.findAll();
     }
 
     // GET a single product by ID
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable(value = "id") Integer id) {
-        Optional<Product> product = productDAO.findById(id);
-        if (product.isPresent()) {
-            return ResponseEntity.ok().body(product.get());
+        Product product = productService.findById(id);
+        if (product != null) {
+            return ResponseEntity.ok().body(product);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     // POST create a new product
-    @PostMapping("/create")
+    @PostMapping
+    @ResponseBody
     public Product createProduct(@RequestBody Product product) {
-        return productDAO.save(product);
+        System.out.println("Hello");
+        System.out.println(product);
+        return productService.save(product);
     }
 
     // PUT update an existing product
@@ -51,9 +57,9 @@ public class ProductManagerRestController {
     public ResponseEntity<Product> updateProduct(
             @PathVariable(value = "id") Integer id,
             @RequestBody Product productDetails) {
-        Optional<Product> product = productDAO.findById(id);
-        if (product.isPresent()) {
-            Product existingProduct = product.get();
+        Product product = productService.findById(id);
+        if (product != null) {
+            Product existingProduct = product;
             existingProduct.setName(productDetails.getName());
             existingProduct.setImage(productDetails.getImage());
             existingProduct.setPrice(productDetails.getPrice());
@@ -61,7 +67,7 @@ public class ProductManagerRestController {
             existingProduct.setCategory(productDetails.getCategory());
             // Update other fields and relationships as needed
 
-            return ResponseEntity.ok().body(productDAO.save(existingProduct));
+            return ResponseEntity.ok().body(productService.save(existingProduct));
         } else {
             return ResponseEntity.notFound().build();
         }

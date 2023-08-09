@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ROOT_URL = "http://localhost:8080/admin/product";
+const ROOT_URL = "http://localhost:8080/admin/products";
 
 const imageUrl = "http://localhost:8080/img/product";
 
@@ -18,6 +18,14 @@ export default () => {
   // Main variable
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  const [productName, setProductName] = useState("");
+  const [productImage, setProductImage] = useState("");
+  const [productPrice, setProductPrice] = useState(1);
+  const [productCreateDate, setProductCreateDate] = useState(new Date());
+  const [productAvailable, setProductAvailablA] = useState(true);
+  const [productQuantity, setProductQuantity] = useState(1);
+  const [productCategory, setProductCategory] = useState(null);
 
   // Variable for action
   const [showToast, setShowToast] = useState(false);
@@ -27,6 +35,7 @@ export default () => {
   const [isValidForm, setIsValidForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const fetchProductData = async () => {
     const response = await fetch(`${ROOT_URL}`);
@@ -57,74 +66,189 @@ export default () => {
 
   // CRUD Action
   const [product, setProduct] = useState({
-    name: "",
-    image: "",
-    price: 0,
-    createDate: new Date(),
-    available: false,
-    quantity: 0,
-    category: null,
+    productName: "",
+    productImage: "",
+    productPrice: 0,
+    productCreateDate: new Date(),
+    productAvailable: false,
+    productQuantity: 0,
+    productCategory: null,
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value,
-    }));
+  //   Columns Data
+  const columns = [
+    {
+      name: "Id",
+      selector: (row) => row.id,
+    },
+    {
+      name: "Tên sản phẩm",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Hình ảnh",
+      selector: (row) => (
+        <img
+          src={`${imageUrl}/` + row.image}
+          style={{ width: "50px", height: "50px" }}
+          alt={row.image}
+        />
+      ),
+    },
+    {
+      name: "Giá sản phẩm",
+      selector: (row) => row.price,
+      sortable: true,
+    },
+    {
+      name: "Ngày tạo",
+      selector: (row) => row.createDate,
+      sortable: true,
+    },
+    {
+      name: "Số lượng",
+      selector: (row) => row.quantity,
+      sortable: true,
+    },
+    {
+      name: "Trạng thái",
+      selector: (row) => displayStatus(row.available),
+      sortable: true,
+    },
+    {
+      button: true,
+      name: "Thao tác",
+      cell: (row) => (
+        <div className="d-flex">
+          <Button
+            variant="outline-tertiary"
+            onClick={() => {
+              console.log(row);
+              handleGetProduct(row);
+            }}
+            className="m-1"
+          >
+            <FontAwesomeIcon icon={faPenAlt} />
+          </Button>
+          <Button variant="outline-danger" className="m-1">
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  const handleGetProduct = (row) => {
+    console.log("hi");
+    setProductName(row.name);
+    setProductImage(row.image.values);
+    setProductPrice(row.price);
+    setProductCreateDate(row.createDate);
+    setProductAvailablA(row.available);
+    setProductQuantity(row.quantity);
+    setProductCategory(categories.values());
+
+    setProduct(row);
+    console.log(product);
   };
 
-  const handleSubmitForm = (e) => {
+  const displayStatus = (status) => {
+    return status ? "Hoạt động" : "Ẩn";
+  };
+
+  // const handleSubmitForm = async (e) => {
+  //   e.preventDefault();
+  //   // Kiểm tra tính hợp lệ của biểu mẫu (ví dụ: tên sản phẩm không thể trống)
+  //   // if (product.name.trim() === "") {
+  //   //   // Hiển thị thông báo lỗi nếu biểu mẫu không hợp lệ
+  //   //   setMessageModal("Please enter a product name.");
+  //   //   setShowToast(true);
+  //   //   return;
+  //   // }
+  //   console.log("hello");
+  //   console.log(JSON.stringify(product));
+
+  //   // Gửi yêu cầu API để thêm mới sản phẩm
+  //   await fetch(`${ROOT_URL}`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(product),
+  //   })
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         // Hiển thị thông báo thành công
+  //         setShowToast(true);
+  //         setMessageModal("Product added successfully.");
+  //         console.log("success");
+  //         // Cập nhật danh sách sản phẩm bằng cách gọi hàm fetchProductData()
+  //         //   fetchProductData();
+
+  //         // Đặt lại giá trị trong biểu mẫu
+  //         setProduct({
+  //           name: "",
+  //           image: "",
+  //           price: 0,
+  //           createDate: new Date(),
+  //           available: true,
+  //           quantity: 0,
+  //           category: null,
+  //         });
+  //       } else {
+  //         // Hiển thị thông báo lỗi nếu không thành công
+  //         setShowToast(true);
+  //         setMessageModal("Failed to add product.");
+  //         console.log("failed");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       // Hiển thị thông báo lỗi nếu có lỗi trong quá trình thêm mới sản phẩm
+  //       setShowToast(true);
+  //       setMessageModal("Failed to add product.");
+  //       console.log("failed");
+  //     });
+  // };
+
+  const handleSubmitProductForm = async (e) => {
     e.preventDefault();
-    // Kiểm tra tính hợp lệ của biểu mẫu (ví dụ: tên sản phẩm không thể trống)
-    if (product.name.trim() === "") {
-      // Hiển thị thông báo lỗi nếu biểu mẫu không hợp lệ
-      setMessageModal("Please enter a product name.");
-      setShowToast(true);
-      return;
-    }
 
-    // Gửi yêu cầu API để thêm mới sản phẩm
-    fetch(`${ROOT_URL}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(product),
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Hiển thị thông báo thành công
-          setShowToast(true);
-          setMessageModal("Product added successfully.");
-          console.log("success");
-          // Cập nhật danh sách sản phẩm bằng cách gọi hàm fetchProductData()
-          //   fetchProductData();
+    Object.assign(product, {
+      productName: productName,
+      productImage: productImage,
+      productPrice: productPrice,
+      productCreateDate: productCreateDate,
+      productAvailable: productAvailable,
+      productQuantity: productQuantity,
+      productCategory: productCategory,
+    });
 
-          // Đặt lại giá trị trong biểu mẫu
-          setProduct({
-            name: "",
-            image: "",
-            price: 0,
-            createDate: new Date(),
-            available: false,
-            quantity: 0,
-            category: null,
-          });
-        } else {
-          // Hiển thị thông báo lỗi nếu không thành công
-          setShowToast(true);
-          setMessageModal("Failed to add product.");
-          console.log("failed");
-        }
-      })
-      .catch((error) => {
-        // Hiển thị thông báo lỗi nếu có lỗi trong quá trình thêm mới sản phẩm
-        setShowToast(true);
-        setMessageModal("Failed to add product.");
-        console.log("failed");
+    console.log("Hi");
+    console.log(product);
+    console.log(JSON.stringify(product));
+
+    // handleResetForm();
+    // console.log(coupon);
+    try {
+      const resp = await fetch(ROOT_URL, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
       });
-      console.log(product);
+      const data = resp.json();
+      setProducts({ ...products, data });
+      setMessageModal("Thêm mới sản phẩm thành công");
+      setShowToast(true);
+    } catch (error) {
+      console.log(error);
+      setMessageModal("Thêm mới sản phẩm Thất bại");
+      setShowToast(true);
+    }
   };
 
   //   const handleSubmitForm = async (e, actionType) => {
@@ -176,6 +300,7 @@ export default () => {
   //   };
 
   //   Search Area
+  // Searching Hanlde
 
   const handleSearch = () => {
     // Perform the search logic based on the searchTerm value
@@ -208,82 +333,9 @@ export default () => {
     const timeout = setTimeout(() => {
       setShowToast(false);
       setMessageModal("");
-    }, 3000);
+    }, 10000);
     return () => clearTimeout(timeout);
   }, [showToast]);
-
-  //   Columns Data
-  const columns = [
-    {
-      name: "Id",
-      selector: (row) => row.id,
-    },
-    {
-      name: "Tên sản phẩm",
-      selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Hình ảnh",
-      selector: (row) => (
-        <img
-          src={`${imageUrl}/` + row.image}
-          style={{ width: "50px", height: "50px" }}
-        />
-      ),
-    },
-    {
-      name: "Giá",
-      selector: (row) => row.price,
-      sortable: true,
-    },
-    {
-      name: "Ngày tạo sản phẩm",
-      selector: (row) => row.createDate,
-      sortable: true,
-    },
-    {
-      name: "Số lượng",
-      selector: (row) => row.quantity,
-      sortable: true,
-    },
-    {
-      button: true,
-      name: "Thao tác",
-      selector: (row) => (
-        <div className="d-flex">
-          <Button
-            variant="outline-tertiary"
-            // handleOnclick={() => {
-            //   setProductID(product.id);
-            //   setProduct(productID);
-            // }}
-            // handleOnclick={() => {
-            //   setProductID(row.product.id);
-            //   setProduct(handleSetStatus(row.productID));
-            // }}
-            onClick={() => {
-              setProductID(product.id);
-              //   setProduct(handleSetStatus(productID));
-              console.log("Here:" + productID);
-            }}
-            className="m-1"
-          >
-            <FontAwesomeIcon icon={faPenAlt} />
-          </Button>
-          <Button
-            variant="outline-danger"
-            handleOnclick={() => {
-              setProductID(product.id);
-            }}
-            className="m-1"
-          >
-            <FontAwesomeIcon icon={faTrashAlt} />
-          </Button>
-        </div>
-      ),
-    },
-  ];
 
   return (
     <>
@@ -309,16 +361,15 @@ export default () => {
           {/* Form section*/}
           <div className="container-fluid">
             <h3 className="my-5 fw-bolder">Quản lý sản phẩm</h3>
-            <Form onSubmit={handleSubmitForm} className="row">
+            <Form onSubmit={(e) => handleSubmitProductForm(e)} className="row">
               {/* Item */}
               <Form.Group className="mb-3 col-6">
                 <Form.Label>Tên sản phẩm</Form.Label>
                 <Form.Control
-                  isInvalid={isValidForm}
                   type="text"
                   name="name"
-                  value={product.name}
-                  onChange={handleChange}
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
                 />
                 <Form.Control.Feedback type={isValidForm ? "valid" : "inValid"}>
                   Vui lòng nhập tên sản phẩm
@@ -328,11 +379,10 @@ export default () => {
               <Form.Group className="mb-3 col-6">
                 <Form.Label>Hình ảnh sản phẩm</Form.Label>
                 <Form.Control
-                  isValid={isValidForm}
                   type="file"
                   name="image"
-                  value={product.image}
-                  onChange={handleChange}
+                  value={productImage}
+                  onChange={(e) => setProductImage(e.target.value)}
                 />
                 <Form.Control.Feedback type={isValidForm ? "valid" : "inValid"}>
                   Vui lòng chọn ảnh sản phẩm
@@ -342,11 +392,10 @@ export default () => {
               <Form.Group className="mb-3 col-6">
                 <Form.Label>Giá sản phẩm</Form.Label>
                 <Form.Control
-                  isValid={isValidForm}
                   type="number"
                   name="price"
-                  value={product.price}
-                  onChange={handleChange}
+                  value={productPrice}
+                  onChange={(e) => setProductPrice(e.target.value)}
                 />
                 <Form.Control.Feedback type={isValidForm ? "valid" : "inValid"}>
                   Vui lòng nhập giá sản phẩm
@@ -356,11 +405,10 @@ export default () => {
               <Form.Group className="mb-3 col-6">
                 <Form.Label>Số lượng sản phẩm</Form.Label>
                 <Form.Control
-                  isValid={isValidForm}
                   type="number"
                   name="quantity"
-                  value={product.quantity}
-                  onChange={handleChange}
+                  value={productQuantity}
+                  onChange={(e) => setProductQuantity(e.target.value)}
                 />
                 <Form.Control.Feedback type={isValidForm ? "valid" : "inValid"}>
                   Vui lòng chọn số lượng sản phẩm
@@ -369,15 +417,18 @@ export default () => {
               {/* Item */}
               <Form.Group className="mb-3 col-6">
                 <Form.Label>Danh mục sản phẩm</Form.Label>
-                <Form.Select>
-                  <option defaultValue>Danh mục</option>
+                <Form.Select
+                  onChange={(e) => setProductCategory(e.target.value)}
+                  defaultValue={productCategory}
+                >
+                  <option>Danh mục</option>
                   {categories.map((ct) => (
-                    <option key={ct.id} value={ct.name}>
+                    <option key={ct.id} value={productCategory}>
                       {ct.name}
                     </option>
                   ))}
                 </Form.Select>
-                <Form.Control.Feedback type={isValidForm ? "valid" : "inValid"}>
+                <Form.Control.Feedback>
                   Vui lòng chọn Danh mục sản phẩm
                 </Form.Control.Feedback>
               </Form.Group>
@@ -390,7 +441,7 @@ export default () => {
                 >
                   Thêm mới
                 </Button>
-                <Button type="submit" variant="outline-info" className="m-1">
+                <Button variant="outline-info" className="m-1">
                   Cập nhật
                 </Button>
               </div>
@@ -401,6 +452,7 @@ export default () => {
           <div className="container-fluid mt-5">
             <h3 className="fw-bolder">Danh sách sản phẩm</h3>
 
+            {/* Searching input */}
             <div className="search-section d-flex">
               <div className="d-flex align-items-center mb-3">
                 <input
@@ -411,7 +463,7 @@ export default () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-outline-primary"
                   onClick={() => handleSearch()}
                 >
                   Search
@@ -419,6 +471,7 @@ export default () => {
               </div>
             </div>
 
+            {/* Table area */}
             <DataTable
               columns={columns}
               data={filteredProducts}
