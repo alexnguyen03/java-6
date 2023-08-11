@@ -40,13 +40,11 @@ public class ReportManagementController {
     ParamService paramService;
 
     @GetMapping("/report/report-top-ten")
-    public String reportTop10View(Model model) {
-        model.addAttribute("reports", orderDetailDAO.getTopProduct());
-        model.addAttribute("categories", categoryDAO.findAll());
-        model.addAttribute("reportPage", "top");
-        model.addAttribute("title", "BÁO CÁO - THỐNG KÊ");
-        model.addAttribute("isPageActive", "statistic");
-        return "/admin/report-top-ten";
+    @ResponseBody
+    public List<ReportTop10> reportTop10View(Model model) {
+        // model.addAttribute("reports", orderDetailDAO.getTopProduct());
+
+        return orderDetailDAO.getTopProduct();
     }
 
     @PostMapping("/report/report-top-ten")
@@ -112,196 +110,23 @@ public class ReportManagementController {
     }
 
     @GetMapping("/report/report-by-category")
-    public String reportByCategoryView(Model model) {
-        model.addAttribute("reports", orderDetailDAO.getReportByCategories());
-        model.addAttribute("isPageActive", "statistic");
-        model.addAttribute("reportPage", "category");
-        model.addAttribute("title", "BÁO CÁO - THỐNG KÊ");
-        return "/admin/report-by-category";
-    }
-
-    @PostMapping("/report/report-by-category")
-    public String reportByCategorySearch(Model model) {
-        String searchKey = paramService.getString("searchKey", "");
-        List<ReportByCategory> reports = null;
-        if (!searchKey.isBlank()) {
-            Date searchVal = null;
-            LocalDate localDate = null;
-            int day = 0;
-            int month = 0;
-            int year = 0;
-            if (searchKey.equals("date")) {
-                searchVal = paramService.getDate("searchVal", "yyyy-MM-dd");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                day = localDate.getDayOfMonth();
-                month = localDate.getMonthValue();
-                year = localDate.getYear();
-                reports = orderDetailDAO.getReportByCategoriesByDate(day, month, year);
-                model.addAttribute("searchVal", day + " tháng " + month + " năm " + year);
-                model.addAttribute("searchKey", searchKey);
-            } else if (searchKey.equals("week")) {
-                String searchValString = paramService.getString("searchVal", "");
-                String weekStr = searchValString.substring(6, searchValString.length());
-                String yearStr = searchValString.substring(0, 4);
-                reports = orderDetailDAO.getReportByCategoriesByWeek(Integer.parseInt(weekStr),
-                        Integer.parseInt(yearStr));
-                // Integer.parseInt(yearStr));
-                model.addAttribute("searchVal", " thứ " + weekStr + " của  " + " năm " + yearStr);
-                model.addAttribute("searchKey", searchKey);
-            } else if (searchKey.equals("month")) {
-                searchVal = paramService.getDate("searchVal", "yyyy-MM");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                month = localDate.getMonthValue();
-                year = localDate.getYear();
-                reports = orderDetailDAO.getReportByCategoriesByMonth(month, year);
-                model.addAttribute("searchKey", searchKey);
-                model.addAttribute("searchVal", month + " năm " + year);
-            } else if (searchKey.equals("year")) {
-                searchVal = paramService.getDate("searchVal", "yyyy");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                year = localDate.getYear();
-                System.out.println(year + "year");
-                reports = orderDetailDAO.getReportByCategoriesByYear(year);
-                model.addAttribute("searchVal", year);
-                model.addAttribute("searchKey", "year");
-            }
-            model.addAttribute("reports", reports);
-        } else {
-            model.addAttribute("msg", "Vui lòng chọn tiêu chí thống kê");
-            model.addAttribute("reports", orderDetailDAO.getReportByCategories());
-        }
-        model.addAttribute("isPageActive", "statistic");
-        model.addAttribute("reportPage", "category");
-        model.addAttribute("title", "BÁO CÁO - THỐNG KÊ");
-        return "/admin/report-by-category";
+    @ResponseBody
+    public List<ReportByCategory> reportByCategoryView(Model model) {
+        return orderDetailDAO.getReportByCategories();
     }
 
     @GetMapping("/report/report-by-product")
-    public String reportByProductView(Model model) {
-        model.addAttribute("reports", orderDetailDAO.getReportByProducts());
-        model.addAttribute("isPageActive", "statistic");
-        model.addAttribute("title", "BÁO CÁO - THỐNG KÊ");
-        model.addAttribute("reportPage", "product");
-        return "/admin/report-by-product";
-    }
+    @ResponseBody
+    public List<ReportByProduct> reportByProductView(Model model) {
 
-    @PostMapping("/report/report-by-product")
-    public String reportByProductSearch(Model model) {
-        String searchKey = paramService.getString("searchKey", "");
-        List<ReportByProduct> reports = null;
-        if (!searchKey.isBlank()) {
-            Date searchVal = null;
-            LocalDate localDate = null;
-            int day = 0;
-            int month = 0;
-            int year = 0;
-            if (searchKey.equals("date")) {
-                searchVal = paramService.getDate("searchVal", "yyyy-MM-dd");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                day = localDate.getDayOfMonth();
-                month = localDate.getMonthValue();
-                year = localDate.getYear();
-                reports = orderDetailDAO.getReportByProductsByDate(day, month, year);
-                model.addAttribute("searchVal", day + " tháng " + month + " năm " + year);
-                model.addAttribute("searchKey", searchKey);
-            } else if (searchKey.equals("week")) {
-                String searchValString = paramService.getString("searchVal", "");
-                String weekStr = searchValString.substring(6, searchValString.length());
-                String yearStr = searchValString.substring(0, 4);
-                reports = orderDetailDAO.getReportByProductsByWeek(Integer.parseInt(weekStr),
-                        Integer.parseInt(yearStr));
-                model.addAttribute("searchVal", " thứ " + weekStr + " của  " + " năm " + yearStr);
-                model.addAttribute("searchKey", searchKey);
-            } else if (searchKey.equals("month")) {
-                searchVal = paramService.getDate("searchVal", "yyyy-MM");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                month = localDate.getMonthValue();
-                year = localDate.getYear();
-                reports = orderDetailDAO.getReportByProductsByMonth(month, year);
-                model.addAttribute("searchKey", searchKey);
-                model.addAttribute("searchVal", month + " năm " + year);
-            } else if (searchKey.equals("year")) {
-                searchVal = paramService.getDate("searchVal", "yyyy");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                year = localDate.getYear();
-                System.out.println(year + "year");
-                reports = orderDetailDAO.getReportByProductsByYear(year);
-                model.addAttribute("searchVal", year);
-                model.addAttribute("searchKey", "year");
-            }
-            model.addAttribute("reports", reports);
-        } else {
-            model.addAttribute("msg", "Vui lòng chọn tiêu chí thống kê");
-            model.addAttribute("reports", orderDetailDAO.getReportByProducts());
-        }
-        model.addAttribute("isPageActive", "statistic");
-        model.addAttribute("title", "BÁO CÁO - THỐNG KÊ");
-        model.addAttribute("reportPage", "product");
-        return "/admin/report-by-product";
+        return orderDetailDAO.getReportByProducts();
     }
 
     @GetMapping("/report/report-by-user")
-    public String reportByUserView(Model model) {
-        model.addAttribute("reports", orderDetailDAO.getReportByUsers());
-        model.addAttribute("reportPage", "user");
-        model.addAttribute("isPageActive", "statistic");
-        model.addAttribute("title", "BÁO CÁO - THỐNG KÊ");
-        return "/admin/report-by-user";
-    }
+    @ResponseBody
+    public List<ReportByUser> reportByUserView(Model model) {
 
-    @PostMapping("/report/report-by-user")
-    public String reportByUserSearch(Model model) {
-        String searchKey = paramService.getString("searchKey", "");
-        List<ReportByUser> reports = null;
-        if (!searchKey.isBlank()) {
-            Date searchVal = null;
-            LocalDate localDate = null;
-            int day = 0;
-            int month = 0;
-            int year = 0;
-            if (searchKey.equals("date")) {
-                searchVal = paramService.getDate("searchVal", "yyyy-MM-dd");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                day = localDate.getDayOfMonth();
-                month = localDate.getMonthValue();
-                year = localDate.getYear();
-                reports = orderDetailDAO.getReportByUsersByDate(day, month, year);
-                model.addAttribute("searchVal", day + " tháng " + month + " năm " + year);
-                model.addAttribute("searchKey", searchKey);
-            } else if (searchKey.equals("week")) {
-                String searchValString = paramService.getString("searchVal", "");
-                String weekStr = searchValString.substring(6, searchValString.length());
-                String yearStr = searchValString.substring(0, 4);
-                reports = orderDetailDAO.getReportByUsersByWeek(Integer.parseInt(weekStr), Integer.parseInt(yearStr));
-                model.addAttribute("searchVal", " thứ " + weekStr + " của  " + " năm " + yearStr);
-                model.addAttribute("searchKey", searchKey);
-            } else if (searchKey.equals("month")) {
-                searchVal = paramService.getDate("searchVal", "yyyy-MM");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                month = localDate.getMonthValue();
-                year = localDate.getYear();
-                reports = orderDetailDAO.getReportByUsersByMonth(month, year);
-                model.addAttribute("searchKey", searchKey);
-                model.addAttribute("searchVal", month + " năm " + year);
-            } else if (searchKey.equals("year")) {
-                searchVal = paramService.getDate("searchVal", "yyyy");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                year = localDate.getYear();
-                System.out.println(year + "year");
-                reports = orderDetailDAO.getReportByUsersByYear(year);
-                model.addAttribute("searchVal", year);
-                model.addAttribute("searchKey", "year");
-            }
-            model.addAttribute("title", "BÁO CÁO - THỐNG KÊ");
-        } else {
-            model.addAttribute("reports", orderDetailDAO.getReportByUsers());
-            model.addAttribute("msg", "Vui lòng chọn tiêu chí thống kê");
-        }
-        model.addAttribute("reportPage", "user");
-        model.addAttribute("reports", reports);
-        model.addAttribute("categories", categoryDAO.findAll());
-        model.addAttribute("isPageActive", "statistic");
-        return "/admin/report-by-user";
+        return orderDetailDAO.getReportByUsers();
     }
 
     @GetMapping("report")
