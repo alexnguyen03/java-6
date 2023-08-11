@@ -184,7 +184,7 @@ export default (props = {}) => {
 								link={Routes.Orders.path}
 							/>
 							<NavItem
-								title='Product'
+								title='Products'
 								icon={faHandHoldingUsd}
 								link={Routes.Product.path}
 							/>

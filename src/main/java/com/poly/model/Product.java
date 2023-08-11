@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,17 +20,19 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "Products")
 public class Product implements Serializable {
 	@Id
@@ -49,10 +52,10 @@ public class Product implements Serializable {
 	@NotNull(message = "{NotNull.product.quantity}")
 	@Min(value = 0, message = "{Min.product.quantity}")
 	private Integer quantity;
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	@NotNull(message = "{NotNull.product.category}")
+	@JsonManagedReference
 	private Category category;
 	@JsonIgnore
 	@OneToMany(mappedBy = "product")
