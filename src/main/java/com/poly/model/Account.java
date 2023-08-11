@@ -49,13 +49,6 @@ public class Account implements Serializable {
 	@OneToMany(mappedBy = "account")
 	private List<Review> reviews;
 
-	@OneToMany(mappedBy = "account")
-	private List<Cart> carts;
-  
-	// @JsonIgnore
-	// @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
-	// List<Authority> authorities;
-
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Accounts_Roles", joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))

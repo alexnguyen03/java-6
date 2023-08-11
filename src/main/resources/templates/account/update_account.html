@@ -75,7 +75,7 @@ body {
 											<img
 												class="border border-2 bg-light p-1 border-success rounded-circle w-100"
 												style="height: 200px;"
-												ng-src="{'/img/update-account/' + form.photo}"
+												ng-src="{{ photo }}"
 												id="file-ip-1-preview">
 										</center>
 									</label>
@@ -84,7 +84,7 @@ body {
 									<div class="input-group">
 										<div class="custom-file">
 											<input type="file" id="file-ip-1" accept="image/*" multiple
-												ng-model="form.photo"
+												ng-model="form.photo" name="file"
 												onchange="angular.element(this).scope().imageChanged(this.files);">
 											<label class="custom-file-label" for="file-ip-1">Chọn
 												Ảnh</label>
