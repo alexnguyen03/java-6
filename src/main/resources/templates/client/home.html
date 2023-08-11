@@ -195,9 +195,10 @@
 									 class="img-fluid"
 									 alt="" /> <span class="label">Mới</span>
 							</a>
-							<div class="product__item__text">
+							<div class="product__item__text"
+								 style="cursor: pointer;">
 								<h6 th:text="${item.name}"></h6>
-								<a th:href="@{/shop/cart-detail/add/{id}(id=${item.id})}"
+								<a th:attr="ng-click=@{|cart.add(${item.id})|}"
 								   class="add-cart">+ Thêm vào giỏ hàng</a>
 								<h5 th:inline="text">
 									[[${#numbers.formatDecimal(item.price, 0, 'COMMA', 2,
