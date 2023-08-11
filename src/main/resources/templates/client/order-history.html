@@ -1,61 +1,69 @@
 <!DOCTYPE html>
-<html lang="zxx"
-      xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{/client/index::dynamic(~{::body})}">
-
+<html
+  lang="zxx"
+  xmlns="http://www.thymeleaf.org"
+  th:replace="~{/client/index::dynamic(~{::body})}"
+>
   <head>
     <meta charset="UTF-8" />
-    <meta name="description"
-          content="Male_Fashion Template" />
-    <meta name="keywords"
-          content="Male_Fashion, unica, creative, html" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible"
-          content="ie=edge" />
+    <meta name="description" content="Male_Fashion Template" />
+    <meta name="keywords" content="Male_Fashion, unica, creative, html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>4MEMS - Team</title>
 
     <!-- Css Styles -->
-    <link rel="stylesheet"
-          th:href="@{/css/font-awesome.min.css}"
-          type="text/css" />
-
+    <link
+      rel="stylesheet"
+      th:href="@{/css/font-awesome.min.css}"
+      type="text/css"
+    />
 
     <!-- AngularJS -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js'
-            integrity='sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA=='
-            crossorigin='anonymous'></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"
+      integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA=="
+      crossorigin="anonymous"
+    ></script>
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-          rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.umd.js"></script>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.css"
+    />
     <!-- Css Styles -->
-    <link rel="stylesheet"
-          th:href="@{/css/bootstrap.min.css}"
-          type="text/css" />
-    <link rel="stylesheet"
-          th:href="@{/css/font-awesome.min.css}"
-          type="text/css" />
-    <link rel="stylesheet"
-          th:href="@{/css/elegant-icons.css}"
-          type="text/css" />
-    <link rel="stylesheet"
-          th:href="@{/css/magnific-popup.css}"
-          type="text/css" />
-    <link rel="stylesheet"
-          th:href="@{/css/nice-select.css}"
-          type="text/css" />
-    <link rel="stylesheet"
-          th:href="@{/css/owl.carousel.min.css}"
-          type="text/css" />
-    <link rel="stylesheet"
-          th:href="@{/css/slicknav.min.css}"
-          type="text/css" />
-    <link rel="stylesheet"
-          th:href="@{/css/style.css}"
-          type="text/css" />
+    <link
+      rel="stylesheet"
+      th:href="@{/css/bootstrap.min.css}"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/css/font-awesome.min.css}"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/css/elegant-icons.css}"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/css/magnific-popup.css}"
+      type="text/css"
+    />
+    <link rel="stylesheet" th:href="@{/css/nice-select.css}" type="text/css" />
+    <link
+      rel="stylesheet"
+      th:href="@{/css/owl.carousel.min.css}"
+      type="text/css"
+    />
+    <link rel="stylesheet" th:href="@{/css/slicknav.min.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
@@ -64,9 +72,7 @@
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
             crossorigin="anonymous"></script> -->
 
-    <link rel="stylesheet"
-          th:href="@{/css/style.css}"
-          type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
   </head>
 
   <body>
@@ -88,18 +94,22 @@
     </section>
 
     <!-- table and filter section -->
-    <div class="order-history-wrapper mt-4">
+    <div class="order-history-wrapper my-4">
       <div class="container">
         <div class="row">
           <div class="col-lg-12 m-auto mt-4">
             <!-- Header -->
-            <div th:if="${success}"
-                 class="alert alert-success alert-dismissible fade show"
-                 role="alert">
-              <button type="button"
-                      class="close"
-                      data-dismiss="alert"
-                      aria-label="Close">
+            <div
+              th:if="${success}"
+              class="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
               <span th:text="${success}"></span>
@@ -108,45 +118,51 @@
 
             <!-- Search area -->
             <div class="d-flex mt-3 mb-3">
-              <form th:action="@{/shop/order-history/search}"
-                    method="post"
-                    class="d-flex justify-content-center">
+              <form
+                th:action="@{/shop/order-history/search}"
+                method="post"
+                class="d-flex justify-content-center"
+              >
                 <div class="p-0">
-                  <div class="input-group"
-                       style="width: 230px">
+                  <div class="input-group" style="width: 230px">
                     <div class="input-group-prepend">
-                      <label class="input-group-text"
-                             for="inputGroupSelect01">Tìm theo</label>
+                      <label class="input-group-text" for="inputGroupSelect01"
+                        >Tìm theo</label
+                      >
                     </div>
-                    <select class="custom-select"
-                            id="inputGroupSelect01"
-                            name="search"
-                            onchange="handleSearchChange()">
+                    <select
+                      class="custom-select"
+                      id="inputGroupSelect01"
+                      name="search"
+                      onchange="handleSearchChange()"
+                    >
                       <option value="select">Chọn</option>
-                      <option value="id"
-                              th:selected="${isId}">
+                      <option value="id" th:selected="${isId}">
                         Mã đơn hàng
                       </option>
-                      <option value="date"
-                              th:selected="${isCreateDate}">
+                      <option value="date" th:selected="${isCreateDate}">
                         Ngày đặt
                       </option>
                     </select>
                   </div>
                 </div>
                 <div class="pl-2">
-                  <input class="search-bar bg-white text-dark form-control"
-                         th:disabled="${isSuscess}"
-                         placeholder="Search..."
-                         type="text"
-                         style="height: 40px"
-                         id="searchInput"
-                         name="keyword" />
+                  <input
+                    class="search-bar bg-white text-dark form-control"
+                    th:disabled="${isSuscess}"
+                    placeholder="Search..."
+                    type="text"
+                    style="height: 40px"
+                    id="searchInput"
+                    name="keyword"
+                  />
                 </div>
                 <div class="mr-auto pl-2">
-                  <button type="submit"
-                          class="btn btn-primary"
-                          style="height: 42px">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="height: 42px"
+                  >
                     Tìm
                   </button>
                 </div>
@@ -154,47 +170,53 @@
 
               <!-- New Web -->
               <div class="mr-auto pl-2">
-                <a th:href="@{/shop/order-history}"
-                   class="btn btn-secondary btn-lg active font-weight-bold px-4 ml-5"
-                   role="button"
-                   aria-pressed="true"
-                   style="height: 42px">Làm mới</a>
+                <a
+                  th:href="@{/shop/order-history}"
+                  class="btn btn-secondary btn-lg active font-weight-bold px-4 ml-5"
+                  role="button"
+                  aria-pressed="true"
+                  style="height: 42px"
+                  >Làm mới</a
+                >
               </div>
 
               <!-- Filter area -->
               <div class="pr-2 d-flex justify-content-center">
-                <form th:action="@{/shop/order-history/filter}"
-                      method="post"
-                      class="d-flex justify-content-center">
-                  <div class="input-group"
-                       style="width: 250px">
+                <form
+                  th:action="@{/shop/order-history/filter}"
+                  method="post"
+                  class="d-flex justify-content-center"
+                >
+                  <div class="input-group" style="width: 250px">
                     <div class="input-group-prepend">
-                      <label class="input-group-text"
-                             for="inputGroupSelect01"
-                             style="height: 40px">Lọc theo</label>
+                      <label
+                        class="input-group-text"
+                        for="inputGroupSelect01"
+                        style="height: 40px"
+                        >Lọc theo</label
+                      >
                     </div>
-                    <select class="custom-select mr-2"
-                            id="inputGroupSelect01"
-                            name="status"
-                            style="height: 40px">
+                    <select
+                      class="custom-select mr-2"
+                      id="inputGroupSelect01"
+                      name="status"
+                      style="height: 40px"
+                    >
                       <option value="select">Chọn trạng thái</option>
-                      <option value="C"
-                              th:selected="${isC}">Đang chờ</option>
-                      <option value="XL"
-                              th:selected="${isXl}">
+                      <option value="C" th:selected="${isC}">Đang chờ</option>
+                      <option value="XL" th:selected="${isXl}">
                         Đang xử lý
                       </option>
-                      <option value="G"
-                              th:selected="${isG}">Đang giao</option>
-                      <option value="DG"
-                              th:selected="${isDg}">Đã giao</option>
-                      <option value="H"
-                              th:selected="${isH}">Đã hủy</option>
+                      <option value="G" th:selected="${isG}">Đang giao</option>
+                      <option value="DG" th:selected="${isDg}">Đã giao</option>
+                      <option value="H" th:selected="${isH}">Đã hủy</option>
                     </select>
                   </div>
-                  <button type="submit"
-                          class="btn btn-primary"
-                          style="height: 40px">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="height: 40px"
+                  >
                     Lọc
                   </button>
                 </form>
@@ -203,7 +225,7 @@
 
             <!-- Table area -->
             <div class="table-responsive">
-              <table class="table table-striped table-hover table-bordered text-center">
+              <table class="table table-striped table-bordered text-center">
                 <thead class="table-dark">
                   <tr>
                     <th scope="col">Mã Đơn Hàng</th>
@@ -219,17 +241,13 @@
                 </thead>
                 <tbody>
                   <tr th:each="order : ${orders}">
-                    <th class="pt-4"
-                        th:text="${order.id}"></th>
-                    <td class="pt-4"
-                        th:text="${order.createDate}"></td>
+                    <th class="pt-4" th:text="${order.id}"></th>
+                    <td class="pt-4" th:text="${order.createDate}"></td>
                     <td class="pt-4">
                       [[${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA',
                       2, 'POINT')}]]<sup>đ</sup>
                     </td>
-                    <td class="pt-4">
-                     
-                    </td>
+                    <td class="pt-4"></td>
                     <td class="pt-4" th:text="${order.address}"></td>
                     <td class="pt-4" th:text="${order.phone}"></td>
                     <td class="pt-4">
@@ -244,10 +262,10 @@
                     <td class="pt-4" th:text="${order.notes}"></td>
                     <td class="pt-3">
                       <button
-                       type="button"
+                        type="button"
                         class="btn btn-white"
                         th:data-toggle="modal"
-                        th:data-target="'#exampleModal' + ${order.id}"
+                        th:data-target="'#orderDetails' + ${order.id}"
                       >
                         <i
                           class="fa fa-eye text-info mr-2"
@@ -256,27 +274,108 @@
                       </button>
                     </td>
 
-                    <div class="modal fade"
-                         th:id="'exampleModal' + ${order.id}">
-                    
+                    <!-- Modal -->
+                    <div
+                      class="modal modal-fullscreen fade"
+                      th:id="'orderDetails' + ${order.id}"
+                    >
                       <div class="modal-dialog">
                         <div class="modal-content">
+                          <!-- Header -->
                           <div class="modal-header">
-                            <h4 class="modal-title">CHI TIẾT ĐƠN HÀNG</h4>
-                          <button type="button"
-                                  class="close"
-                                  data-dismiss="modal"
-                                  aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
+                            <h5 class="modal-title container">
+                              Đơn hàng -
+                              <span class="font-weight-bold">
+                                [[ ${order.id }]]
+                              </span>
+                            </h5>
+                            <button
+                              type="button"
+                              class="close"
+                              data-dismiss="modal"
+                            >
+                              &times;
+                            </button>
                           </div>
-                          <div class="modal-body">[[${order.id}]]</div>
+                          <!-- Body -->
+                          <div class="modal-body">
+                            <div
+                              th:each="orderdetail, loop : ${order.orderDetails}"
+                              class="container"
+                            >
+                              <div>
+                                <h5 class="mb-3">
+                                  Sản phẩm:
+                                  <strong th:text="${orderdetail.product.name}">
+                                  </strong>
+                                </h5>
+                                <div class="d-flex justify-content-between">
+                                  <div class="d-flex justify-content-start">
+                                    <img
+                                      th:src="@{/img/product/{image}(image=${orderdetail.product.image})}"
+                                      class="img-fluid me-3"
+                                      width="100px"
+                                      height="100px"
+                                    />
+                                    <div
+                                      class="d-flex flex-column justify-content-between"
+                                    >
+                                      <span
+                                        th:text="'Số lượng: ' + ${orderdetail.quantity}"
+                                        class="text-muted"
+                                      >
+                                      </span>
+                                      <span class="text-muted">
+                                        Đơn giá:
+                                        [[${#numbers.formatDecimal(orderdetail.product.price,
+                                        0, 'COMMA', 2, 'POINT')}]]<span
+                                          class="text-danger text-decoration-line-through"
+                                          >đ</span
+                                        >
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="d-flex flex-column justify-content-start align-content-center"
+                                  >
+                                    <span> Tổng tiền </span>
+                                    <span class="text-muted">
+                                      [[${#numbers.formatDecimal(orderdetail.product.price
+                                      * orderdetail.quantity, 0, 'COMMA', 2,
+                                      'POINT')}]]<span
+                                        class="text-danger text-decoration-line-through"
+                                        >đ</span
+                                      >
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <hr />
+                            </div>
+                          </div>
+
+                          <!-- Footer -->
                           <div class="modal-footer">
-                            <button type="button"
-                                    class="btn btn-secondary"
-                                    data-dismiss="modal">Close</button>
-                            <button type="button"
-                                    class="btn btn-primary">Save changes</button>
+                            <div
+                              class="container d-flex justify-content-end"
+                              th:each="detail : ${order.orderDetails}"
+                            >
+                              <h6>
+                                <span
+                                  >Tổng thanh toán (
+                                  <strong>[[ ${detail.quantity} ]]</strong>
+                                  )</span
+                                >:
+                                <span class="font-weight-bold">
+                                  [[${#numbers.formatDecimal(detail.product.price
+                                  * detail.quantity, 0, 'COMMA', 2,
+                                  'POINT')}]]<span
+                                    class="text-danger text-decoration-line-through"
+                                    >đ</span
+                                  >
+                                </span>
+                              </h6>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -290,19 +389,11 @@
       </div>
     </div>
 
-
     <!-- Js Plugins -->
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
-    <script th:src="@{/js/jquery.nice-select.min.js}"></script>
-    <script th:src="@{/js/jquery.nicescroll.min.js}"></script>
-    <script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
-    <script th:src="@{/js/jquery.countdown.min.js}"></script>
-    <script th:src="@{/js/jquery.slicknav.js}"></script>
-    <script th:src="@{/js/mixitup.min.js}"></script>
-    <script th:src="@{/js/owl.carousel.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
-    
+
     <script>
       function handleSearchChange() {
         const searchInput = document.getElementById("searchInput");
@@ -315,10 +406,9 @@
           searchInput.setAttribute("type", "text");
         }
       }
-      $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
-      })
+      $("#myModal").on("shown.bs.modal", function () {
+        $("#myInput").trigger("focus");
+      });
     </script>
-
   </body>
 </html>

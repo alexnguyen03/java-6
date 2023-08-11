@@ -180,6 +180,7 @@
                       <i
                         class="fa fa-minus border p-2 text-dark decrease"
                         aria-hidden="true"
+                        th:attr="ng-click=@{|cart.minusInDetail()|}"
                       ></i>
                       <input
                         type="number"
@@ -192,6 +193,7 @@
                       <i
                         class="fa fa-plus text-dark border p-2 increase"
                         aria-hidden="true"
+                        th:attr="ng-click=@{|cart.plusInDetail()|}"
                       ></i>
                     </div>
                   </div>
@@ -311,23 +313,6 @@
                 <div class="col-lg-12 mb-3">
                   <hr />
                 </div>
-                <!-- 							<c:forEach var="review" items="${ reviews }"> -->
-                <!-- 								<div class="col-lg-1 d-flex justify-content-center"> -->
-                <!-- 									<img -->
-                <!-- 										src="${pageContext.request.contextPath }/img/user-management/${ review.account.photo }" -->
-                <!-- 										class="rounded-circle border" width="80px" height="70px" /> -->
-                <!-- 								</div> -->
-                <!-- 								<div class="col-lg-11 mb-3"> -->
-                <!-- 									<strong>${ review.account.fullname }</strong> <span> <fmt:formatDate -->
-                <!-- 											type="both" dateStyle="short" timeStyle="short" -->
-                <!-- 											value="${ review.dateReview}" pattern="dd-MM-yyyy hh:mm:ss" /> -->
-                <!-- 									</span><br /> -->
-                <!-- 									<c:forEach begin="1" end="${ review.rating }"> -->
-                <!-- 										<i class="fa fa-star text-warning"></i> -->
-                <!-- 									</c:forEach> -->
-                <!-- 									<p class="fw-light">${ review.textReview }</p> -->
-                <!-- 								</div> -->
-                <!-- 							</c:forEach> -->
 
                 <!-- Reviewed section -->
                 <th:block th:each="review : ${reviews}">
@@ -371,32 +356,7 @@
           </div>
         </div>
         <div class="row">
-          <!-- 				<c:forEach var="product_similar" items="${ product_similars }"> -->
-          <!-- 					Item -->
-          <!-- 					<div class="col-lg-4 col-md-6 col-sm-6"> -->
-          <!-- 						<div class="product__item sale"> -->
-          <!-- 							<div class="product__item__pic"> -->
-          <!-- 								<a href="/shop/product-detail?id=${ product_similar.id }"> <img -->
-          <!-- 									src="${pageContext.request.contextPath }/img/product/${product_similar.image}" -->
-          <!-- 									class="img-fluid" /></a> -->
-          <!-- 							</div> -->
-          <!-- 							<div class="product__item__text"> -->
-          <!-- 								<h6>${ product_similar.name }</h6> -->
-          <!-- 								<a href="/shop/cart-detail/add/${product_similar.id}" -->
-          <!-- 									class="add-cart">+ Thêm vào giỏ hàng</a> -->
-          <!-- 																<div class="rating mr-3"> -->
-          <!-- 																	<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i -->
-          <!-- 																		class="fa fa-star"></i> <i class="fa fa-star"></i> <i -->
-          <!-- 																		class="fa fa-star-o"></i> -->
-          <!-- 																</div> -->
-          <!-- 								<h5> -->
-          <!-- 									${ product_similar.price } <span class="text-danger">đ</span> -->
-          <!-- 								</h5> -->
-          <!-- 							</div> -->
-          <!-- 						</div> -->
-          <!-- 					</div> -->
-          <!-- 				</c:forEach> -->
-
+        
           <!-- Item -->
           <div
             class="col-lg-4 col-md-6 col-sm-6"
@@ -457,16 +417,10 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
 
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/jquery.nice-select.min.js"></script>
-    <script src="/js/jquery.nicescroll.min.js"></script>
-    <script src="/js/jquery.magnific-popup.min.js"></script>
-    <script src="/js/jquery.countdown.min.js"></script>
-    <script src="/js/jquery.slicknav.js"></script>
-    <script src="/js/mixitup.min.js"></script>
-    <script src="/js/owl.carousel.min.js"></script>
-    <script src="/js/main.js"></script>
+            <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+            <script th:src="@{/js/bootstrap.min.js}"></script>
+            <script th:src="@{/js/main.js}"></script>
+            <script th:src="@{/js/cart.js}"></script>
+            <script th:src="@{/js/product-detail.js}"></script>
   </body>
-
 </html>
