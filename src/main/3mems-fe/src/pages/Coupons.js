@@ -18,7 +18,6 @@ export default () => {
 	const [showCard, setShowCard] = useState(false);
 	const [showAddBtn, setShowAddBtn] = useState(true);
 	const [showToast, setShowToast] = useState(false);
-	const [toastMsg, setToastMsg] = useState('');
 	const [showUpdateBtn, setShowUpdateBtn] = useState(false);
 	const [showNote, setShowNote] = useState(false);
 	const handleCloseModal = () => setShowModal(false);
@@ -122,16 +121,6 @@ export default () => {
 
 			style: (row) => ({border: '1px grey solid'}, {backgroundColor: 'rgb(109, 235, 198)'}),
 		},
-		{
-			when: (row) => dayjs(row.expirationDate) < dayjs(new Date()),
-
-			style: (row) => ({backgroundColor: 'rgb(244, 168, 1)'}),
-		},
-		{
-			when: (row) => dayjs(row.expirationDate) < dayjs(new Date()) && row.couponCode === coupon.couponCode,
-
-			style: (row) => ({border: '1px grey solid'}, {backgroundColor: 'rgb(109, 235, 198)'}),
-		},
 	];
 	const getData = async () => {
 		try {
@@ -197,15 +186,13 @@ export default () => {
 				body: JSON.stringify(coupon),
 			});
 			const data = resp.json();
-			// setCoupon(data);
-			setToastMsg('Cập nhật khuyên mãi thành công !');
-			setShowToast(true);
-			getData();
+			setCoupon(data);
+			console.log(coupon.activated);
 		} catch (error) {
-			setToastMsg('Cập nhật khuyên mãi thất bại! Vui lòng thử lại.');
 			console.log(error);
-			setShowToast(true);
 		}
+		getData();
+		console.log('updated');
 	};
 	const isFormValid = (coupon) => {
 		if (coupon.couponCode === '' || coupon.couponName === '' || coupon.discountAmount === 0) {
@@ -240,18 +227,13 @@ export default () => {
 				body: JSON.stringify(coupon),
 			});
 			const data = resp.json();
-			getData();
-			handleResetForm();
-			setToastMsg('Thêm khuyến mãi thành công !');
-			setShowToast(true);
-			setCouponCodeError('');
-			setCouponNameError('');
-			setDiscountAmountError('');
+			// getData();
+			// setCoupons(...coupons, data);
 		} catch (error) {
 			console.log(error);
-			setToastMsg('Thêm khuyến mãi thất bại ! Vui lòng thử lại.');
-			setShowToast(true);
 		}
+		handleResetForm();
+		setShowToast(true);
 	};
 	const handleShowCard = () => {
 		setShowCard((pre) => !pre);
@@ -266,8 +248,9 @@ export default () => {
 		setDiscountAmount('');
 		setExpirationDate('');
 		setActivated(true);
-		setDiscountAmount(0);
-		setCoupon(coupon, {activated: true});
+		setCouponCodeError('');
+		setCouponNameError('');
+		setDiscountAmountError('');
 		setRangeDate([dayjs(new Date()), dayjs(new Date())]);
 		setActivated((pre) => !pre);
 	};
@@ -292,7 +275,7 @@ export default () => {
 						<Toast.Header>
 							<strong className='me-auto'>4MEMS - Thông báo</strong>
 						</Toast.Header>
-						<Toast.Body className='text-white'>{toastMsg}</Toast.Body>
+						<Toast.Body className='text-white'>Cập nhật trạng thái đơn hàng thành công !</Toast.Body>
 					</Toast>
 				</Row>
 				{showCard && (
@@ -396,7 +379,7 @@ export default () => {
 													component='DateRangePicker'>
 													<DateRangePicker
 														value={rangeDate}
-														minDate={dayjs(new Date())}
+														minDate={!update ? dayjs(new Date()) : ''}
 														// onChange={(newValue) => handleDateChange(newValue)}
 														onChange={(newValue) => setRangeDate(newValue)}
 													/>

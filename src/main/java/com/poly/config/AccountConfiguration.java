@@ -30,15 +30,16 @@ public class AccountConfiguration {
 		// Tắt thuật tấn công giả mạo
 		http.csrf(csrf -> csrf.disable());
 		// Quyền yêu cầu truy cập
-		http.authorizeHttpRequests(requests -> requests.requestMatchers("/order/**",
-				"/account/changepassword")
-				.authenticated().requestMatchers("/admin/**").hasAnyRole("ADMIN").anyRequest().permitAll());
+		// http.authorizeHttpRequests(requests -> requests.requestMatchers("/order/**",
+		// "/account/changepassword")
+		// .authenticated().requestMatchers("/admin/**").hasAnyRole("ADMIN").anyRequest().permitAll());
 		// Đăng nhập
-		http.formLogin(login -> login.loginPage("/account/login").loginProcessingUrl("/account/login")
-				.defaultSuccessUrl("/account/login/success",
-						false)
-				.failureUrl("/account/login/error"));
-		http.rememberMe(me -> me.tokenValiditySeconds(86400));
+		// http.formLogin(login ->
+		// login.loginPage("/account/login").loginProcessingUrl("/account/login")
+		// .defaultSuccessUrl("/account/login/success",
+		// false)
+		// .failureUrl("/account/login/error"));
+		// http.rememberMe(me -> me.tokenValiditySeconds(86400));
 		// Điều khiển lỗi truy cập không đúng quyền
 		http.exceptionHandling(handling -> handling.accessDeniedPage("/account/unauthoried"));
 		// Đăng xuất
