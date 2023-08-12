@@ -18,8 +18,8 @@ import jakarta.transaction.Transactional;
 
 public interface ProductDAO extends JpaRepository<Product, Integer> {
 	// ******************** select AREA ********************
-	//	SELECT ALL WHERE AVAIABLE == true
-	Page<Product> findByAvailable(Boolean available,Pageable pageable);
+	// SELECT ALL WHERE AVAIABLE == true
+	Page<Product> findByAvailable(Boolean available, Pageable pageable);
 
 	// Select Top 10 product
 	@Query("SELECT p " + "FROM Product p " + "JOIN OrderDetail od ON p.id = od.product.id " + "GROUP BY p "
@@ -41,6 +41,8 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 
 	// DSL Select By Name
 	Page<Product> findByNameLike(String name, Pageable pageable);
+
+	List<Product> findByNameLike(String name);
 
 	// ******************** SORT AREA ********************
 	// SELECT All by price sort like
