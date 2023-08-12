@@ -188,6 +188,11 @@ export default (props = {}) => {
 								icon={faCog}
 								link={Routes.Coupons.path}
 							/>
+							<NavItem
+								title='Category'
+								icon={faCog}
+								link={Routes.Categorys.path}
+							/>
 
 							<CollapsableNavItem
 								eventKey='tables/'

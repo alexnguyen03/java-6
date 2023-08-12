@@ -30,6 +30,7 @@ import Sidebar from '../components/Sidebar';
 import Dashboard from './Dashboard';
 import Orders from './Orders';
 import Coupons from './Coupons';
+import Categorys from './Categorys';
 import Accordion from './components/Accordion';
 import Alerts from './components/Alerts';
 import Badges from './components/Badges';
@@ -171,6 +172,11 @@ export default () => (
 			exact
 			path={Routes.Coupons.path}
 			component={Coupons}
+		/>
+		<RouteWithSidebar
+			exact
+			path={Routes.Categorys.path}
+			component={Categorys}
 		/>
 		<RouteWithSidebar
 			exact
