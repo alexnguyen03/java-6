@@ -1,17 +1,14 @@
-import {faCalendarAlt, faPenSquare} from '@fortawesome/free-solid-svg-icons';
+import {faPenSquare} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {Button, Card, Col, Form, InputGroup, Row, Toast} from '@themesberg/react-bootstrap';
+import {DateRangePicker} from '@mui/x-date-pickers-pro/DateRangePicker';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {DemoItem} from '@mui/x-date-pickers/internals/demo';
+import {Button, Card, Col, Form, Row, Toast} from '@themesberg/react-bootstrap';
+import dayjs from 'dayjs';
 import moment from 'moment-timezone';
 import React, {useEffect, useState} from 'react';
 import DataTable from 'react-data-table-component';
-import Datetime from 'react-datetime';
-import {DateRangePicker} from '@mui/x-date-pickers-pro/DateRangePicker';
-import {format} from 'date-fns';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import {SingleInputDateRangeField} from '@mui/x-date-pickers-pro/SingleInputDateRangeField';
-import {DemoContainer, DemoItem} from '@mui/x-date-pickers/internals/demo';
-import dayjs from 'dayjs';
 const ROOT_URL = 'http://localhost:8080/admin/coupons';
 
 export default () => {

@@ -1,56 +1,72 @@
-import React, {useState} from 'react';
-
+import React, {useEffect, useState} from 'react';
+import DataTable from 'react-data-table-component';
+import {Nav, Tab} from '@themesberg/react-bootstrap';
+import ReportsTopTen from './ReportsTopTen';
+import ReportsByCategory from './ReportsByCategory';
+import ReportsByProduct from './ReportsByProduct';
+import ReportsByUser from './ReportsByUser';
+const ROOT_URL = 'http://localhost:8080/admin/report';
 export default () => {
-	const UserData = [
-		{
-			id: 1,
-			year: 2016,
-			userGain: 80000,
-			userLost: 823,
-		},
-		{
-			id: 2,
-			year: 2017,
-			userGain: 45677,
-			userLost: 345,
-		},
-		{
-			id: 3,
-			year: 2018,
-			userGain: 78888,
-			userLost: 555,
-		},
-		{
-			id: 4,
-			year: 2019,
-			userGain: 90000,
-			userLost: 4555,
-		},
-		{
-			id: 5,
-			year: 2020,
-			userGain: 4300,
-			userLost: 234,
-		},
-	];
-	const [userData, setUserData] = useState({
-		labels: UserData.map((data) => data.year),
-		datasets: [
-			{
-				label: 'Users Gained',
-				data: UserData.map((data) => data.userGain),
-				backgroundColor: ['rgba(75,192,192,1)', '#ecf0f1', '#50AF95', '#f3ba2f', '#2a71d0'],
-				borderColor: 'black',
-				borderWidth: 2,
-			},
-		],
-	});
-
-	// IF YOU SEE THIS COMMENT: I HAVE GOOD EYESIGHT
-
 	return (
-		<div className='App'>
-			<div style={{width: 700}}></div>
-		</div>
+		<>
+			<h2 className='text-center'>TỔNG HỢP - THỐNG KÊ</h2>
+			<Tab.Container defaultActiveKey='top-ten'>
+				<Nav
+					fill
+					variant='pills'
+					className='flex-column flex-sm-row'>
+					<Nav.Item>
+						<Nav.Link
+							eventKey='top-ten'
+							className='mb-sm-3 mb-md-0'>
+							Top 10 sản phẩm bán chạy
+						</Nav.Link>
+					</Nav.Item>
+					<Nav.Item>
+						<Nav.Link
+							eventKey='category'
+							className='mb-sm-3 mb-md-0'>
+							Danh mục
+						</Nav.Link>
+					</Nav.Item>
+					<Nav.Item>
+						<Nav.Link
+							eventKey='product'
+							className='mb-sm-3 mb-md-0'>
+							Sản phẩm
+						</Nav.Link>
+					</Nav.Item>
+					<Nav.Item>
+						<Nav.Link
+							eventKey='user'
+							className='mb-sm-3 mb-md-0'>
+							Người dùng
+						</Nav.Link>
+					</Nav.Item>
+				</Nav>
+				<Tab.Content>
+					<Tab.Pane
+						eventKey='top-ten'
+						className='py-4'>
+						<ReportsTopTen />
+					</Tab.Pane>
+					<Tab.Pane
+						eventKey='category'
+						className='py-4'>
+						<ReportsByCategory />
+					</Tab.Pane>
+					<Tab.Pane
+						eventKey='product'
+						className='py-4'>
+						<ReportsByProduct />
+					</Tab.Pane>
+					<Tab.Pane
+						eventKey='user'
+						className='py-4'>
+						<ReportsByUser />
+					</Tab.Pane>
+				</Tab.Content>
+			</Tab.Container>
+		</>
 	);
 };

@@ -38,7 +38,7 @@ public class Account implements Serializable {
 	private String token;
 	@OneToMany(mappedBy = "account")
 	private List<Order> orders;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Review> reviews;
 

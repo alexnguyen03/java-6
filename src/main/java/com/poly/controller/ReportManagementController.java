@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +13,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.poly.model.Category;
 import com.poly.model.ReportByCategory;
@@ -29,6 +33,7 @@ import com.poly.service.ParamService;
 
 @Controller
 @RequestMapping("/admin")
+@CrossOrigin("*")
 public class ReportManagementController {
     @Autowired
     OrderDetailDAO orderDetailDAO;
@@ -43,8 +48,17 @@ public class ReportManagementController {
     @ResponseBody
     public List<ReportTop10> reportTop10View(Model model) {
         // model.addAttribute("reports", orderDetailDAO.getTopProduct());
-
-        return orderDetailDAO.getTopProduct();
+        List<ReportTop10> list = orderDetailDAO.getTopProduct();
+        List<ReportTop10> top10 = new ArrayList<>();
+        int length = list.size();
+        if (length < 10) {
+            length = list.size();
+        }
+        for (int i = 0; i < length; i++) {
+            top10.add(list.get(i));
+            System.out.println(top10.get(i));
+        }
+        return top10;
     }
 
     @PostMapping("/report/report-top-ten")
@@ -59,7 +73,6 @@ public class ReportManagementController {
             int year = 0;
             if (searchKey.equals("date")) {
                 searchVal = paramService.getDate("searchVal", "yyyy-MM-dd");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 day = localDate.getDayOfMonth();
                 month = localDate.getMonthValue();
                 year = localDate.getYear();
@@ -75,7 +88,6 @@ public class ReportManagementController {
                 model.addAttribute("searchKey", searchKey);
             } else if (searchKey.equals("month")) {
                 searchVal = paramService.getDate("searchVal", "yyyy-MM");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 month = localDate.getMonthValue();
                 year = localDate.getYear();
                 reports = orderDetailDAO.getTopProductByMonth(month, year);
@@ -83,9 +95,7 @@ public class ReportManagementController {
                 model.addAttribute("searchVal", month + " năm " + year);
             } else if (searchKey.equals("year")) {
                 searchVal = paramService.getDate("searchVal", "yyyy");
-                localDate = searchVal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 year = localDate.getYear();
-                System.out.println(year + "year");
                 reports = orderDetailDAO.getTopProductByYear(year);
                 model.addAttribute("searchVal", year);
                 model.addAttribute("searchKey", "year");
@@ -115,6 +125,36 @@ public class ReportManagementController {
         return orderDetailDAO.getReportByCategories();
     }
 
+    @GetMapping("/report/report-by-category/filter")
+    @ResponseBody
+    public List<ReportByCategory> reportByCategoryFilter(@RequestParam("startDate") String sDate,
+            @RequestParam("endDate") String eDate) {
+
+        Date startDate = paramService.getDate2(sDate, "yyyy-MM-dd");
+        Date endDate = paramService.getDate2(eDate, "yyyy-MM-dd");
+        return orderDetailDAO.getReportByCategoriesByDate(startDate, endDate);
+    }
+
+    @GetMapping("/report/report-by-product/filter")
+    @ResponseBody
+    public List<ReportByProduct> reportByProductFilter(@RequestParam("startDate") String sDate,
+            @RequestParam("endDate") String eDate) {
+
+        Date startDate = paramService.getDate2(sDate, "yyyy-MM-dd");
+        Date endDate = paramService.getDate2(eDate, "yyyy-MM-dd");
+        return orderDetailDAO.getReportByProductsByDate(startDate, endDate);
+    }
+
+    @GetMapping("/report/report-by-user/filter")
+    @ResponseBody
+    public List<ReportByUser> reportByUserFilter(@RequestParam("startDate") String sDate,
+            @RequestParam("endDate") String eDate) {
+
+        Date startDate = paramService.getDate2(sDate, "yyyy-MM-dd");
+        Date endDate = paramService.getDate2(eDate, "yyyy-MM-dd");
+        return orderDetailDAO.getReportByUsersByDate(startDate, endDate);
+    }
+
     @GetMapping("/report/report-by-product")
     @ResponseBody
     public List<ReportByProduct> reportByProductView(Model model) {
@@ -132,8 +172,6 @@ public class ReportManagementController {
     @GetMapping("report")
     public String getReportView(Model model) {
         // Date date =
-        // Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        // System.out.println(orderDAO.getTurnoverByDay(new Date()));
         model.addAttribute("reportByMonth", orderDAO.getTurnoverByMonth(new Date()));
         model.addAttribute("reportByYear", orderDAO.getTurnoverByYear(new Date()));
         model.addAttribute("reportByDate", orderDAO.getTurnoverByDay(new Date()));
