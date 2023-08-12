@@ -38,9 +38,9 @@ export default () => {
 	const [discountAmount, setDiscountAmount] = useState(0);
 	const [startDate, setStartDate] = useState(new Date());
 	const [expirationDate, setExpirationDate] = useState('');
-	const [couponCodeError, setCouponCodeError] = useState('');
-	const [couponNameError, setCouponNameError] = useState('');
-	const [discountAmountError, setDiscountAmountError] = useState('');
+	const [couponCodeError, setCouponCodeError] = useState();
+	const [couponNameError, setCouponNameError] = useState();
+	const [discountAmountError, setDiscountAmountError] = useState();
 	const [activated, setActivated] = useState(true);
 	const [formValid, setFormValid] = useState(false);
 	const [rangeDate, setRangeDate] = useState([dayjs(new Date()), dayjs(new Date())]);
@@ -154,15 +154,12 @@ export default () => {
 		setFilterKey(keyword);
 	};
 	const handleGetCouponDetails = (row) => {
-		// Object.assign(coupon, {couponCode: row.couponCode, discountAmount: row.discountAmount, expirationDate: moment(rangeDate[1].$d).format('yyyy-MM-DD'), startDate: moment(rangeDate[0].$d).format('yyyy-MM-DD'), activated: row.activated, couponName: row.couponName, createdDate: moment(row.createdDate).format('yyyy-MM-DD')});
-
 		setUpdate(true);
 		setCouponCode(row.couponCode);
 		setCouponName(row.couponName);
 		setCreatedDate(row.createdDate);
 		setDiscountAmount(row.discountAmount);
 		setActivated(row.activated);
-		console.log(activated);
 		setRangeDate([dayjs(row.startDate), dayjs(row.expirationDate)]);
 
 		setShowCard(true);
@@ -175,7 +172,6 @@ export default () => {
 	const handleUpdateCoupon = async (e) => {
 		// e.preventDefault();
 		Object.assign(coupon, {couponCode: couponCode, discountAmount: discountAmount, expirationDate: moment(rangeDate[1].$d).format('yyyy-MM-DD'), startDate: moment(rangeDate[0].$d).format('yyyy-MM-DD'), activated: activated, couponName: couponName, createdDate: moment(createdDate).format('yyyy-MM-DD')});
-		console.log(JSON.stringify(coupon));
 		try {
 			const resp = await fetch(ROOT_URL, {
 				method: 'PUT',
@@ -187,23 +183,27 @@ export default () => {
 			});
 			const data = resp.json();
 			setCoupon(data);
-			console.log(coupon.activated);
 		} catch (error) {
 			console.log(error);
 		}
 		getData();
-		console.log('updated');
 	};
 	const isFormValid = (coupon) => {
 		if (coupon.couponCode === '' || coupon.couponName === '' || coupon.discountAmount === 0) {
 			if (coupon.couponCode === '') {
 				setCouponCodeError('Vui lòng nhập vào Mã Khuyến Mãi !');
+			} else {
+				setCouponCodeError();
 			}
 			if (coupon.couponName === '') {
 				setCouponNameError('Vui lòng nhập vào Tên Khuyến Mãi !');
+			} else {
+				setCouponNameError();
 			}
 			if (coupon.discountAmount === 0) {
 				setDiscountAmountError('Vui lòng nhập vào Phần trăm Khuyến Mãi !');
+			} else {
+				setDiscountAmountError();
 			}
 			return false;
 		} else {
@@ -227,7 +227,7 @@ export default () => {
 				body: JSON.stringify(coupon),
 			});
 			const data = resp.json();
-			// getData();
+			getData();
 			// setCoupons(...coupons, data);
 		} catch (error) {
 			console.log(error);
@@ -248,9 +248,9 @@ export default () => {
 		setDiscountAmount('');
 		setExpirationDate('');
 		setActivated(true);
-		setCouponCodeError('');
-		setCouponNameError('');
-		setDiscountAmountError('');
+		setCouponCodeError();
+		setCouponNameError();
+		setDiscountAmountError();
 		setRangeDate([dayjs(new Date()), dayjs(new Date())]);
 		setActivated((pre) => !pre);
 	};
@@ -364,7 +364,7 @@ export default () => {
 													<Form.Label>Trạng thái</Form.Label>
 													<Form.Select
 														defaultValue={coupon.activated}
-														value={coupon.activated}
+														value={activated}
 														onChange={handleOnChangeSelect}>
 														<option value='true'>Đang hoạt động</option>
 														<option value='false'>Không hoạt động</option>
