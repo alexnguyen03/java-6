@@ -1,7 +1,11 @@
 import { faPenAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
+  ButtonGroup,
   Form,
+  Modal,
+  ModalBody,
+  ModalFooter,
   Toast,
   ToastBody,
   ToastHeader,
@@ -9,6 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ModalHeader from "@themesberg/react-bootstrap/lib/esm/ModalHeader";
 
 const ROOT_URL = "http://localhost:8080/admin/products";
 
@@ -23,24 +28,30 @@ export default () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isShowToast, setIsShowToast] = useState(false);
   const [messageToast, setMessageToast] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalsValue, setModalValue] = useState("");
+  const handleCloseModal = () => setShowModal(false);
 
   // Form Variable
-  const [id, setID] = useState("");
-  const [name, setName] = useState("");
-  const [image, setImage] = useState(null);
-  const [price, setPrice] = useState(1);
+  const [productId, setProductID] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productImage, setProductImage] = useState(null);
+  const [productPrice, setProductPrice] = useState(1);
   const [createDate, setcreateDate] = useState(new Date());
   const [available, setAvailable] = useState(true);
-  const [quantity, setQuantity] = useState(1);
+  const [productQuantity, setProductQuantity] = useState(1);
   const [productCategory, setProductCategory] = useState("");
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const [product, setProduct] = useState({
+    id: "",
     name: "",
-    image: "",
+    image: null,
     price: 1,
     createDate: "",
     available: true,
     quantity: 1,
+    category: "",
   });
 
   // DataTable Variable
@@ -104,7 +115,16 @@ export default () => {
           >
             <FontAwesomeIcon icon={faPenAlt} />
           </Button>
-          <Button variant="outline-danger" className="m-1">
+          <Button
+            variant="outline-danger"
+            className="m-1"
+            onClick={() => {
+              setShowModal(true);
+              console.log(row);
+              handleGetProductDetails(row);
+              setModalValue(row.id);
+            }}
+          >
             <FontAwesomeIcon icon={faTrashAlt} />
           </Button>
         </div>
@@ -164,16 +184,16 @@ export default () => {
       available: available,
       category: productCategory,
       createDate: formatDate(createDate),
-      image: image.name,
-      name: name,
-      price: Number(price),
-      quantity: Number(quantity),
+      image: productImage,
+      name: productName,
+      price: Number(productPrice),
+      quantity: Number(productQuantity),
     });
 
     const formData = new FormData();
-    formData.append("file", image);
-    // formData.append("product", product);
-    console.log(image.name);
+    formData.append("file", productImage);
+    formData.append("product", product);
+    console.log(productImage.name);
 
     try {
       const resp = await fetch(`${ROOT_URL}/create`, {
@@ -198,9 +218,80 @@ export default () => {
     console.log(JSON.stringify(product));
   };
 
+  const handleUpdateProduct = async (e) => {
+    e.preventDefault();
+    Object.assign(product, {
+      id: productId,
+      name: productName,
+      image: productImage,
+      price: productPrice,
+      createDate: createDate,
+      available: available,
+      quantity: productQuantity,
+      category: productCategory,
+    });
+
+    console.log(JSON.stringify(product));
+
+    try {
+      const resp = await fetch(ROOT_URL + "/update" + { productId }, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+      const data = resp.json();
+      setProduct(data);
+    } catch (error) {
+      console.log(error);
+    }
+
+    fetchProductData();
+    console.log("updated");
+  };
+
+  const handleDeleteProduct = async (e, row) => {
+    e.preventDefault();
+    Object.assign(product, {
+      // id: row.id,
+      name: row.name,
+      image: row.image,
+      price: row.price,
+      createDate: row.createDate,
+      available: !row.available,
+      quantity: row.quantity,
+      category: row.category,
+    });
+
+    console.log(JSON.stringify(product));
+  };
+
   const handleGetProductDetails = (row) => {
-    // setName(row.name);
-    // setProduct(row);
+    setIsUpdate(true);
+    setProductID(row.id);
+    setProductName(row.name);
+    setProductImage(row.image);
+    setProductPrice(row.price);
+    setProductQuantity(row.quantity);
+    setProductCategory(row.category.id);
+    setAvailable(row.available);
+    setcreateDate(row.createDate);
+  };
+
+  const handleResetForm = () => {
+    setProductID("");
+    setProductName("");
+    setProductImage(null);
+    setProductPrice("1");
+    setProductQuantity("1");
+    setProductCategory("");
+    setAvailable(true);
+    setcreateDate(formatDate(new Date()));
+
+    setProduct([]);
+    setIsUpdate(false);
   };
 
   //   Use Effect
@@ -237,12 +328,11 @@ export default () => {
             <Form.Label>Tên sản phẩm</Form.Label>
             <Form.Control
               onChange={(e) => {
-                setName(e.target.value);
-                console.log(name);
+                setProductName(e.target.value);
               }}
               required
               type="text"
-              vaiue={name}
+              value={productName}
             />
             <Form.Control.Feedback>
               Vui lòng nhập tên sản phẩm
@@ -252,7 +342,10 @@ export default () => {
           <Form.Group className="mb-3 col-6">
             <Form.Label>Hình ảnh sản phẩm</Form.Label>
             <Form.Control
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => {
+                setProductImage(e.target.files[0]);
+                console.log("Image Change: " + productImage);
+              }}
               required
               type="file"
               name="file"
@@ -267,12 +360,11 @@ export default () => {
             <Form.Label>Giá sản phẩm</Form.Label>
             <Form.Control
               onChange={(e) => {
-                setPrice(e.target.value);
-                console.log(price);
+                setProductPrice(e.target.value);
               }}
               required
               type="number"
-              value={price}
+              value={productPrice}
             />
             <Form.Control.Feedback>
               Vui lòng nhập giá sản phẩm
@@ -283,11 +375,10 @@ export default () => {
             <Form.Label>Số lượng sản phẩm</Form.Label>
             <Form.Control
               onChange={(e) => {
-                setQuantity(e.target.value);
-                console.log(quantity);
+                setProductQuantity(e.target.value);
               }}
               required
-              value={quantity}
+              value={productQuantity}
               type="number"
             />
             <Form.Control.Feedback>
@@ -301,7 +392,6 @@ export default () => {
               defaultValue={productCategory}
               onChange={(e) => {
                 setProductCategory(e.target.value);
-                console.log(productCategory);
               }}
               value={productCategory}
             >
@@ -322,13 +412,14 @@ export default () => {
               variant="outline-tertiary"
               className="m-1"
               onClick={(e) => handleAddProduct(e)}
+              disabled={isUpdate}
             >
               Thêm mới
             </Button>
             <Button
               variant="outline-info"
               className="m-1"
-              onClick={() => console.log("Update")}
+              onClick={(e) => handleUpdateProduct(e)}
             >
               Cập nhật
             </Button>
@@ -336,7 +427,7 @@ export default () => {
               type="reset"
               variant="outline-primary"
               className="m-1"
-              onClick={() => console.log("reset")}
+              onClick={() => handleResetForm()}
             >
               Reset
             </Button>
@@ -344,10 +435,32 @@ export default () => {
         </Form>
 
         {/* Table Overview */}
+        <h3 className="fw-bolder mt-5">Danh sách sản phẩm</h3>
+
+        {/* Searching input */}
+        {/* <div className="search-section d-flex">
+              <div className="d-flex align-items-center mb-3">
+                <input
+                  type="text"
+                  className="form-control me-2"
+                  placeholder="Tìm kiếm theo tên..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() => handleSearch()}
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+             */}
         <DataTable
           columns={columns}
           data={products}
           responsive
+          highlightOnHover
           pagination
           striped
         />
@@ -368,6 +481,46 @@ export default () => {
             <span>{messageToast}</span>
           </ToastBody>
         </Toast>
+
+        {/* Modal */}
+        <Modal
+          as={Modal.Dialog}
+          centered
+          show={showModal}
+          onHide={handleCloseModal}
+        >
+          <Modal.Header>
+            <Modal.Title className="h6">
+              Bạn có chắc chắn muốn xóa: {modalsValue}
+            </Modal.Title>
+            <Button
+              variant="close"
+              aria-label="Close"
+              onClick={handleCloseModal}
+            />
+          </Modal.Header>
+          <ModalBody>
+            <img src={"http://localhost:8080/img/cat-delete.jpg"} alt="" />
+          </ModalBody>
+          <ModalFooter>
+            <ButtonGroup>
+              <Button
+                variant="outline-primary"
+                className="m-1"
+                onClick={() => handleCloseModal()}
+              >
+                Trở lại
+              </Button>
+              <Button
+                variant="danger"
+                className="m-1"
+                onClick={(e, row) => handleDeleteProduct(e, row)}
+              >
+                Xóa
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </Modal>
       </div>
     </>
   );

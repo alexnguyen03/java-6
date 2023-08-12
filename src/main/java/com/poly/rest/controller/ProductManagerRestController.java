@@ -28,70 +28,75 @@ import com.poly.service.impl.ProductServiceImpl;
 @RestController
 @RequestMapping("/admin/products")
 public class ProductManagerRestController {
-    @Autowired
-    ProductServiceImpl productService;
+	@Autowired
+	ProductServiceImpl productService;
 
-    // @GetMapping
-    // public List<Product> getAllList() {
-    // return productService.findAll();
-    // }
+	// @GetMapping
+	// public List<Product> getAllList() {
+	// return productService.findAll();
+	// }
 
-    // // GET a single product by ID
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Product> getProductById(@PathVariable(value = "id")
-    // Integer id) {
-    // Product product = productService.findById(id);
-    // if (product != null) {
-    // return ResponseEntity.ok().body(product);
-    // } else {
-    // return ResponseEntity.notFound().build();
-    // }
-    // }
+	// // GET a single product by ID
+	// @GetMapping("/{id}")
+	// public ResponseEntity<Product> getProductById(@PathVariable(value = "id")
+	// Integer id) {
+	// Product product = productService.findById(id);
+	// if (product != null) {
+	// return ResponseEntity.ok().body(product);
+	// } else {
+	// return ResponseEntity.notFound().build();
+	// }
+	// }
 
-    // // POST create a new product
-    // @PostMapping
-    // @ResponseBody
-    // public Product createProduct(@RequestBody Product product) {
-    // System.out.println("Hello");
-    // System.out.println(product);
-    // return productService.save(product);
-    // }
+	// // POST create a new product
+	// @PostMapping
+	// @ResponseBody
+	// public Product createProduct(@RequestBody Product product) {
+	// System.out.println("Hello");
+	// System.out.println(product);
+	// return productService.save(product);
+	// }
 
-    // // PUT update an existing product
-    // @PutMapping("/update/{id}")
-    // public ResponseEntity<Product> updateProduct(
-    // @PathVariable(value = "id") Integer id,
-    // @RequestBody Product productDetails) {
-    // Product product = productService.findById(id);
-    // if (product != null) {
-    // Product existingProduct = product;
-    // existingProduct.setName(productDetails.getName());
-    // existingProduct.setImage(productDetails.getImage());
-    // existingProduct.setPrice(productDetails.getPrice());
-    // existingProduct.setQuantity(productDetails.getQuantity());
-    // existingProduct.setCategory(productDetails.getCategory());
-    // // Update other fields and relationships as needed
+	// // PUT update an existing product
+	// @PutMapping("/update/{id}")
+	// public ResponseEntity<Product> updateProduct(
+	// @PathVariable(value = "id") Integer id,
+	// @RequestBody Product productDetails) {
+	// Product product = productService.findById(id);
+	// if (product != null) {
+	// Product existingProduct = product;
+	// existingProduct.setName(productDetails.getName());
+	// existingProduct.setImage(productDetails.getImage());
+	// existingProduct.setPrice(productDetails.getPrice());
+	// existingProduct.setQuantity(productDetails.getQuantity());
+	// existingProduct.setCategory(productDetails.getCategory());
+	// // Update other fields and relationships as needed
 
-    // return ResponseEntity.ok().body(productService.save(existingProduct));
-    // } else {
-    // return ResponseEntity.notFound().build();
-    // }
-    // }
+	// return ResponseEntity.ok().body(productService.save(existingProduct));
+	// } else {
+	// return ResponseEntity.notFound().build();
+	// }
+	// }
 
-    @GetMapping("")
-    @ResponseBody
-    public List<Product> getAll() {
-        return productService.findAll();
+	@GetMapping("")
+	@ResponseBody
+	@CrossOrigin(origins = "http://localhost:3000/volt-react-dashboard#/product")
+	public List<Product> getAll() {
+		return productService.findAll();
+	}
+
+	@PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@ResponseBody
+	@CrossOrigin(origins = "http://localhost:3000/volt-react-dashboard#/product")
+	public ResponseEntity<Product> add(@RequestBody Product product, @RequestParam MultipartFile img) {
+		System.out.println(img);
+		System.out.println(product.getImage());
+		return ResponseEntity.ok(new Product());
+		// return ResponseEntity.ok(productService.save(product));
+	}
+	
+	@PutMapping("/update/{id}")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable("id") Integer id) {
+        return ResponseEntity.ok(productService.save(product));
     }
-
-    @PostMapping(value = "/create",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseBody
-    public ResponseEntity<Product> add(@RequestBody Product product,
-            @RequestParam MultipartFile img) {
-        System.out.println(img);
-        System.out.println(product.getImage());
-        return ResponseEntity.ok(new Product());
-        // return ResponseEntity.ok(productService.save(product));
-    }
-
 }
