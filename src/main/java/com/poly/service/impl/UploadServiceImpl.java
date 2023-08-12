@@ -17,18 +17,23 @@ public class UploadServiceImpl implements UploadService {
 
 	@Override
 	public File save(MultipartFile file, String folder) {
-		
 		File dir = new File("src/main/resources/static/img/" + folder).getAbsoluteFile();
 		if (dir.exists()) {
-			dir.mkdir();
+			dir.mkdirs();
 		}
-		String s = System.currentTimeMillis() + file.getOriginalFilename();
+		String s = file.getOriginalFilename();
 		String name = Integer.toHexString(s.hashCode()) + s.substring(s.lastIndexOf("."));
+		System.out.println(s);
 		try {
-			File saveFile = new File(dir, name);
-			file.transferTo(saveFile);
-			System.out.println(saveFile);
-			return saveFile;
+			File saveFile = new File(dir, s);
+			if (!saveFile.exists()) {
+				file.transferTo(saveFile);
+				System.out.println(saveFile);
+				return saveFile;
+			}else {
+				 System.out.println("File already exists: " + saveFile);
+				return saveFile;
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

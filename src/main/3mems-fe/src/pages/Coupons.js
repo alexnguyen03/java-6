@@ -18,7 +18,6 @@ export default () => {
 	const [showCard, setShowCard] = useState(false);
 	const [showAddBtn, setShowAddBtn] = useState(true);
 	const [showToast, setShowToast] = useState(false);
-	const [toastMsg, setToastMsg] = useState('');
 	const [showUpdateBtn, setShowUpdateBtn] = useState(false);
 	const [showNote, setShowNote] = useState(false);
 	const handleCloseModal = () => setShowModal(false);
@@ -39,9 +38,9 @@ export default () => {
 	const [discountAmount, setDiscountAmount] = useState(0);
 	const [startDate, setStartDate] = useState(new Date());
 	const [expirationDate, setExpirationDate] = useState('');
-	const [couponCodeError, setCouponCodeError] = useState('');
-	const [couponNameError, setCouponNameError] = useState('');
-	const [discountAmountError, setDiscountAmountError] = useState('');
+	const [couponCodeError, setCouponCodeError] = useState();
+	const [couponNameError, setCouponNameError] = useState();
+	const [discountAmountError, setDiscountAmountError] = useState();
 	const [activated, setActivated] = useState(true);
 	const [formValid, setFormValid] = useState(false);
 	const [rangeDate, setRangeDate] = useState([dayjs(new Date()), dayjs(new Date())]);
@@ -122,16 +121,6 @@ export default () => {
 
 			style: (row) => ({border: '1px grey solid'}, {backgroundColor: 'rgb(109, 235, 198)'}),
 		},
-		{
-			when: (row) => dayjs(row.expirationDate) < dayjs(new Date()),
-
-			style: (row) => ({backgroundColor: 'rgb(244, 168, 1)'}),
-		},
-		{
-			when: (row) => dayjs(row.expirationDate) < dayjs(new Date()) && row.couponCode === coupon.couponCode,
-
-			style: (row) => ({border: '1px grey solid'}, {backgroundColor: 'rgb(109, 235, 198)'}),
-		},
 	];
 	const getData = async () => {
 		try {
@@ -165,15 +154,12 @@ export default () => {
 		setFilterKey(keyword);
 	};
 	const handleGetCouponDetails = (row) => {
-		// Object.assign(coupon, {couponCode: row.couponCode, discountAmount: row.discountAmount, expirationDate: moment(rangeDate[1].$d).format('yyyy-MM-DD'), startDate: moment(rangeDate[0].$d).format('yyyy-MM-DD'), activated: row.activated, couponName: row.couponName, createdDate: moment(row.createdDate).format('yyyy-MM-DD')});
-
 		setUpdate(true);
 		setCouponCode(row.couponCode);
 		setCouponName(row.couponName);
 		setCreatedDate(row.createdDate);
 		setDiscountAmount(row.discountAmount);
 		setActivated(row.activated);
-		console.log(activated);
 		setRangeDate([dayjs(row.startDate), dayjs(row.expirationDate)]);
 
 		setShowCard(true);
@@ -186,7 +172,6 @@ export default () => {
 	const handleUpdateCoupon = async (e) => {
 		// e.preventDefault();
 		Object.assign(coupon, {couponCode: couponCode, discountAmount: discountAmount, expirationDate: moment(rangeDate[1].$d).format('yyyy-MM-DD'), startDate: moment(rangeDate[0].$d).format('yyyy-MM-DD'), activated: activated, couponName: couponName, createdDate: moment(createdDate).format('yyyy-MM-DD')});
-		console.log(JSON.stringify(coupon));
 		try {
 			const resp = await fetch(ROOT_URL, {
 				method: 'PUT',
@@ -197,26 +182,28 @@ export default () => {
 				body: JSON.stringify(coupon),
 			});
 			const data = resp.json();
-			// setCoupon(data);
-			setToastMsg('Cập nhật khuyên mãi thành công !');
-			setShowToast(true);
-			getData();
+			setCoupon(data);
 		} catch (error) {
-			setToastMsg('Cập nhật khuyên mãi thất bại! Vui lòng thử lại.');
 			console.log(error);
-			setShowToast(true);
 		}
+		getData();
 	};
 	const isFormValid = (coupon) => {
 		if (coupon.couponCode === '' || coupon.couponName === '' || coupon.discountAmount === 0) {
 			if (coupon.couponCode === '') {
 				setCouponCodeError('Vui lòng nhập vào Mã Khuyến Mãi !');
+			} else {
+				setCouponCodeError();
 			}
 			if (coupon.couponName === '') {
 				setCouponNameError('Vui lòng nhập vào Tên Khuyến Mãi !');
+			} else {
+				setCouponNameError();
 			}
 			if (coupon.discountAmount === 0) {
 				setDiscountAmountError('Vui lòng nhập vào Phần trăm Khuyến Mãi !');
+			} else {
+				setDiscountAmountError();
 			}
 			return false;
 		} else {
@@ -241,17 +228,12 @@ export default () => {
 			});
 			const data = resp.json();
 			getData();
-			handleResetForm();
-			setToastMsg('Thêm khuyến mãi thành công !');
-			setShowToast(true);
-			setCouponCodeError('');
-			setCouponNameError('');
-			setDiscountAmountError('');
+			// setCoupons(...coupons, data);
 		} catch (error) {
 			console.log(error);
-			setToastMsg('Thêm khuyến mãi thất bại ! Vui lòng thử lại.');
-			setShowToast(true);
 		}
+		handleResetForm();
+		setShowToast(true);
 	};
 	const handleShowCard = () => {
 		setShowCard((pre) => !pre);
@@ -266,8 +248,9 @@ export default () => {
 		setDiscountAmount('');
 		setExpirationDate('');
 		setActivated(true);
-		setDiscountAmount(0);
-		setCoupon(coupon, {activated: true});
+		setCouponCodeError();
+		setCouponNameError();
+		setDiscountAmountError();
 		setRangeDate([dayjs(new Date()), dayjs(new Date())]);
 		setActivated((pre) => !pre);
 	};
@@ -292,7 +275,7 @@ export default () => {
 						<Toast.Header>
 							<strong className='me-auto'>4MEMS - Thông báo</strong>
 						</Toast.Header>
-						<Toast.Body className='text-white'>{toastMsg}</Toast.Body>
+						<Toast.Body className='text-white'>Cập nhật trạng thái đơn hàng thành công !</Toast.Body>
 					</Toast>
 				</Row>
 				{showCard && (
@@ -381,7 +364,7 @@ export default () => {
 													<Form.Label>Trạng thái</Form.Label>
 													<Form.Select
 														defaultValue={coupon.activated}
-														value={coupon.activated}
+														value={activated}
 														onChange={handleOnChangeSelect}>
 														<option value='true'>Đang hoạt động</option>
 														<option value='false'>Không hoạt động</option>
@@ -396,7 +379,7 @@ export default () => {
 													component='DateRangePicker'>
 													<DateRangePicker
 														value={rangeDate}
-														minDate={dayjs(new Date())}
+														minDate={!update ? dayjs(new Date()) : ''}
 														// onChange={(newValue) => handleDateChange(newValue)}
 														onChange={(newValue) => setRangeDate(newValue)}
 													/>

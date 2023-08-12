@@ -30,8 +30,9 @@ public class RootController {
     public String index(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            String user = ((UserDetails) principal).getUsername();
-            model.addAttribute("user", user);
+            String username = ((UserDetails) principal).getUsername();
+            model.addAttribute("user", username);
+            session.set("username", username);
         }
         List<Product> items = productDAO.findTop10BestSellingProducts();
         model.addAttribute("items", items);

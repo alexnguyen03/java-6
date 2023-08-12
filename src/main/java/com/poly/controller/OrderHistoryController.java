@@ -15,6 +15,8 @@ import com.poly.model.Account;
 import com.poly.model.Order;
 import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
+import com.poly.service.OrderDetailService;
+import com.poly.service.OrderService;
 import com.poly.service.ParamService;
 import com.poly.service.SessionService;
 
@@ -25,6 +27,10 @@ public class OrderHistoryController {
 	OrderDAO orderDao;
 	@Autowired
 	OrderDetailDAO orderDetailDao;
+	@Autowired
+	OrderService orderService;
+	@Autowired
+	OrderDetailService orderDetailService;
 	@Autowired
 	ParamService paramService;
 	@Autowired
@@ -46,7 +52,7 @@ public class OrderHistoryController {
 		sessionService.set("account", account);
 
 		Account account2 = sessionService.get("account");
-		List<Order> orders = orderDao.findByAccountName(account2.getUsername());
+		List<Order> orders = orderService.findByAccountName(account2.getUsername());
 		model.addAttribute("orders", orders);
 		model.addAttribute("pageActive", "order-history");
 
@@ -61,7 +67,7 @@ public class OrderHistoryController {
 			Date date = null;
 			try {
 				date = paramService.getDate2(keyword, "yyyy-MM-dd");
-				List<Order> orders = orderDao.findByCreatedDate(date);
+				List<Order> orders = orderService.findByCreatedDate(date);
 				if (orders.size() > 0) {
 					model.addAttribute("success", "Đã tìm thấy ngày đặt hàng là : " + keyword);
 					model.addAttribute("orders", orders);
@@ -98,7 +104,7 @@ public class OrderHistoryController {
 	public String search(Model model, @RequestParam("status") String status) {
 		Account account = sessionService.get("account");
 		if (status.equals("C")) {
-			List<Order> orders = orderDao.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isC", true);
@@ -107,7 +113,7 @@ public class OrderHistoryController {
 				model.addAttribute("success", "Không tìm thấy đơn hàng có trạng thái là Đang chờ");
 			}
 		} else if (status.equals("XL")) {
-			List<Order> orders = orderDao.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isXl", true);
@@ -116,7 +122,7 @@ public class OrderHistoryController {
 				model.addAttribute("success", "Không tìm thấy đơn hàng có trạng thái là Đang xử lý");
 			}
 		} else if (status.equals("G")) {
-			List<Order> orders = orderDao.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isG", true);
@@ -125,7 +131,7 @@ public class OrderHistoryController {
 				model.addAttribute("success", "Không tìm thấy đơn hàng có trạng thái là Đang giao");
 			}
 		} else if (status.equals("DG")) {
-			List<Order> orders = orderDao.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isDg", true);
@@ -135,7 +141,7 @@ public class OrderHistoryController {
 			}
 
 		} else if (status.equals("H")) {
-			List<Order> orders = orderDao.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isH", true);

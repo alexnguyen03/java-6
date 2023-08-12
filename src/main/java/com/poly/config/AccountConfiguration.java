@@ -37,7 +37,8 @@ public class AccountConfiguration {
 		// http.formLogin(login ->
 		// login.loginPage("/account/login").loginProcessingUrl("/account/login")
 		// .defaultSuccessUrl("/account/login/success",
-		// false).failureUrl("/account/login/error"));
+		// false)
+		// .failureUrl("/account/login/error"));
 		// http.rememberMe(me -> me.tokenValiditySeconds(86400));
 		// Điều khiển lỗi truy cập không đúng quyền
 		http.exceptionHandling(handling -> handling.accessDeniedPage("/account/unauthoried"));
