@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poly.model.Account;
+import com.poly.model.Coupon;
 import com.poly.repository.AccountDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import com.poly.model.Order;
 import com.poly.model.OrderDetail;
 import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
+import com.poly.service.AccountService;
 import com.poly.service.OrderService;
 import com.poly.service.SessionService;
 
@@ -36,7 +38,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderDetailDAO orderDetailDAO;
-    AccountDAO accountDAO;
+   
+    @Autowired
+    AccountService accountService;
 
     @Override
     public List<Order> findAll() {
@@ -95,24 +99,20 @@ public class OrderServiceImpl implements OrderService {
         ObjectMapper mapper = new ObjectMapper();
         Order order = mapper.convertValue(orderData, Order.class);
         if (order.getPayment().getIdPaymemt() == 2) {
-            if (order.getCoupon().getCouponCode() != null) {
-                orderDAO.save(order);
-
-                TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
-                };
-                List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
-                        .peek(d -> d.setOrder(order)).collect(Collectors.toList());
-                orderDetailDAO.saveAll(details);
-            } else {
-                order.setCoupon(null);
-                orderDAO.save(order);
-
-                TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
-                };
-                List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
-                        .peek(d -> d.setOrder(order)).collect(Collectors.toList());
-                orderDetailDAO.saveAll(details);
+        	Coupon coupon = order.getCoupon();
+            if (coupon == null) {
+            	 order.setCoupon(null);
             }
+            String account =  sessionService.get("username");
+            Account account2 = accountService.findById(account).get();
+            order.setAccount(account2);
+            orderDAO.save(order);
+
+            TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
+            };
+            List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
+                    .peek(d -> d.setOrder(order)).collect(Collectors.toList());
+            orderDetailDAO.saveAll(details);
         }
         return order;
     }
