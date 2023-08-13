@@ -46,6 +46,7 @@ import Tables from './components/Tables';
 import Tabs from './components/Tabs';
 import Toasts from './components/Toasts';
 import Tooltips from './components/Tooltips';
+import Account from './Account';
 
 const RouteWithLoader = ({component: Component, ...rest}) => {
 	const [loaded, setLoaded] = useState(false);
@@ -76,16 +77,6 @@ const RouteWithSidebar = ({component: Component, ...rest}) => {
 		return () => clearTimeout(timer);
 	}, []);
 
-	const localStorageIsSettingsVisible = () => {
-		return localStorage.getItem('settingsVisible') === 'false' ? false : true;
-	};
-
-	// const [showSettings, setShowSettings] = useState(localStorageIsSettingsVisible);
-
-	// const toggleSettings = () => {
-	// 	setShowSettings(!showSettings);
-	// 	localStorage.setItem('settingsVisible', !showSettings);
-	// };
 
 	return (
 		<Route
@@ -94,7 +85,6 @@ const RouteWithSidebar = ({component: Component, ...rest}) => {
 				<>
 					<Preloader show={loaded ? false : true} />
 					<Sidebar />
-
 					<main className='content'>
 						<Navbar />
 						<Component {...props} />
@@ -125,6 +115,11 @@ export default () => (
 			exact
 			path={Routes.ForgotPassword.path}
 			component={ForgotPassword}
+		/>
+		<RouteWithSidebar 
+			exact
+			path={Routes.Account.path}
+			component={Account}
 		/>
 		<RouteWithLoader
 			exact

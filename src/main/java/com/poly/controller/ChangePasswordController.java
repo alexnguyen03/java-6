@@ -18,6 +18,8 @@ import com.poly.service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("account")
 public class ChangePasswordController {
@@ -33,6 +35,8 @@ public class ChangePasswordController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             String user = ((UserDetails) principal).getUsername();
+
+
             model.addAttribute("user", user);
         }
         return "account/changepassword";
@@ -40,8 +44,8 @@ public class ChangePasswordController {
 
     @PostMapping("changepassword")
     public String processChangePassword(Model model, @RequestParam("username") String username, @RequestParam("password") String newPassword, HttpServletResponse response) {
-        Account account = accountService.findById(username);
-        accountService.changePassword(account, pe.encode(newPassword));
+        Optional<Account> account = accountService.findById(username);
+        accountService.changePassword(account.get(), pe.encode(newPassword));
         model.addAttribute("message", "Đổi mật khẩu thành công!");
         response.addHeader("refresh", "1,url=/");
         return "account/changepassword";

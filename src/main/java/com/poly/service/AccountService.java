@@ -1,15 +1,13 @@
 package com.poly.service;
 
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import com.poly.model.Account;
-import org.springframework.ui.Model;
+import java.util.Optional;
+
 import com.poly.model.Account;
 
 public interface AccountService {
  
-	Account findById(String username);
+	Optional<Account> findById(String username);
 
 	List<Account> findAll();
 

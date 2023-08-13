@@ -25,6 +25,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import ScrollToTop from './components/ScrollToTop';
 import HomePage from './pages/HomePage';
+import Sidebar from './components/Sidebar';
 
 ReactDOM.render(
 	<HashRouter>

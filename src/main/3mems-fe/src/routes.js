@@ -5,6 +5,7 @@ export const Routes = {
 	Dashboard: {path: '/'},
 	Settings: {path: '/settings'},
 	Orders: {path: '/orders'},
+	Account: {path: '/account'},
 	Coupons: {path: '/coupons'},
 	Upgrade: {path: '/upgrade'},
 	BootstrapTables: {path: '/tables/bootstrap-tables'},

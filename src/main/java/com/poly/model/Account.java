@@ -2,9 +2,9 @@ package com.poly.model;
 
 import java.io.Serializable;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,28 +25,41 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "Accounts")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 public class Account implements Serializable {
 	@Id
+	@NotBlank(message = "{NotBlank.account.username}")
 	private String username;
+
+	@NotBlank(message = "{NotBlank.account.password}")
 	private String password;
+
+	@NotBlank(message = "{NotBlank.account.fullname}")
 	private String fullname;
+
+	@NotBlank(message = "{NotBlank.account.email}")
+	@Email(message = "{Email.account.email}")
 	private String email;
-	private Boolean activated;
 
 	private String photo;
+	private Boolean activated;
 	private String token;
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Order> orders;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	private List<Review> reviews;
 
-	// @JsonIgnore
-	// @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
-	// List<Authority> authorities;
-
 	@JsonIgnore
+	@OneToMany(mappedBy = "account")
+	private List<Cart> carts;
+
+//	@JsonIgnore
+//	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+//	List<Authority> authorities;
+
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Accounts_Roles", joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
 	private List<Role> roles;

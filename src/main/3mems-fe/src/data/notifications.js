@@ -10,7 +10,7 @@ export default [
         "id": 1,
         "read": false,
         "image": Profile1,
-        "sender": "Jose Leos",
+        "sender": "Tấn",
         "time": "a few moments ago",
         "link": "#",
         "message": `Added you to an event "Project stand-up" tomorrow at 12:30 AM.`

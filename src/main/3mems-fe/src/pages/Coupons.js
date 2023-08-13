@@ -104,7 +104,6 @@ export default () => {
 			const data = await resp.json();
 			{
 				setLoading(false);
-				console.log(data);
 				setCoupons(data);
 			}
 		} catch (error) {

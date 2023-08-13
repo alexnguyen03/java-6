@@ -2,7 +2,8 @@ package com.poly.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.Optional;
+
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,6 +28,9 @@ public interface AccountDAO extends JpaRepository<Account, String> {
 
 	@Query("SELECT u FROM Account u WHERE u.username = ?1")
 	Account findByUsername(String username);
+
+	@Query("SELECT u FROM Account u")
+	List<Account> getAll();
 
 //	@Query(value = "SELECT count(a.username) FROM Accounts a", nativeQuery = true)
 //	Integer countAllAccount();
