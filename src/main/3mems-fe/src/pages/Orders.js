@@ -239,6 +239,7 @@ export default () => {
 
 	return (
 		<>
+			<h2 className='text-center'>QUẢN LÝ ĐƠN ĐẶT HÀNG</h2>
 			<Row className='mb-3'>
 				{showCard && (
 					<>

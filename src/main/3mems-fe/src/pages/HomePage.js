@@ -33,6 +33,7 @@ import Orders from './Orders';
 import Product from './Product';
 import Reports from './Reports';
 import Reviews from './Reviews';
+import Categorys from './Categorys';
 import Accordion from './components/Accordion';
 import Alerts from './components/Alerts';
 import Badges from './components/Badges';
@@ -183,6 +184,11 @@ export default () => (
 			exact
 			path={Routes.Coupons.path}
 			component={Coupons}
+		/>
+		<RouteWithSidebar
+			exact
+			path={Routes.Categorys.path}
+			component={Categorys}
 		/>
 		<RouteWithSidebar
 			exact

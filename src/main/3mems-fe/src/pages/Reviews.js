@@ -163,6 +163,7 @@ export default () => {
 
 	return (
 		<>
+			<h2 className='text-center'>QUẢN LÝ ĐÁNH GIÁ SẢN PHẨM</h2>
 			<Row className='mt-5'>
 				<Col xl={4}>
 					<InputGroup className='input-group-merge search-bar'>

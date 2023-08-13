@@ -158,7 +158,6 @@ export default (props = {}) => {
 								// link={Routes.Dashboard.path}
 								image={ReactHero}
 							/>
-
 							{/* <NavItem title="Overview" link={Routes.DashboardOverview.path} icon={faChartPie} /> */}
 							{/* <NavItem
 								external
@@ -173,7 +172,6 @@ export default (props = {}) => {
 								icon={faHandHoldingUsd}
 								link={Routes.Dashboard.path}
 							/>
-
 							<NavItem
 								title='Account'
 								icon={faUser}
@@ -198,6 +196,11 @@ export default (props = {}) => {
 								title='Report'
 								icon={faChartPie}
 								link={Routes.Reports.path}
+							/>{' '}
+							<NavItem
+								title='Category'
+								icon={faCog}
+								link={Routes.Categorys.path}
 							/>
 							<NavItem
 								title='Products'
