@@ -9,6 +9,7 @@ app.controller('cartCtrl', function ($scope, $http) {
 		isQuantityValid: true,
 		isOutOfProduct: false,
 		amoutInDetail: 1,
+		storeAmount: 0,
 		plusInDetail() {
 			this.quantityInDetail++;
 		},
@@ -19,8 +20,29 @@ app.controller('cartCtrl', function ($scope, $http) {
 			this.quantityInDetail--;
 		},
 		plus(id) {
+			console.log(this.storeAmount);
+			let data;
+			if (this.storeAmount == 0) {
+				$http.get(`/rest/products/${id}`).then((resp) => {
+					console.log(resp.data);
+					this.storeAmount = resp.data.quantity;
+					data = resp.data;
+				});
+				return;
+			}
+
 			var item = this.items.find((item) => item.id == id);
-			item.quantity++;
+			if (item.quantity >= this.storeAmount) {
+				alert('Bạn đã chọn vượt quá số lượng sản phẩm khả dụng !');
+				item.quantity = this.storeAmount;
+				return;
+			}
+			if (item) {
+				item.quantity++;
+			} else {
+				this.items.push(data);
+			}
+
 			this.saveToLocalStorage();
 		},
 		minus(id) {

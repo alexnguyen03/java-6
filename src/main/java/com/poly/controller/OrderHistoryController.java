@@ -1,5 +1,6 @@
 package com.poly.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,10 +16,12 @@ import com.poly.model.Account;
 import com.poly.model.Order;
 import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
+import com.poly.service.AccountService;
 import com.poly.service.OrderDetailService;
 import com.poly.service.OrderService;
 import com.poly.service.ParamService;
 import com.poly.service.SessionService;
+import com.poly.service.impl.AccountServiceImpl;
 
 @Controller
 @RequestMapping("/shop/order-history")
@@ -36,25 +39,27 @@ public class OrderHistoryController {
 	@Autowired
 	SessionService sessionService;
 
+	@Autowired
+	AccountServiceImpl accountService;
+
 	@GetMapping("")
 	public String index(Model model) {
-		// if (sessionService.get("account") == null) {
-		// sessionService.set("messageShop", "Đăng nhập trước khi xem đơn hàng");
-		// return "redirect:/account/login";
-		// }
 
-		Account account = new Account();
-		account.setUsername("hoainam");
-		account.setPassword("123456");
-		account.setFullname("Hoài Nam update");
-		account.setEmail("namnhpc03517@fpt.edu.vn");
-		// account.setActivated(true);
-		sessionService.set("account", account);
-
-		Account account2 = sessionService.get("account");
-		List<Order> orders = orderService.findByAccountName(account2.getUsername());
+		Account acc = new Account();
+		List<Order> orders = new ArrayList<>();
+		try {
+			String uname = sessionService.get("username");
+			acc = accountService.findById(uname).get();
+			if (acc == null) {
+				sessionService.set("messageShop", "Đăng nhập trước khi xem đơn hàng");
+				return "redirect:/account/login";
+			}
+			orders = orderService.findByAccountName(uname);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		model.addAttribute("orders", orders);
-		model.addAttribute("pageActive", "order-history");
+		// model.addAttribute("pageActive", "order-history");
 
 		return "client/order-history";
 	}
