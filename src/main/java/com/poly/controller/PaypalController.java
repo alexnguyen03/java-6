@@ -1,6 +1,7 @@
 package com.poly.controller;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,18 +63,26 @@ public class PaypalController {
 		double total = paramService.getDouble("total", 0);
 		String phone = paramService.getString("sdt", "");
 		String address = paramService.getString("dc", "");
-		try {
-			Payment payment = service.createPayment(total, "USD", "paypal", "sale", address,
-					"http://localhost:8080/" + CANCEL_URL, "http://localhost:8080/" + SUCCESS_URL);
-			for (Links link : payment.getLinks()) {
-				if (link.getRel().equals("approval_url")) {
-					return "redirect:" + link.getHref();
+		
+		// Kiểm tra định dạng số điện thoại bằng biểu thức chính quy
+		String phoneRegex = "^\\d{10}$"; // Kiểm tra đúng 10 chữ số
+		Pattern pattern = Pattern.compile(phoneRegex);
+
+		if (phone.trim().isEmpty() || address.trim().isEmpty() || !pattern.matcher(phone).matches()) {
+			return "redirect:/shop/checkout";
+		} else {
+			try {
+				Payment payment = service.createPayment(total, "USD", "paypal", "sale", address,
+						"http://localhost:8080/" + CANCEL_URL, "http://localhost:8080/" + SUCCESS_URL);
+				for (Links link : payment.getLinks()) {
+					if (link.getRel().equals("approval_url")) {
+						return "redirect:" + link.getHref();
+					}
 				}
+
+			} catch (PayPalRESTException e) {
+				e.printStackTrace();
 			}
-
-		} catch (PayPalRESTException e) {
-
-			e.printStackTrace();
 		}
 		return "redirect:/";
 	}
@@ -114,7 +123,7 @@ public class PaypalController {
 						orderDetailDAO.saveAll(details);
 					}
 				}
-				return "redirect:/shop/checkout";
+				return "redirect:/shop/order-history";
 			}
 		} catch (PayPalRESTException e) {
 			System.out.println(e.getMessage());

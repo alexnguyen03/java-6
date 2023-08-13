@@ -3,6 +3,11 @@ package com.poly.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.RedirectView;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -98,7 +103,6 @@ public class OrderServiceImpl implements OrderService {
                 List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
                         .peek(d -> d.setOrder(order)).collect(Collectors.toList());
                 orderDetailDAO.saveAll(details);
-                // response.sendRedirect("/order-history"); // Thay thế "/order-history"
             } else {
                 order.setCoupon(null);
                 orderDAO.save(order);
