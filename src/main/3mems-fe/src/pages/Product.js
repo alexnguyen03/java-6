@@ -549,7 +549,7 @@ export default () => {
         </Modal>
 
         {/* Form Overview */}
-        <h3 className="my-5 fw-bolder">Quản lý sản phẩm</h3>
+        <h2 className="my-5 text-center fw-bolder">Quản lý sản phẩm</h2>
         <Form className="row">
           {/* Item */}
           <Form.Group className="mb-3 col-6">
