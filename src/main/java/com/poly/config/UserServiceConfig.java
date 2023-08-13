@@ -13,11 +13,12 @@ import java.util.stream.Collectors;
 public class UserServiceConfig implements UserDetailsService {
     @Autowired
     private AccountDAO userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = userRepository.findByUsername(username);
-        System.out.println("Account: " +  account);
-        if(account == null){
+        System.out.println("Account: " + account);
+        if (account == null) {
             throw new UsernameNotFoundException("Không tìm thấy username");
         }
         return new org.springframework.security.core.userdetails.User(account.getUsername(),

@@ -32,6 +32,7 @@ import Dashboard from './Dashboard';
 import Orders from './Orders';
 import Product from './Product';
 import Reports from './Reports';
+import Reviews from './Reviews';
 import Accordion from './components/Accordion';
 import Alerts from './components/Alerts';
 import Badges from './components/Badges';
@@ -79,7 +80,6 @@ const RouteWithSidebar = ({component: Component, ...rest}) => {
 		return () => clearTimeout(timer);
 	}, []);
 
-
 	return (
 		<Route
 			{...rest}
@@ -118,7 +118,7 @@ export default () => (
 			path={Routes.ForgotPassword.path}
 			component={ForgotPassword}
 		/>
-		<RouteWithSidebar 
+		<RouteWithSidebar
 			exact
 			path={Routes.Account.path}
 			component={Account}
@@ -173,6 +173,11 @@ export default () => (
 			exact
 			path={Routes.Reports.path}
 			component={Reports}
+		/>
+		<RouteWithSidebar
+			exact
+			path={Routes.Reviews.path}
+			component={Reviews}
 		/>
 		<RouteWithSidebar
 			exact

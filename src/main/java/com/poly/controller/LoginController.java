@@ -49,8 +49,9 @@ public class LoginController {
         Account account = dao.findByUsername(principal.getName());
 
         System.out.println(account.getRoles().toString());
-        //Trả về List: lấy vị trí roles đầu tiên
-        if((account.getRoles().get(0).getName().equalsIgnoreCase("ADMIN"))  || (account.getRoles().get(0).getName().equalsIgnoreCase("MANAGE") )) {
+        // Trả về List: lấy vị trí roles đầu tiên
+        if ((account.getRoles().get(0).getName().equalsIgnoreCase("ADMIN"))
+                || (account.getRoles().get(0).getName().equalsIgnoreCase("MANAGE"))) {
             return "redirect:http://localhost:3000/#/";
         }
         model.addAttribute("message", "Đăng nhập thành công");

@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Button, Card, Col, Form, Modal, Row, Table, Toast} from '@themesberg/react-bootstrap';
 import React, {useEffect, useState, useRef} from 'react';
 import DataTable from 'react-data-table-component';
-const ROOT_URL = 'http://localhost:8080/rest/orders';
+const ROOT_URL = 'http://localhost:8080/admin/orders';
 
 export default () => {
 	const [showCard, setShowCard] = useState(false);
@@ -102,8 +102,9 @@ export default () => {
 		try {
 			const resp = await fetch(ROOT_URL + `/users/${row.id}`);
 			const data = await resp.json();
-			setShowCard(true);
+			console.log(data);
 			setUser(data);
+			setShowCard(true);
 		} catch (error) {
 			console.log(error);
 		}

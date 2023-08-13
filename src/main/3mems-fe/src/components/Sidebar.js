@@ -3,7 +3,7 @@ import SimpleBar from 'simplebar-react';
 import {useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faBook, faBoxOpen, faChartPie, faCog, faFileAlt, faHandHoldingUsd, faSignOutAlt, faTable, faTimes, faChevronCircleDown, faCalendarAlt, faMapPin, faInbox, faRocket} from '@fortawesome/free-solid-svg-icons';
+import {faBook, faBoxOpen, faChartPie, faCog, faFileAlt, faHandHoldingUsd, faSignOutAlt, faTable, faTimes, faChevronCircleDown, faCalendarAlt, faMapPin, faInbox, faRocket, faTicketAlt, faStar, faUser, faStamp} from '@fortawesome/free-solid-svg-icons';
 import {Nav, Badge, Image, Button, Dropdown, Accordion, Navbar} from '@themesberg/react-bootstrap';
 import {Link} from 'react-router-dom';
 
@@ -176,30 +176,35 @@ export default (props = {}) => {
 
 							<NavItem
 								title='Account'
-								icon={faCog}
+								icon={faUser}
 								link={Routes.Account.path}
 							/>
 							<NavItem
 								title='Orders'
-								icon={faCog}
+								icon={faBoxOpen}
 								link={Routes.Orders.path}
 							/>
 							<NavItem
+								title='Review'
+								icon={faStar}
+								link={Routes.Reviews.path}
+							/>
+							<NavItem
 								title='Coupon'
-								icon={faCog}
+								icon={faTicketAlt}
 								link={Routes.Coupons.path}
 							/>
 							<NavItem
 								title='Report'
-								icon={faCog}
+								icon={faChartPie}
 								link={Routes.Reports.path}
 							/>
 							<NavItem
 								title='Products'
-								icon={faHandHoldingUsd}
+								icon={faStamp}
 								link={Routes.Product.path}
 							/>
-							<CollapsableNavItem
+							{/* <CollapsableNavItem
 								eventKey='tables/'
 								title='Tables'
 								icon={faTable}>
@@ -314,7 +319,7 @@ export default (props = {}) => {
 									title='Tooltips'
 									link={Routes.Tooltips.path}
 								/>
-							</CollapsableNavItem>
+							</CollapsableNavItem> */}
 						</Nav>
 					</div>
 				</SimpleBar>
