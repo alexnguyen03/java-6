@@ -2,7 +2,7 @@
  * 
  */
 var app = angular.module('myApp_Checkout', []);
-app.controller('myCtrl_Checkout', function($scope, $http) {
+app.controller('myCtrl_Checkout', function($scope, $http, $location) {
 	$scope.items = [];
 	$scope.discount = 0;
 
@@ -67,10 +67,29 @@ app.controller('myCtrl_Checkout', function($scope, $http) {
 		//		},
 		purchase() {
 			var order = angular.copy(this);
-			console.log(order);
+
+			if (order.phone.trim() === '') {
+				alert('Vui lòng nhập số điên thoại');
+				return;
+			}
+
+			if (order.address.trim() === '') {
+				alert('Vui lòng nhập địa chỉ');
+				return;
+			}
+
+			const phoneNumberPattern = /^(?:\+?84|0)(?:\d{9}|\d{10})$/;
+			if (!phoneNumberPattern.test(order.phone)) {
+				alert('Số điện thoại không hợp lệ');
+				return;
+			}
+
 			// Thực hiện đặt hàng
 			$http.post("/rest/orders", order).then(resp => {
-				alert("Thanh toán thành công !!!");
+				if (order.payment === '2') {
+					alert("Thanh toán thành công !!!");
+					window.location.href = "/shop/order-history";
+				}
 				//location.href = "/shop/order-history";
 			}).catch(error => {
 				alert("Thanh toán lỗi !!!");
