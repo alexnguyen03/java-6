@@ -55,7 +55,6 @@ public class Product implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	@NotNull(message = "{NotNull.product.category}")
-	// @JsonManagedReference
 	private Category category;
 	@JsonIgnore
 	@OneToMany(mappedBy = "product")

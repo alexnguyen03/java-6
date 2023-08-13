@@ -272,7 +272,7 @@ export default () => {
 										Số điện thoại: <strong>{order.phone}</strong>
 									</div>
 									<div className='mb-2'>
-										Tổng tiền thanh toán: <strong>{order.totalPrice}</strong>
+										Tổng tiền thanh toán: <strong>{order.totalPrice.toLocaleString('it-IT', {style: 'currency', currency: 'VND'})}</strong>
 									</div>
 									<div className='mb-2'>
 										Trạng thái đơn hàng: <strong className={`badge  bg-${displayBadgeStatus(order.status)}`}> {displayStatus(order.status)}</strong>
@@ -379,7 +379,7 @@ export default () => {
 												return (
 													<tr key={id}>
 														<td>{id}</td>
-														<td>{od.price}</td>
+														<td>{od.price.toLocaleString('it-IT', {style: 'currency', currency: 'VND'})}</td>
 														<td>{name}</td>
 														<td>{od.quantity}</td>
 													</tr>
