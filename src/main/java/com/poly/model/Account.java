@@ -34,11 +34,8 @@ public class Account implements Serializable {
 	@NotBlank(message = "{NotBlank.account.password}")
 	private String password;
 
-	@NotBlank(message = "{NotBlank.account.fullname}")
 	private String fullname;
 
-	@NotBlank(message = "{NotBlank.account.email}")
-	@Email(message = "{Email.account.email}")
 	private String email;
 
 	private String photo;
