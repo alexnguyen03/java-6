@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.poly.model.Account;
+import com.poly.model.Role;
 import com.poly.repository.AccountDAO;
 import com.poly.repository.CartDAO;
 import com.poly.service.CookieService;
@@ -18,6 +19,7 @@ import com.poly.service.ParamService;
 import com.poly.service.SessionService;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("account")
@@ -49,10 +51,14 @@ public class LoginController {
         Account account = dao.findByUsername(principal.getName());
 
         System.out.println(account.getRoles().toString());
-        // Trả về List: lấy vị trí roles đầu tiên
-        if ((account.getRoles().get(0).getName().equalsIgnoreCase("ADMIN"))
-                || (account.getRoles().get(0).getName().equalsIgnoreCase("MANAGE"))) {
-            return "redirect:http://localhost:3000/#/";
+        // Trả về List: role
+        List<Role> roles = account.getRoles();
+        if (!roles.isEmpty()) {
+            for (Role role : roles) {
+                if (!role.getName().equalsIgnoreCase("user")) {
+                    return "redirect:http://localhost:3000/#/";
+                }
+            }
         }
         model.addAttribute("message", "Đăng nhập thành công");
         return "redirect:/";

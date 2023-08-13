@@ -26,8 +26,15 @@ public class UpdateProfileRestController {
 	SessionService sessionService;
 
 	@GetMapping()
-	public Optional<Account> getOne() {
-		return accountService.findById("hoainam");
+	public Account getOne() {
+		Account acc = new Account();
+		try {
+			String uname = sessionService.get("username");
+			acc = accountService.findById(uname).get();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return acc;
 	}
 
 	@PutMapping("{id}")
