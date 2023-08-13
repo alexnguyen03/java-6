@@ -1,3 +1,14 @@
+import {
+  PieChart,
+  Pie,
+  Tooltip,
+  BarChart,
+  XAxis,
+  YAxis,
+  Legend,
+  CartesianGrid,
+  Bar,
+} from "recharts";
 import {faTrashrAlt, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Button, Card, Col, Form, InputGroup, Row, Toast} from '@themesberg/react-bootstrap';
@@ -9,9 +20,17 @@ const ROOT_URL = 'http://localhost:8080/admin/reviews';
 export default () => {
 	const [loading, setLoading] = useState(true);
  	const [reviews, setReviews] = useState([]);
-  	const [products, setProducts] = useState([]);
-  	const [isLoading, setIsLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 	const [dataVersion, setDataVersion] = useState(0);
+  const [data, setData] = useState([]);
+
+  // const data = [
+  //   { name: "Facebook", users: 2000000000 },
+  //   { name: "Instagram", users: 1500000000 },
+  //   { name: "Twiter", users: 1000000000 },
+  //   { name: "Telegram", users: 500000000 },
+  // ];
 
   const columns = [
     {
@@ -68,6 +87,7 @@ export default () => {
       ),
     },
   ];
+
   const handleDelete = async (id) => {
     try {
 		const confirmed = window.confirm('Bạn có chắc chắn muốn xóa đánh giá này?');
@@ -117,6 +137,16 @@ export default () => {
     setFilteredData(filteredRows);
   };
 
+  const fetchDataReport = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/admin/reviews/report");
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.log("Error fetching data from API:", error);
+    }
+  };
+
   const getData = async () => {
     try {
       const resp = await fetch(ROOT_URL);
@@ -151,6 +181,7 @@ export default () => {
       }
     };
     fetchData();
+    fetchDataReport();
   }, []);
 
   const CustomProductNameCell = ({ row }) => {
@@ -160,6 +191,30 @@ export default () => {
 
   return (
     <>
+    <h2 className="text-center mb-4">Thống kê trung bình số sao đánh giá của từng sản phẩm</h2>
+     <BarChart
+          width={1000}
+          height={300}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 80,
+            bottom: 5,
+          }}
+          barSize={15}
+        >
+          <XAxis
+            dataKey="ProductName"
+            scale="point"
+            padding={{ left: 10, right: 10 }}
+          />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Bar dataKey="AverageRating" fill="#8884d8" background={{ fill: "#eee" }} />
+        </BarChart>
       <Row className='mt-5'>
       <Col xl={4}>
 								<InputGroup className='input-group-merge search-bar'>

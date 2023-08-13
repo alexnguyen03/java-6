@@ -32,5 +32,4 @@ public class ReviewServiceImpl implements ReviewService {
 	public Review findId(int id) {
 		return reviewDAO.findById(id).get();
 	}
-
 }
