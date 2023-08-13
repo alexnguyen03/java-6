@@ -132,14 +132,14 @@ export default () => {
       try {
         setIsLoading(true); // Start fetching, isLoading is true
 
-        await Promise.all([
-          fetchBestSellingProduct(),
-          fetchProductNewest(),
-          fetchtotalRenue(),
-          fetchTotalProductsSoldToday(),
-          fetchStatusProduct(),
-          fetchPageTopTenOrderDetails(),
-        ]);
+        // await Promise.all([
+        //   fetchBestSellingProduct(),
+        //   fetchProductNewest(),
+        //   fetchtotalRenue(),
+        //   fetchTotalProductsSoldToday(),
+        //   fetchStatusProduct(),
+        //   fetchPageTopTenOrderDetails(),
+        // ]);
 
         setIsLoading(false); // Completed fetching, isLoading is false
       } catch (error) {

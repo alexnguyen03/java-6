@@ -65,7 +65,11 @@ const Account = () => {
     setFullName(row.fullname);
     setEmail(row.email);
     setIsUpdate(true);
-    setActivated(activated)
+    setActivated(row.activated);
+    // setAccount(row)
+
+    Object.assign(account, {activated : row.activated})
+
     console.log(row)
   };
 
@@ -181,6 +185,7 @@ const Account = () => {
                       <Form.Group id="userName">
                         <Form.Label>Tên đăng nhập</Form.Label>
                         <Form.Control
+                          readOnly
                           name="userName"
                           required
                           value={userName}
@@ -224,6 +229,7 @@ const Account = () => {
                       <Form.Group id="gender">
                         <Form.Label>Trạng thái</Form.Label>
                         <Form.Select
+                          value={account.activated}
                           defaultValue={account.activated}
                           onChange={handleOnChangeSelect}
                         >
