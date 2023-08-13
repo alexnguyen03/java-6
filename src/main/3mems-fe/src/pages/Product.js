@@ -33,10 +33,10 @@ export default () => {
   const [modalsValue, setModalValue] = useState("");
   const handleCloseModal = () => setShowModal(false);
   const [showCardForm, setShowCardForm] = useState(false);
-  const [isRestore, setIsRestore] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedUpdateProduct, setSelectedUpdateProduct] = useState(null);
 
   // Form Variable
   const [productId, setProductID] = useState("");
@@ -175,6 +175,7 @@ export default () => {
         }
         console.log(newProduct);
         setProducts(newProduct);
+        setFilteredProducts(newProduct);
       }
     } catch (error) {
       console.log("Error: " + error);
@@ -277,38 +278,59 @@ export default () => {
       setErrorImage("");
     }
 
-    Object.assign(product, {
-      available: available,
-      createDate: formatDate(createDate),
-      image: productImage.name,
-      name: productName,
-      price: Number(productPrice),
-      quantity: Number(productQuantity),
-    });
+    if (selectedUpdateProduct) {
+      const updatedProduct = {
+        ...selectedUpdateProduct,
+        image: productImage,
+      };
 
-    if (!isFormValid(product)) {
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("product", JSON.stringify(product));
-    formData.append("file", productImage);
-    console.log(productImage);
-
-    try {
-      const resp = await fetch(ROOT_URL, {
+      fetch(`${ROOT_URL}`, {
         method: "PUT",
-        body: formData,
-      });
-      const data = resp.json();
-      setMessageToast("Cập nhật sản phẩm thành công!");
-      setIsShowToast(true);
-      fetchProductData();
-    } catch (error) {
-      console.log(error);
-      setMessageToast("Cập nhật sản phẩm thất bại!");
-      setIsShowToast(true);
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedProduct),
+      })
+        .then((response) => {
+          if (response.ok) {
+            const data = response.json();
+            // Xử lý thành công
+            setMessageToast("Cập nhật sản phẩm thành công");
+            setIsShowToast(true);
+            setShowModal(false);
+            // fetchProductData();
+          } else {
+            // Xử lý lỗi
+            setMessageToast("Lỗi khi cập nhật sản phẩm:", response.statusText);
+            setIsShowToast(true);
+          }
+        })
+        .catch((error) => {
+          // Xử lý lỗi
+          setMessageToast("Lỗi khi cập nhật sản phẩm:", error);
+          setIsShowToast(true);
+        });
     }
+
+    // const formData = new FormData();
+    // formData.append("product", JSON.stringify(product));
+    // formData.append("file", productImage);
+    // console.log(productImage);
+
+    // try {
+    //   const resp = await fetch(ROOT_URL, {
+    //     method: "PUT",
+    //     body: formData,
+    //   });
+    //   const data = resp.json();
+    //   setMessageToast("Cập nhật sản phẩm thành công!");
+    //   setIsShowToast(true);
+    //   fetchProductData();
+    // } catch (error) {
+    //   console.log(error);
+    //   setMessageToast("Cập nhật sản phẩm thất bại!");
+    //   setIsShowToast(true);
+    // }
 
     console.log(JSON.stringify(product));
     fetchProductData();
@@ -362,10 +384,12 @@ export default () => {
 
   const handleGetProductDetails = (row) => {
     setIsUpdate(true);
-    setProductID(row.id);
+    setSelectedUpdateProduct(row);
+
     Object.assign(product, {
       id: row.id,
     });
+
     setProductName(row.name);
     setProductImage(row.image);
     setProductPrice(row.price);
@@ -373,6 +397,8 @@ export default () => {
     setProductCategory(row.category.id);
     setAvailable(row.available);
     setcreateDate(row.createDate);
+
+    setProduct(row);
   };
 
   const handleResetForm = () => {
@@ -473,7 +499,8 @@ export default () => {
         <Toast
           show={isShowToast}
           onClose={() => setIsShowToast(false)}
-          className="position-absolute end-0"
+          className="position-fixed end-0"
+          style={{ "z-index": "1000", top: "5px" }}
         >
           <ToastHeader>
             <span className="fw-bolder">|</span>
@@ -494,9 +521,9 @@ export default () => {
           onHide={handleCloseModal}
         >
           <Modal.Header>
-            <Modal.Title className="h6">
-              Bạn có chắc chắn muốn xóa:{" "}
-              <span className="fw-bold">{modalsValue}</span>
+            <Modal.Title className="h6 text-muted">
+              Cập nhật sản phẩm:
+              <span className="fw-bold text-dark">{" " + modalsValue}</span>
             </Modal.Title>
             <Button
               variant="close"
@@ -508,7 +535,7 @@ export default () => {
             <img src={"http://localhost:8080/img/cat-delete.jpg"} alt="" />
           </ModalBody>
           <ModalFooter>
-            <ButtonGroup>
+            <div className="d-flex">
               <Button
                 variant="outline-primary"
                 className="m-1"
@@ -523,7 +550,7 @@ export default () => {
               >
                 Cập nhật trạng thái
               </Button>
-            </ButtonGroup>
+            </div>
           </ModalFooter>
         </Modal>
 
@@ -648,7 +675,7 @@ export default () => {
         </div>
 
         {isLoading ? (
-          <h2 className="text-center">Loading...</h2>
+          <h2 className="text-center bg-white">Loading...</h2>
         ) : (
           <>
             <DataTable
