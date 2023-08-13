@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.poly.model.Account;
 import com.poly.service.AccountService;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("account")
 public class UpdateProfileController {
@@ -17,7 +19,7 @@ public class UpdateProfileController {
 	
 	@GetMapping("update-account")
 	public String index() {
-		Account account = accountService.findById("hoainam");
+		Optional<Account> account = accountService.findById("hoainam");
 		return "/account/update_account";
 	}
 }

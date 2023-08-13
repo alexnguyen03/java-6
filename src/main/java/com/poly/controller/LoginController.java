@@ -16,50 +16,59 @@ import com.poly.repository.CartDAO;
 import com.poly.service.CookieService;
 import com.poly.service.ParamService;
 import com.poly.service.SessionService;
+
 import java.security.Principal;
 
 @Controller
 @RequestMapping("account")
 public class LoginController {
-	@Autowired
-	AccountDAO dao;
-	@Autowired
-	SessionService session;
-	@Autowired
-	CookieService cookieService;
-	@Autowired
-	ParamService paramService;
-	@Autowired
-	CartDAO cartDAO;
+    @Autowired
+    AccountDAO dao;
+    @Autowired
+    SessionService session;
+    @Autowired
+    CookieService cookieService;
+    @Autowired
+    ParamService paramService;
+    @Autowired
+    CartDAO cartDAO;
 
-	@RequestMapping("login")
-	public String logInForm(Model model, Account account) {
-		String username = cookieService.getValue("username");
-		if (username != null) {
-			session.set("username", username);
-			model.addAttribute("username", username);
-		}
-		return "account/login";
-	}
+    @RequestMapping("login")
+    public String logInForm(Model model, Account account) {
+        System.out.println(account);
+        String username = cookieService.getValue("username");
+        if (username != null) {
+            session.set("username", username);
+            model.addAttribute("username", username);
+        }
+        return "account/login";
+    }
 
-	@RequestMapping("login/success")
-	public String logInSuccess(Model model, Account account) {
-		model.addAttribute("message", "Đăng nhập thành công");
-		return "redirect:/";
-	}
+    @RequestMapping("login/success")
+    public String logInSuccess(Model model, Principal principal) {
+        Account account = dao.findByUsername(principal.getName());
 
-	@RequestMapping("login/error")
-	public String logInError(Model model, @Validated Account account, Errors errors) {
-		if (errors.hasErrors()) {
-			model.addAttribute("message", "Tài khoản hoặc mật khẩu không đúng!");
-			return "account/login";
-		}
-		return "account/login";
-	}
+        System.out.println(account.getRoles().toString());
+        //Trả về List: lấy vị trí roles đầu tiên
+        if((account.getRoles().get(0).getName().equalsIgnoreCase("ADMIN"))  || (account.getRoles().get(0).getName().equalsIgnoreCase("MANAGE") )) {
+            return "redirect:http://localhost:3000/#/";
+        }
+        model.addAttribute("message", "Đăng nhập thành công");
+        return "redirect:/";
+    }
 
-	@RequestMapping("unauthoried")
-	public String unauthoried(Model model, @ModelAttribute("account") Account account) {
-		model.addAttribute("message", "Bạn không có quyền truy cập!");
-		return "account/login";
-	}
+    @RequestMapping("login/error")
+    public String logInError(Model model, @Validated Account account, Errors errors) {
+        if (errors.hasErrors()) {
+            model.addAttribute("message", "Tài khoản hoặc mật khẩu không đúng!");
+            return "account/login";
+        }
+        return "account/login";
+    }
+
+    @RequestMapping("unauthoried")
+    public String unauthoried(Model model, @ModelAttribute("account") Account account) {
+        model.addAttribute("message", "Bạn không có quyền truy cập!");
+        return "account/login";
+    }
 }

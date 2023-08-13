@@ -1,20 +1,13 @@
 package com.poly.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.poly.model.Account;
-import com.poly.model.Category;
-import com.poly.repository.AccountDAO;
-import com.poly.repository.CategoryDAO;
-import com.poly.service.AccountService;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import com.poly.model.Account;
 import com.poly.repository.AccountDAO;
 import com.poly.service.AccountService;
-import org.springframework.ui.Model;
 
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -29,13 +22,13 @@ public class AccountServiceImpl implements AccountService{
 //	PasswordEncoder pe;
 
 	@Override
-	public Account findById(String username) {
-		return adao.findById(username).get();
+	public Optional<Account> findById(String username) {
+		return adao.findById(username);
 	}
 
 	@Override
 	public List<Account> findAll() {
-		return adao.findAll();
+		return adao.getAll();
 	}
 
 //	@Override
