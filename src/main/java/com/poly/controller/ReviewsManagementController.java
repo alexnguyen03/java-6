@@ -2,8 +2,11 @@ package com.poly.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -30,9 +33,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poly.model.Account;
 import com.poly.model.Coupon;
 import com.poly.model.Product;
+import com.poly.model.ProductRatingDTO;
 import com.poly.model.Review;
 import com.poly.repository.AccountDAO;
 import com.poly.repository.ProductDAO;
@@ -53,10 +59,36 @@ public class ReviewsManagementController {
     @Autowired
     EmailServiceImpl emailServiceImpl;
 
+    @Autowired
+    ReviewDAO reviewDAO;
+
     @GetMapping("")
     @ResponseBody
     public List<Review> getAll() {
         return reviewService.findAll();
+    }
+
+    @GetMapping("/report")
+    @ResponseBody
+    public String getReport() {
+        List<Object[]> results = reviewDAO.get();
+        List<Map<String, Object>> reportList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Map<String, Object> reportItem = new HashMap<>();
+            reportItem.put("ProductName", (String) result[0]);
+            reportItem.put("AverageRating", (Double) result[1]);
+            reportList.add(reportItem);
+        }
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(reportList);
+            return json;
+        } catch (JsonProcessingException e) {
+            // Handle exception
+            return null;
+        }
     }
 
     @DeleteMapping("/{id}")

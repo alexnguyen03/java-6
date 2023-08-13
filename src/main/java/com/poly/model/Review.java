@@ -38,7 +38,7 @@ public class Review implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Account account;
-    private int rating;
+    private float rating;
     @Column(name = "review_text")
     private String textReview;
     @Temporal(TemporalType.TIMESTAMP)

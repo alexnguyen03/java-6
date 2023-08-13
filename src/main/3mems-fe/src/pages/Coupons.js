@@ -261,6 +261,7 @@ export default () => {
 
 	return (
 		<>
+			<h2 className='text-center'>QUẢN LÝ KHUYẾN MÃI</h2>
 			<Row className='mb-3'>
 				<Row className='my-3 position-relative'>
 					<Toast

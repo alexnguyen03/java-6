@@ -122,7 +122,7 @@ export default (props) => {
 										className='user-avatar md-avatar rounded-circle'
 									/> */}
 									<div className='media-body ms-2 text-dark align-items-center d-none d-lg-block'>
-										<span className='mb-0 font-small fw-bold'>{username}</span>
+										<span className='mb-0 font-small fw-bold'>Admin</span>
 									</div>
 								</div>
 							</Dropdown.Toggle>

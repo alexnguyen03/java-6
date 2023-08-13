@@ -10,6 +10,7 @@ export const Routes = {
 	Coupons: {path: '/coupons'},
 	Product: {path: '/product'},
 	Reviews: {path: '/reviews'},
+	Categorys: {path: '/categorys'},
 	Upgrade: {path: '/upgrade'},
 	BootstrapTables: {path: '/tables/bootstrap-tables'},
 	Billing: {path: '/examples/billing'},
