@@ -16,6 +16,7 @@ import com.poly.model.Account;
 import com.poly.model.Order;
 import com.poly.model.OrderDetail;
 import com.poly.model.Product;
+import com.poly.repository.AccountDAO;
 import com.poly.repository.OrderDAO;
 import com.poly.repository.OrderDetailDAO;
 import com.poly.repository.ProductDAO;
@@ -29,6 +30,8 @@ public class AdminIndexRestController {
 
     @Autowired
     OrderDAO orderDAO;
+    @Autowired
+    AccountDAO accountDAO;
 
     @Autowired
     OrderDetailDAO orderDetailDAO;
@@ -39,6 +42,14 @@ public class AdminIndexRestController {
     @GetMapping("/admin/index/findByStatusC")
     public List<Order> getFindByStatusC() {
         return orderDAO.findByStatus("C");
+    }
+
+    @GetMapping("/admin/username")
+    public Account getUsernameInDashboard() {
+        String uname = sessionService.get("username");
+        System.out.println(uname);
+        Account acc = accountDAO.findByUsername(uname);
+        return acc;
     }
 
     @GetMapping("/admin/index/selectProductNewest")

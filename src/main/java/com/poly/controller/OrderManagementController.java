@@ -60,109 +60,51 @@ public class OrderManagementController {
     @Autowired
     ParamService paramService;
 
-    // @GetMapping("orders")
-    // @ResponseBody
-    // public List<Order> getAll() {
-    // return orderService.findAll();
-    // }
+    @GetMapping("orders")
+    @ResponseBody
+    public List<Order> getAll() {
+        return orderService.findAll();
+    }
 
-    // @GetMapping("orders/detail/{orderID}")
-    // @ResponseBody
-    // public List<OrderDetail> getAllOrderDetailByOrderID(@PathVariable("orderID")
-    // Long id) {
-    // return orderDetailService.findByOrderId(id);
-    // }
+    @GetMapping("orders/detail/{orderID}")
+    @ResponseBody
+    public List<OrderDetail> getAllOrderDetailByOrderID(@PathVariable("orderID") Long id) {
+        return orderDetailService.findByOrderId(id);
+    }
 
-    // @GetMapping("orders/users/{orderID}")
-    // @ResponseBody
-    // public Account getAllAccount(@PathVariable("orderID") Long id) {
-    // return orderService.findAllAccount(id);
-    // }
+    @GetMapping("orders/users/{orderID}")
+    @ResponseBody
+    public Account getAllAccount(@PathVariable("orderID") Long id) {
+        return orderService.findAllAccount(id);
+    }
 
-    // @PutMapping("orders/{orderID}")
-    // public ResponseEntity<Object> updateOrder(@RequestBody Order order,
-    // @PathVariable("orderID") Long id) {
-    // if (order.getStatus().equals("H")) {
-    // order.setNotes(order.getNotes());
-    // // gui mail sau khi huy don hang
-    // Account account = (Account) sessionService.get("account");
-    // EmailDetail details = new EmailDetail();
-    // details.setRecipient(account.getEmail());
-    // details.setSubject("4MEMS - Thông báo hủy đơn hàng");
-    // details.setMsgBody(
-    // "Thông tin đơn hàng của bạn\n"
-    // + "Mã đơn hàng: " + id +
-    // "\nTổng tiền đơn hàng: " + order.getTotalPrice() + " đ" +
-    // "\nNgày đặt hàng: " + order.getCreateDate() +
-    // "\nLý do đơn hàng bị hủy: " + order.getNotes() +
-    // "\n3MEMS thành thật xin lỗi quý khách vì đơn hàng đã bị hủy.\nMong quý khách
-    // luôn tin tưởng và ủng hộ 3MEMS trong thời gian sắp tới ! ");
-    // String sts = emailServiceImpl.sendSimpleMail(details);
-    // List<OrderDetail> ls = order.getOrderDetails();
-    // for (OrderDetail orderDetail : ls) {
-    // Product prod = orderDetail.getProduct();
-    // System.out.println("oldProd" + orderDetail.getProduct().getQuantity());
-    // System.out.println("orderDetail " + orderDetail.getQuantity());
-    // prod.setQuantity(prod.getQuantity() + orderDetail.getQuantity());
-    // System.out.println("new Prod " + prod.getQuantity());
-    // productService.save(prod);
-    // }
-    // }
-    // return ResponseEntity.ok(orderService.save(order));
-    // }
-
-    // public String updateStatus(@RequestParam("id") Long id,
-    // @RequestParam("status") String status,
-    // @RequestParam("notes") Optional<String> notes) {
-    // System.out.println(id + " " + status);
-    // Order order = orderService.findById(id);
-    // if (status.equals("H")) {
-    // order.setNotes(notes.get());
-    // // gui mail sau khi huy don hang
-    // Account account = (Account) sessionService.get("account");
-    // EmailDetail details = new EmailDetail();
-    // details.setRecipient(account.getEmail());
-    // details.setSubject("3MEMS - Thông báo hủy đơn hàng");
-    // details.setMsgBody(
-    // "Thông tin đơn hàng của bạn\n"
-    // + "Mã đơn hàng: " + id +
-    // "\nTổng tiền đơn hàng: " + order.getTotalPrice() + " đ" +
-    // "\nNgày đặt hàng: " + order.getCreateDate() +
-    // "\nLý do đơn hàng bị hủy: " + notes +
-    // "\n3MEMS thành thật xin lỗi quý khách vì đơn hàng đã bị hủy.\nMong quý khách
-    // luôn tin tưởng và ủng hộ 3MEMS trong thời gian sắp tới ! ");
-    // String sts = emailServiceImpl.sendSimpleMail(details);
-    // List<OrderDetail> ls = order.getOrderDetails();
-    // for (OrderDetail orderDetail : ls) {
-    // Product prod = orderDetail.getProduct();
-    // System.out.println("oldProd" + orderDetail.getProduct().getQuantity());
-    // System.out.println("orderDetail " + orderDetail.getQuantity());
-    // prod.setQuantity(prod.getQuantity() + orderDetail.getQuantity());
-    // System.out.println("new Prod " + prod.getQuantity());
-    // productService.save(prod);
-    // }
-    // }
-    // order.setStatus(status);
-    // orderService.save(order);
-    // sessionService.set("isUpdated", true);
-    // return "redirect:/admin/order";
-    // }
-
-    // @GetMapping("/order/cancel")
-    // public String orderCancelView(Model model) {
-    // model.addAttribute("isCancel", true);
-    // return "/admin/order";
-    // }
-
-    // // ModelAttribute
-    // @ModelAttribute("listStatus")
-    // public Map<String, String> listStatus() {
-    // Map<String, String> map = new HashMap<>();
-    // map.put("C", "Đang chờ");
-    // map.put("XL", "Đang xử lý");
-    // map.put("G", "Đang giao");
-    // map.put("DG", "Đã giao");
-    // map.put("H", "Hủy");
-    // return map;
-    // }
+    @PutMapping("orders/{orderID}")
+    public ResponseEntity<Object> updateOrder(@RequestBody Order order, @PathVariable("orderID") Long id) {
+        if (order.getStatus().equals("H")) {
+            order.setNotes(order.getNotes());
+            // gui mail sau khi huy don hang
+            Account account = (Account) sessionService.get("account");
+            EmailDetail details = new EmailDetail();
+            details.setRecipient(account.getEmail());
+            details.setSubject("4MEMS - Thông báo hủy đơn hàng");
+            details.setMsgBody(
+                    "Thông tin đơn hàng của bạn\n"
+                            + "Mã đơn hàng: " + id +
+                            "\nTổng tiền đơn hàng: " + order.getTotalPrice() + " đ" +
+                            "\nNgày đặt hàng: " + order.getCreateDate() +
+                            "\nLý do đơn hàng bị hủy: " + order.getNotes() +
+                            "\n3MEMS thành thật xin lỗi quý khách vì đơn hàng đã bị hủy.\nMong quý khách luôn tin tưởng và ủng hộ 3MEMS trong thời gian sắp tới ! ");
+            String sts = emailServiceImpl.sendSimpleMail(details);
+            // List<OrderDetail> ls = order.getOrderDetails();
+            // for (OrderDetail orderDetail : ls) {
+            // Product prod = orderDetail.getProduct();
+            // System.out.println("oldProd" + orderDetail.getProduct().getQuantity());
+            // System.out.println("orderDetail " + orderDetail.getQuantity());
+            // prod.setQuantity(prod.getQuantity() + orderDetail.getQuantity());
+            // System.out.println("new Prod " + prod.getQuantity());
+            // productService.save(prod);
+            // }
+        }
+        return ResponseEntity.ok(orderService.save(order));
+    }
 }

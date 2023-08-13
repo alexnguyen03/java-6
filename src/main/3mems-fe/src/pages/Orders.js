@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Button, Card, Col, Form, Modal, Row, Table, Toast} from '@themesberg/react-bootstrap';
 import React, {useEffect, useState, useRef} from 'react';
 import DataTable from 'react-data-table-component';
-const ROOT_URL = 'http://localhost:8080/rest/orders';
+const ROOT_URL = 'http://localhost:8080/admin/orders';
 
 export default () => {
 	const [showCard, setShowCard] = useState(false);
@@ -102,8 +102,9 @@ export default () => {
 		try {
 			const resp = await fetch(ROOT_URL + `/users/${row.id}`);
 			const data = await resp.json();
-			setShowCard(true);
+			console.log(data);
 			setUser(data);
+			setShowCard(true);
 		} catch (error) {
 			console.log(error);
 		}
@@ -238,6 +239,8 @@ export default () => {
 
 	return (
 		<>
+			<h2 className='text-center'>QUẢN LÝ ĐƠN ĐẶT HÀNG</h2>
+			{/* cmt to push */}
 			<Row className='mb-3'>
 				{showCard && (
 					<>
@@ -272,7 +275,7 @@ export default () => {
 										Số điện thoại: <strong>{order.phone}</strong>
 									</div>
 									<div className='mb-2'>
-										Tổng tiền thanh toán: <strong>{order.totalPrice}</strong>
+										Tổng tiền thanh toán: <strong>{order.totalPrice.toLocaleString('it-IT', {style: 'currency', currency: 'VND'})}</strong>
 									</div>
 									<div className='mb-2'>
 										Trạng thái đơn hàng: <strong className={`badge  bg-${displayBadgeStatus(order.status)}`}> {displayStatus(order.status)}</strong>
@@ -379,7 +382,7 @@ export default () => {
 												return (
 													<tr key={id}>
 														<td>{id}</td>
-														<td>{od.price}</td>
+														<td>{od.price.toLocaleString('it-IT', {style: 'currency', currency: 'VND'})}</td>
 														<td>{name}</td>
 														<td>{od.quantity}</td>
 													</tr>

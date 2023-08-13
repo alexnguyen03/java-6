@@ -6,6 +6,7 @@ import {Row, Col, Nav, Form, Image, Navbar, Dropdown, Container, ListGroup, Inpu
 
 import NOTIFICATIONS_DATA from '../data/notifications';
 import Profile3 from '../assets/img/team/profile-picture-3.jpg';
+import {Link} from 'react-router-dom';
 
 export default (props) => {
 	const [notifications, setNotifications] = useState(NOTIFICATIONS_DATA);
@@ -48,7 +49,10 @@ export default (props) => {
 			</ListGroup.Item>
 		);
 	};
-
+	const getUsername = async () => {
+		try {
+		} catch (error) {}
+	};
 	return (
 		<Navbar
 			variant='dark'
@@ -59,7 +63,7 @@ export default (props) => {
 				className='px-0'>
 				<div className='d-flex justify-content-between w-100'>
 					<div className='d-flex align-items-center'>
-						<Form className='navbar-search'>
+						{/* <Form className='navbar-search'>
 							<Form.Group id='topbarSearch'>
 								<InputGroup className='input-group-merge search-bar'>
 									<InputGroup.Text>
@@ -71,7 +75,7 @@ export default (props) => {
 									/>
 								</InputGroup>
 							</Form.Group>
-						</Form>
+						</Form> */}
 					</div>
 					<Nav className='align-items-center'>
 						<Dropdown
@@ -113,12 +117,12 @@ export default (props) => {
 								as={Nav.Link}
 								className='pt-1 px-0'>
 								<div className='media d-flex align-items-center'>
-									<Image
+									{/* <Image
 										src={Profile3}
 										className='user-avatar md-avatar rounded-circle'
-									/>
+									/> */}
 									<div className='media-body ms-2 text-dark align-items-center d-none d-lg-block'>
-										<span className='mb-0 font-small fw-bold'>Bonnie Green</span>
+										<span className='mb-0 font-small fw-bold'>Admin</span>
 									</div>
 								</div>
 							</Dropdown.Toggle>
@@ -158,8 +162,18 @@ export default (props) => {
 									<FontAwesomeIcon
 										icon={faSignOutAlt}
 										className='text-danger me-2'
-									/>{' '}
-									Logout
+									/>
+									{/* <Link
+										to={{pathname: 'http://localhost:8080/account/login'}}
+										target='_blank'>
+										Logout
+									</Link> */}
+									<a
+										target='_blank'
+										rel='noreferrer'
+										href='https://www.kindacode.com'>
+										Go to KindaCode.com
+									</a>
 								</Dropdown.Item>
 							</Dropdown.Menu>
 						</Dropdown>

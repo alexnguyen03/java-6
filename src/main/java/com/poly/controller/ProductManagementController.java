@@ -31,7 +31,7 @@ import jakarta.servlet.ServletContext;
 import jakarta.validation.Valid;
 
 @RestController
-// @RequestMapping("")
+@RequestMapping("")
 @CrossOrigin("*")
 public class ProductManagementController {
 	@Autowired
@@ -45,15 +45,15 @@ public class ProductManagementController {
 	@Autowired
 	ParamService param;
 
-	// @GetMapping("/rest/products/{id}")
-	// public Product findById(@PathVariable("id") int id) {
-	// return productDAO.findById(id).get();
-	// }
+	@GetMapping("/rest/products/{id}")
+	public Product findById(@PathVariable("id") int id) {
+		return productDAO.findById(id).get();
+	}
 
-	// @GetMapping("/rest/products")
-	// public List<Product> findAll() {
-	// return productDAO.findAll();
-	// }
+	@GetMapping("/rest/products")
+	public List<Product> findAll() {
+		return productDAO.findAll();
+	}
 
 	// @GetMapping("")
 	// private String getProductManager(Model model, @RequestParam("p")

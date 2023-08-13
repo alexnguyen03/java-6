@@ -1,6 +1,5 @@
 package com.poly.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +45,9 @@ public class AdminConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests()
-                .requestMatchers("/*", "/js/**", "/css/**", "/img/**", "/fonts/**", "/account/**", "/files/**, ","/admin/**").permitAll()
+                .requestMatchers("/*", "/js/**", "/css/**", "/img/**", "/fonts/**", "/account/**", "/files/**, ",
+                        "/admin/**", "/shop/**", "/rest/products/**", "/shop/checkout/**", "/rest/orders/**",  "/rest/coupon/**")
+                .permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .and()
                 .formLogin()
@@ -67,6 +68,5 @@ public class AdminConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
         return http.build();
     }
-
 
 }
