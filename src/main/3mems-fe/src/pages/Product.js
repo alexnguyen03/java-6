@@ -224,7 +224,7 @@ export default () => {
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
-    if (!productImage) {
+    if (productImage === null) {
       setErrorImage("Vui lòng chọn hình ảnh sản phẩm.");
       return;
     } else {
@@ -259,81 +259,74 @@ export default () => {
       const data = await resp.json();
       setMessageToast("Thêm sản phẩm thành công!");
       setIsShowToast(true);
+      handleResetForm();
       fetchProductData();
     } catch (error) {
       console.log(error);
       setMessageToast("Thêm sản phẩm thất bại!");
       setIsShowToast(true);
     }
+
     console.log("Product have been added");
   };
 
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
 
-    if (!productImage) {
-      setErrorImage("Vui lòng chọn hình ảnh sản phẩm.");
-      return;
-    } else {
-      setErrorImage("");
-    }
-
-    if (selectedUpdateProduct) {
-      const updatedProduct = {
-        ...selectedUpdateProduct,
-        image: productImage,
-      };
-
-      fetch(`${ROOT_URL}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedProduct),
-      })
-        .then((response) => {
-          if (response.ok) {
-            const data = response.json();
-            // Xử lý thành công
-            setMessageToast("Cập nhật sản phẩm thành công");
-            setIsShowToast(true);
-            setShowModal(false);
-            // fetchProductData();
-          } else {
-            // Xử lý lỗi
-            setMessageToast("Lỗi khi cập nhật sản phẩm:", response.statusText);
-            setIsShowToast(true);
-          }
-        })
-        .catch((error) => {
-          // Xử lý lỗi
-          setMessageToast("Lỗi khi cập nhật sản phẩm:", error);
-          setIsShowToast(true);
-        });
-    }
-
-    // const formData = new FormData();
-    // formData.append("product", JSON.stringify(product));
-    // formData.append("file", productImage);
-    // console.log(productImage);
-
-    // try {
-    //   const resp = await fetch(ROOT_URL, {
-    //     method: "PUT",
-    //     body: formData,
-    //   });
-    //   const data = resp.json();
-    //   setMessageToast("Cập nhật sản phẩm thành công!");
-    //   setIsShowToast(true);
-    //   fetchProductData();
-    // } catch (error) {
-    //   console.log(error);
-    //   setMessageToast("Cập nhật sản phẩm thất bại!");
-    //   setIsShowToast(true);
-    // }
+    Object.assign(product, {
+      available: available,
+      createDate: formatDate(createDate),
+      image: productImage.name,
+      name: productName,
+      price: Number(productPrice),
+      quantity: Number(productQuantity),
+    });
 
     console.log(JSON.stringify(product));
-    fetchProductData();
+
+    if (!isFormValid(product)) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("product", JSON.stringify(product));
+    formData.append("file", productImage);
+    console.log(productImage);
+
+    if (productImage === null) {
+      try {
+        const resp = await fetch(ROOT_URL, {
+          method: "PUT",
+          body: formData,
+        });
+        const data = await resp.json();
+        setMessageToast("Cập nhật sản phẩm thành công");
+        setIsShowToast(true);
+        setShowModal(false);
+        handleResetForm();
+      } catch (error) {
+        console.log(error);
+        setMessageToast("Lỗi khi cập nhật sản phẩm:", error);
+        setIsShowToast(true);
+      }
+    } else {
+      try {
+        const resp = await fetch(`${ROOT_URL}/noneMultipart`, {
+          method: "PUT",
+          body: formData,
+        });
+        const data = await resp.json();
+        setMessageToast("Cập nhật sản phẩm thành công");
+        setIsShowToast(true);
+        setShowModal(false);
+        handleResetForm();
+      } catch (error) {
+        console.log(error);
+        setMessageToast("Lỗi khi cập nhật sản phẩm:", error);
+        setIsShowToast(true);
+      }
+    }
+
     console.log("Product have been updated");
   };
 
@@ -360,6 +353,7 @@ export default () => {
         .then((response) => {
           if (response.ok) {
             const data = response.json();
+            console.log(data);
             // Xử lý thành công
             setMessageToast("Trạng thái đã được cập nhật thành công");
             setIsShowToast(true);
@@ -404,14 +398,14 @@ export default () => {
   const handleResetForm = () => {
     setProductID("");
     setProductName("");
-    setProductImage();
+    setProductImage(null);
     setProductPrice("1");
     setProductQuantity("1");
     setProductCategory("");
     setAvailable(true);
     setcreateDate(formatDate(new Date()));
 
-    setProduct([]);
+    setProduct({});
     setIsUpdate(false);
   };
 
@@ -578,6 +572,7 @@ export default () => {
               required
               type="file"
               name="file"
+              accept="image/*"
               // value={''}
             />
             {errorImage && <i className="text-danger">{errorImage}</i>}
