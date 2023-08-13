@@ -46,7 +46,7 @@ public class AdminConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests()
                 .requestMatchers("/*", "/js/**", "/css/**", "/img/**", "/fonts/**", "/account/**", "/files/**, ",
-                        "/admin/**", "/shop/**", "/rest/products/**", "/shop/checkout/**", "/rest/orders/**",  "/rest/coupon/**")
+                        "/admin/**", "/shop/**", "/rest/products/**", "/shop/checkout/**", "/rest/orders/**",  "/rest/coupon/**","/admin/products/**")
                 .permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .and()

@@ -114,7 +114,7 @@ public class ProductManagerRestController {
 
 	@PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@ResponseBody
-	public ResponseEntity<Product> updateProduct(@RequestPart("product") String productStr,
+	public ResponseEntity<Product> update(@RequestPart("product") String productStr,
 			@RequestPart("file") MultipartFile file) {
 		ObjectMapper mapper = new ObjectMapper();
 		File newFile = null;
@@ -124,22 +124,65 @@ public class ProductManagerRestController {
 		Product newProduct = new Product();
 		try {
 			newProduct = mapper.readValue(productStr, Product.class);
+
+			System.out.println(newProduct.getCategory().getName());
 		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return ResponseEntity.noContent().build();
 
 		}
+		// return ResponseEntity.ok(new Product());
 		return ResponseEntity.ok(productService.save(newProduct));
 	}
+
+	@PutMapping(value = "/noneMultipart", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@ResponseBody
+	public ResponseEntity<Product> updateNoneMultipartFile(@RequestPart("product") String productStr) {
+		ObjectMapper mapper = new ObjectMapper();
+		Product newProduct = new Product();
+		try {
+			newProduct = mapper.readValue(productStr, Product.class);
+
+			System.out.println(newProduct.getCategory().getName());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResponseEntity.noContent().build();
+
+		}
+		// return ResponseEntity.ok(new Product());
+		return ResponseEntity.ok(productService.save(newProduct));
+	}
+
+//	@PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	@ResponseBody
+//	public ResponseEntity<Product> updateProduct(@RequestPart("product") String productStr,
+//			@RequestPart("file") MultipartFile file) {
+//		
+//		System.out.println(productStr);
+//		
+//		ObjectMapper mapper = new ObjectMapper();
+//		File newFile = null;
+//		if (!file.isEmpty()) {
+//			newFile = paramService.save(file, "/img/product");
+//		}
+//		Product newProduct = new Product();
+//		try {
+//			newProduct = mapper.readValue(productStr, Product.class);
+//
+//		} catch (JsonProcessingException e) {
+//			e.printStackTrace();
+//			return ResponseEntity.noContent().build();
+//		}
+//		return ResponseEntity.ok(productService.save(newProduct));
+//	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateProduct(@PathVariable Integer id, @RequestBody Product updatedProduct) {
 		Product product = productService.findById(id);
 		try {
 			product.setAvailable(updatedProduct.getAvailable());
-			// Cập nhật các thuộc tính khác của hàng dữ liệu (nếu cần)
-			// ...
-
 			productService.save(product);
 		} catch (Exception e) {
 			e.printStackTrace();
