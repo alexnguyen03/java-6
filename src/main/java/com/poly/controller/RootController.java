@@ -50,6 +50,6 @@ public class RootController {
         List<Product> items = productDAO.findTop10ByOrderByCreateDateDesc();
         model.addAttribute("items", items);
         model.addAttribute("pageActive", "index");
-        return "client/index";
+        return "client/home";
     }
 }
