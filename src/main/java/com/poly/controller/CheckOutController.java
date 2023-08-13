@@ -44,25 +44,33 @@ public class CheckOutController {
 	AccountService accountService;
 	@Autowired
 	PaymentService paymentService;
+	@Autowired
+	SessionService sessionService;
 
 	@GetMapping("")
 	public String index(Model model) {
 		// lấy account
-//		Account account = sessionService.get("account");
-//		Cart cart = cartDAO.findByUserName(account.getUsername());
+		// Account account = sessionService.get("account");
+		// Cart cart = cartDAO.findByUserName(account.getUsername());
 		// lấy product
-//		List<CartDetail> listCartDetail = cart.getCartDetails();
+		// List<CartDetail> listCartDetail = cart.getCartDetails();
 		// tính tổng tiền
-//		double toTal_Price = 0;
-//		for (CartDetail od : listCartDetail) {
-//			double toTal = od.getProduct().getPrice() * od.getQuantity();
-//			toTal_Price += toTal;
-//		}
-//		model.addAttribute("cartDetails", listCartDetail);
-//		model.addAttribute("provisional", toTal_Price);
-//		model.addAttribute("account", account);
-		Optional<Account> account = accountService.findById("hoainam");
-		model.addAttribute("account", account);
+		// double toTal_Price = 0;
+		// for (CartDetail od : listCartDetail) {
+		// double toTal = od.getProduct().getPrice() * od.getQuantity();
+		// toTal_Price += toTal;
+		// }
+		// model.addAttribute("cartDetails", listCartDetail);
+		// model.addAttribute("provisional", toTal_Price);
+		// model.addAttribute("account", account);
+		String username = sessionService.get("username");
+		if (username == null) {
+			sessionService.set("state", "cart");
+			return "redirect:/account/login";
+		}
+		Account acc = accountService.findById(username).get();
+		// Optional<Account> account = accountService.findById("hoainam");
+		model.addAttribute("account", acc);
 		List<Payment> payment = paymentService.findAll();
 		model.addAttribute("payment", payment);
 		return "/client/checkoutt";
@@ -71,56 +79,56 @@ public class CheckOutController {
 	@PostMapping("/create")
 	public String checkout(Model model) {
 		// Order
-//		Order order = new Order();
-//		double toTal_Price = 0;
-//		Account account = sessionService.get("account");
-//		Cart cart = cartDAO.findByUserName(account.getUsername());
+		// Order order = new Order();
+		// double toTal_Price = 0;
+		// Account account = sessionService.get("account");
+		// Cart cart = cartDAO.findByUserName(account.getUsername());
 		// lấy product
-//		List<CartDetail> listCartDetail = cart.getCartDetails();
-//		for (CartDetail od : listCartDetail) {
-//			double toTal = od.getProduct().getPrice() * od.getQuantity();
-//			toTal_Price += toTal;
-//		}
-//		String phone = paramService.getString("phone", "");
-//		String address = paramService.getString("address", "");
-//		Coupon coupon = sessionService.get("coupon");
-//		double discountAmount = 0.0;
-//		if (coupon != null) {
-//			discountAmount = coupon.getDiscountAmount();
-//		}
-//		if (PhoneNumberValidator.validate(phone)) {
-//			order.setCoupon(coupon);
-//			order.setAccount(account);
-//			order.setPhone(phone);
-//			order.setAddress(address);
-//			order.setTotalPrice(toTal_Price - (toTal_Price * discountAmount));
-//			order.setStatus("C");
-//			orderDAO.save(order);
-//			sessionService.remove("coupon");
-			// OrderDetail
-//			for (CartDetail od : listCartDetail) {
-//				OrderDetail orderDetail = new OrderDetail();
-//				orderDetail.setOrder(order);
-//				orderDetail.setProduct(od.getProduct());
-//				orderDetail.setPrice(od.getProduct().getPrice());
-//				orderDetail.setQuantity(od.getQuantity());
-//				orderDetailDAO.save(orderDetail);
-				// xóa sản phẩm của cartdetail
-//				int productId = od.getProduct().getId();
-//				cartDetailDAO.deleteByProductId(productId);
-				// cập nhật lại số lượng của sản phẩm
-//				productDAO.updateQuantityProduct(od.getQuantity(), productId);
-//			}
-//		} else if (phone.equals("")) {
-//			model.addAttribute("success", "Bạn chưa nhập số điện thoại !!!");
-//			return "/client/checkout";
-//		} else if (address.equals("")) {
-//			model.addAttribute("success", "Bạn chưa nhập địa chỉ !!!");
-//			return "/client/checkout";
-//		} else {
-//			model.addAttribute("success", "Số điện thoại không hợp lệ !!!");
-//			return "/client/checkout";
-//		}
+		// List<CartDetail> listCartDetail = cart.getCartDetails();
+		// for (CartDetail od : listCartDetail) {
+		// double toTal = od.getProduct().getPrice() * od.getQuantity();
+		// toTal_Price += toTal;
+		// }
+		// String phone = paramService.getString("phone", "");
+		// String address = paramService.getString("address", "");
+		// Coupon coupon = sessionService.get("coupon");
+		// double discountAmount = 0.0;
+		// if (coupon != null) {
+		// discountAmount = coupon.getDiscountAmount();
+		// }
+		// if (PhoneNumberValidator.validate(phone)) {
+		// order.setCoupon(coupon);
+		// order.setAccount(account);
+		// order.setPhone(phone);
+		// order.setAddress(address);
+		// order.setTotalPrice(toTal_Price - (toTal_Price * discountAmount));
+		// order.setStatus("C");
+		// orderDAO.save(order);
+		// sessionService.remove("coupon");
+		// OrderDetail
+		// for (CartDetail od : listCartDetail) {
+		// OrderDetail orderDetail = new OrderDetail();
+		// orderDetail.setOrder(order);
+		// orderDetail.setProduct(od.getProduct());
+		// orderDetail.setPrice(od.getProduct().getPrice());
+		// orderDetail.setQuantity(od.getQuantity());
+		// orderDetailDAO.save(orderDetail);
+		// xóa sản phẩm của cartdetail
+		// int productId = od.getProduct().getId();
+		// cartDetailDAO.deleteByProductId(productId);
+		// cập nhật lại số lượng của sản phẩm
+		// productDAO.updateQuantityProduct(od.getQuantity(), productId);
+		// }
+		// } else if (phone.equals("")) {
+		// model.addAttribute("success", "Bạn chưa nhập số điện thoại !!!");
+		// return "/client/checkout";
+		// } else if (address.equals("")) {
+		// model.addAttribute("success", "Bạn chưa nhập địa chỉ !!!");
+		// return "/client/checkout";
+		// } else {
+		// model.addAttribute("success", "Số điện thoại không hợp lệ !!!");
+		// return "/client/checkout";
+		// }
 		return "redirect:/shop/order-history";
 	}
 }
