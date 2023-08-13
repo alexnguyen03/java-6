@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -35,6 +37,7 @@ public class Category implements Serializable {
 	@NotBlank(message = "{NotBlank.category.name}")
 	String name;
 	@OneToMany(mappedBy = "category")
+	@JsonBackReference
 	List<Product> products;
 
 	@Override

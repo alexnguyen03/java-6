@@ -225,7 +225,8 @@
 					</a>
 					<div class="product__item__text">
 						<h6 th:text="${item.name}"></h6>
-						<a th:href="@{|/shop/cart-detail/add/${item.id}|}" class="add-cart">+ Thêm vào giỏ hàng</a>
+						<a th:attr="ng-click=@{|cart.add(${item.id})|}"
+								   class="add-cart">+ Thêm vào giỏ hàng</a>
 						<h5>
 								<span
 										class="text-danger">[[${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}]]đ</span>

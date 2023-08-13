@@ -173,11 +173,7 @@ export default (props = {}) => {
 								icon={faHandHoldingUsd}
 								link={Routes.Dashboard.path}
 							/>
-							<NavItem
-								title='Settings'
-								icon={faCog}
-								link={Routes.Settings.path}
-							/>
+
 							<NavItem
 								title='Account'
 								icon={faCog}
@@ -193,7 +189,16 @@ export default (props = {}) => {
 								icon={faCog}
 								link={Routes.Coupons.path}
 							/>
-
+							<NavItem
+								title='Report'
+								icon={faCog}
+								link={Routes.Reports.path}
+							/>
+							<NavItem
+								title='Products'
+								icon={faHandHoldingUsd}
+								link={Routes.Product.path}
+							/>
 							<CollapsableNavItem
 								eventKey='tables/'
 								title='Tables'

@@ -8,6 +8,16 @@ app.controller('cartCtrl', function ($scope, $http) {
 		quantityInDetail: 1,
 		isQuantityValid: true,
 		isOutOfProduct: false,
+		amoutInDetail: 1,
+		plusInDetail() {
+			this.quantityInDetail++;
+		},
+		minusInDetail() {
+			if (this.quantityInDetail === 1) {
+				return;
+			}
+			this.quantityInDetail--;
+		},
 		plus(id) {
 			var item = this.items.find((item) => item.id == id);
 			item.quantity++;
@@ -68,7 +78,7 @@ app.controller('cartCtrl', function ($scope, $http) {
 			if (window.location.href.includes('shop')) {
 				path = 'shop';
 			}
-			if (window.location.href.includes('cart-detail')) {
+			if (window.location.href.includes('cart-detail') || window.location.href.includes('order-history')) {
 				path = 'order';
 			}
 			return path;

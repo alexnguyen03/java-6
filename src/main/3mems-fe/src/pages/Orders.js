@@ -1,9 +1,9 @@
-import {faList, faUser} from '@fortawesome/free-solid-svg-icons';
+import {faList, faUser, faEye} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Button, Card, Col, Form, Modal, Row, Table, Toast} from '@themesberg/react-bootstrap';
 import React, {useEffect, useState, useRef} from 'react';
 import DataTable from 'react-data-table-component';
-const ROOT_URL = 'http://localhost:8080/admin/orders';
+const ROOT_URL = 'http://localhost:8080/rest/orders';
 
 export default () => {
 	const [showCard, setShowCard] = useState(false);
@@ -38,10 +38,24 @@ export default () => {
 			selector: (row) => displayStatus(row.status),
 			sortable: true,
 		},
-		// {
-		// 	button: true,
-		// 	cell: (row) => <button className='btn btn-warning btn-xs'>Edit</button>,
-		// },
+		{
+			button: true,
+			name: 'Chi tiết',
+			cell: (row) => (
+				<button
+					className='btn btn-info btn-xs'
+					onClick={() => {
+						console.log(row);
+						handleGetOrderDetails(row);
+					}}>
+					<FontAwesomeIcon
+						icon={faEye}
+						size='lg'
+						className='text-white'
+					/>
+				</button>
+			),
+		},
 	];
 
 	const [order, setOrder] = useState({
@@ -66,18 +80,30 @@ export default () => {
 			console.log(error);
 		}
 	};
+	const conditionalRowStyles = [
+		{
+			when: (row) => row.status === 'H',
+
+			style: (row) => ({backgroundColor: row.activated ? 'inerit' : 'pink'}),
+		},
+		{
+			when: (row) => row.id === order.id,
+
+			style: (row) => ({border: '1px grey solid'}, {backgroundColor: 'rgb(109, 235, 198)'}),
+		},
+	];
 	const handleGetOrderDetails = async (row) => {
 		setShowNote(false);
 		setShowCard(true);
 		if (row.id === order.id) {
 			return;
 		}
+		setOrder(row);
 		try {
 			const resp = await fetch(ROOT_URL + `/users/${row.id}`);
 			const data = await resp.json();
 			setShowCard(true);
 			setUser(data);
-			setOrder(row);
 		} catch (error) {
 			console.log(error);
 		}
@@ -88,7 +114,7 @@ export default () => {
 		} catch (error) {
 			console.log(error);
 		}
-		if (row.status === 'H' || row.status === 'G') {
+		if (row.status === 'H' || row.status === 'DG') {
 			setShowUpdateBtn(false);
 		} else {
 			setShowUpdateBtn(true);
@@ -102,10 +128,10 @@ export default () => {
 			case 'XL':
 				return 'Đang chờ xử lý';
 				break;
-			case 'DG':
+			case 'G':
 				return 'Đang giao';
 				break;
-			case 'G':
+			case 'DG':
 				return 'Đã giao';
 				break;
 			default:
@@ -122,7 +148,7 @@ export default () => {
 				return (
 					<>
 						<option value='Xl'>Chờ xử lý</option>
-						<option value='DG'>Đang giao</option>
+						<option value='G'>Đang giao</option>
 						<option value='H'>Hủy</option>
 					</>
 				);
@@ -130,8 +156,8 @@ export default () => {
 			case 'DG':
 				return (
 					<>
-						<option value='DG'>Đang giao</option>
-						<option value='G'>Đã giao</option>
+						<option value='G'>Đang giao</option>
+						<option value='DG'>Đã giao</option>
 						<option value='H'>Hủy</option>
 					</>
 				);
@@ -250,7 +276,7 @@ export default () => {
 									</div>
 									<div className='mb-2'>
 										Trạng thái đơn hàng: <strong className={`badge  bg-${displayBadgeStatus(order.status)}`}> {displayStatus(order.status)}</strong>
-										{(order.status === 'XL' || order.status === 'DG') && (
+										{(order.status === 'XL' || order.status === 'G') && (
 											<Form.Select
 												onChange={handleOnChangeSelect}
 												aria-label='Default select example'
@@ -277,7 +303,7 @@ export default () => {
 											Lý đo hủy: <u>{order.notes}</u>
 										</div>
 									)}
-									{showUpdateBtn && (order.status !== 'H' || order.status !== 'G') && (
+									{showUpdateBtn && (order.status !== 'H' || order.status !== 'DG') && (
 										<>
 											<Row>
 												<Col xl={6}>
@@ -361,7 +387,6 @@ export default () => {
 											})}
 										</tbody>
 									</Table>
-									<ul></ul>
 								</Card.Body>
 							</Card>
 						</Col>
@@ -374,11 +399,13 @@ export default () => {
 						// expandableRows
 						columns={columns}
 						data={orders}
+						striped
 						pagination
 						highlightOnHover
 						progressPending={loading}
 						onRowDoubleClicked={handleGetOrderDetails}
 						fixedHeader
+						conditionalRowStyles={conditionalRowStyles}
 						fixedHeaderScrollHeight='500px'
 					/>
 				</Col>

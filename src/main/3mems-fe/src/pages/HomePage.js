@@ -3,7 +3,7 @@ import {Redirect, Route, Switch} from 'react-router-dom';
 import {Routes} from '../routes';
 
 // pages
-import Settings from './Settings';
+
 import ForgotPassword from './examples/ForgotPassword';
 import Lock from './examples/Lock';
 import NotFoundPage from './examples/NotFound';
@@ -27,9 +27,11 @@ import Navbar from '../components/Navbar';
 import Preloader from '../components/Preloader';
 import Sidebar from '../components/Sidebar';
 
+import Coupons from './Coupons';
 import Dashboard from './Dashboard';
 import Orders from './Orders';
-import Coupons from './Coupons';
+import Product from './Product';
+import Reports from './Reports';
 import Accordion from './components/Accordion';
 import Alerts from './components/Alerts';
 import Badges from './components/Badges';
@@ -164,13 +166,18 @@ export default () => (
 		/>
 		<RouteWithSidebar
 			exact
-			path={Routes.Coupons.path}
-			component={Coupons}
+			path={Routes.Product.path}
+			component={Product}
 		/>
 		<RouteWithSidebar
 			exact
-			path={Routes.Settings.path}
-			component={Settings}
+			path={Routes.Reports.path}
+			component={Reports}
+		/>
+		<RouteWithSidebar
+			exact
+			path={Routes.Coupons.path}
+			component={Coupons}
 		/>
 		<RouteWithSidebar
 			exact

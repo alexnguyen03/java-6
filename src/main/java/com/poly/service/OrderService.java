@@ -33,4 +33,9 @@ public interface OrderService {
 
     Order create(JsonNode orderData);
 
+    List<Order> findByAccountName(String name);
+
+    List<Order> findByCreatedDate(Date ngayDat);
+
+    List<Order> findByStatusAndUser(String status, String username);
 }

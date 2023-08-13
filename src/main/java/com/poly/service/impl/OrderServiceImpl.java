@@ -113,4 +113,19 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    @Override
+    public List<Order> findByAccountName(String name) {
+        return orderDAO.findByAccountName(name);
+    }
+
+    @Override
+    public List<Order> findByCreatedDate(Date ngayDat) {
+        return orderDAO.findByCreatedDate(ngayDat);
+    }
+
+    @Override
+    public List<Order> findByStatusAndUser(String status, String username) {
+        return orderDAO.findByStatusAndUser(status, username);
+    }
+
 }
