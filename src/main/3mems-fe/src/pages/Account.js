@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
 import { Button, Card, Col, Form, Row } from "@themesberg/react-bootstrap";
 
+const imageUrl = 'http://localhost:8080/img/update-account';
+
 const Account = () => {
   const [userName, setUserName] = useState("");
   const [fullname, setFullName] = useState("");
@@ -33,9 +35,18 @@ const Account = () => {
       sortable: true,
     },
     {
-      name: "Hình ảnh",
-      sortable: true,
-      selector: (row) => row.photo,
+      // name: "Hình ảnh",
+      // sortable: true,
+      // selector: (row) => row.photo,
+
+      name: 'Hình ảnh',
+			selector: (row) => (
+				<img
+					src={`${imageUrl}/` + row.photo}
+					style={{width: '50px', height: '50px'}}
+					alt={row.photo}
+				/>
+			),
     },
 
     {
@@ -141,7 +152,7 @@ const Account = () => {
 
   return (
     <Row>
-      {showAddBtn ? (
+      {/* {showAddBtn ? (
         <Col xl={12}>
           <Button
             style={{ marginTop: 20, marginBottom: 20 }}
@@ -156,7 +167,7 @@ const Account = () => {
             Thêm tài khoản
           </Button>
         </Col>
-      ) : null}
+      ) : null} */}
 
       {showForm ? (
         <Col xl={12}>
