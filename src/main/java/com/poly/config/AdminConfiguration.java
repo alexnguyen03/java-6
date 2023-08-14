@@ -47,7 +47,7 @@ public class AdminConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/*", "/js/**", "/css/**", "/img/**", "/fonts/**", "/account/**", "/files/**, ",
                         "/admin/**", "/shop/**", "/rest/products/**", "/shop/checkout/**", "/rest/orders/**",
-                        "/rest/update-account/**", "/rest/coupon/**", "/admin/products/**",
+                        "/rest/update-account/**", "/rest/coupon/**", "/admin/products/**", "/pay/success/**",
                         "/rest/upload/update-account/**")
                 .permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
