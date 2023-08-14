@@ -95,6 +95,7 @@ app.controller('myCtrl_Checkout', function($scope, $http, $location) {
 						alert("Thanh toán thành công !!!");
 						window.location.href = "/shop/order-history";
 					}
+					alert(order);
 				})
 				.catch((error) => {
 					alert('Thanh toán lỗi !!!');

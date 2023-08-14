@@ -79,7 +79,6 @@ public class PaypalController {
 						return "redirect:" + link.getHref();
 					}
 				}
-
 			} catch (PayPalRESTException e) {
 				e.printStackTrace();
 			}
@@ -94,36 +93,30 @@ public class PaypalController {
 
 	@GetMapping(value = SUCCESS_URL)
 	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
-
 		try {
 			Payment payment = service.executePayment(paymentId, payerId);
 			System.out.println(payment.toJSON());
 			if (payment.getState().equals("approved")) {
 				JsonNode orderData = sessionService.get("orderData");
-
 				ObjectMapper mapper = new ObjectMapper();
 				Order order = mapper.convertValue(orderData, Order.class);
 				if (order.getPayment().getIdPaymemt() == 1) {
-					if (order.getCoupon().getCouponCode() != null) {
-						orderDAO.save(order);
-
-						TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
-						};
-						List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
-								.peek(d -> d.setOrder(order)).collect(Collectors.toList());
-						orderDetailDAO.saveAll(details);
-					} else {
-						order.setCoupon(null);
-						orderDAO.save(order);
-
-						TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
-						};
-						List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
-								.peek(d -> d.setOrder(order)).collect(Collectors.toList());
-						orderDetailDAO.saveAll(details);
-					}
+					Coupon coupon = order.getCoupon();
+		            if (coupon == null) {
+		            	 order.setCoupon(null);
+		            }
+		            String account =  sessionService.get("username");
+		            Account account2 = accountService.findById(account).get();
+		            order.setAccount(account2);
+		            System.out.println(order);
+		            orderDAO.save(order);
+		            TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>() {
+		            };
+		            List<OrderDetail> details = mapper.convertValue(orderData.get("orderDetails"), type).stream()
+		                    .peek(d -> d.setOrder(order)).collect(Collectors.toList());
+		            orderDetailDAO.saveAll(details);
+					return "redirect:/shop/order-history";
 				}
-				return "redirect:/shop/order-history";
 			}
 		} catch (PayPalRESTException e) {
 			System.out.println(e.getMessage());
