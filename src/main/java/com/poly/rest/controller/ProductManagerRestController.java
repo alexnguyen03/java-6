@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -138,13 +139,17 @@ public class ProductManagerRestController {
 
 	@PutMapping(value = "/noneMultipart", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@ResponseBody
-	public ResponseEntity<Product> updateNoneMultipartFile(@RequestPart("product") String productStr) {
+	public ResponseEntity<Product> updateNoneMultipartFile(@RequestPart("product") String productStr,
+			@RequestPart("file") MultipartFile oldFile) {
 		ObjectMapper mapper = new ObjectMapper();
+
+		File newFile = null;
+		if (!oldFile.isEmpty()) {
+			newFile = paramService.save(oldFile, "/img/product");
+		}
 		Product newProduct = new Product();
 		try {
 			newProduct = mapper.readValue(productStr, Product.class);
-
-			System.out.println(newProduct.getCategory().getName());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -294,22 +294,35 @@ export default () => {
     console.log(productImage);
 
     if (productImage === null) {
-      try {
-        const resp = await fetch(ROOT_URL, {
-          method: "PUT",
-          body: formData,
-        });
-        const data = await resp.json();
-        setMessageToast("Cập nhật sản phẩm thành công");
-        setIsShowToast(true);
-        setShowModal(false);
-        handleResetForm();
-      } catch (error) {
-        console.log(error);
-        setMessageToast("Lỗi khi cập nhật sản phẩm:", error);
-        setIsShowToast(true);
+      if (productImage === null) {
+        setErrorImage("Vui lòng chọn hình ảnh sản phẩm.");
+        return;
+      } else {
+        setErrorImage("");
+
+        try {
+          const resp = await fetch(ROOT_URL, {
+            method: "PUT",
+            body: formData,
+          });
+          const data = await resp.json();
+          setMessageToast("Cập nhật sản phẩm thành công");
+          setIsShowToast(true);
+          setShowModal(false);
+          handleResetForm();
+        } catch (error) {
+          console.log(error);
+          setMessageToast("Lỗi khi cập nhật sản phẩm:", error);
+          setIsShowToast(true);
+        }
       }
     } else {
+      setErrorImage("");
+
+      Object.assign(product, {
+        image: productImage,
+      });
+
       try {
         const resp = await fetch(`${ROOT_URL}/noneMultipart`, {
           method: "PUT",
@@ -391,6 +404,10 @@ export default () => {
     setProductCategory(row.category.id);
     setAvailable(row.available);
     setcreateDate(row.createDate);
+
+    const fileName = document.getElementsByName("file");
+    fileName.values = row.image;
+    console.log(fileName);
 
     setProduct(row);
   };
