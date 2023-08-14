@@ -268,17 +268,16 @@ public class ReviewsManagementController {
 	@PostMapping("create")
 	public String create(RedirectAttributes rdAtr) {
 		int productId = Integer.parseInt(paramService.getString("productId", ""));
-		int rating = Integer.parseInt(paramService.getString("rating", ""));
+		float rating = Float.parseFloat(paramService.getString("rating", ""));
 		String text = paramService.getString("textReview", "");
 		// lấy user từ session
-		Account account_Session = sessionService.get("account");
 		// kiểm tra có đăng nhập hay chưa
-		if (account_Session == null) {
+		if (sessionService.get("username") == null) {
 			sessionService.set("messageShop", "Đăng nhập để được đánh giá sản phẩm");
 			rdAtr.addAttribute("isMessageShop", true);
 			return "redirect:/account/login";
 		}
-		Account account = accountDAO.findById(account_Session.getUsername()).get();
+		Account account = accountDAO.findById(sessionService.get("username")).get();
 		Product product = productDAO.findById(productId).get();
 		Review review = new Review();
 		review.setAccount(account);
@@ -290,9 +289,7 @@ public class ReviewsManagementController {
 		return "redirect:/shop/product-detail?id=" + product.getId();
 	}
 	// Shop-Detail Function end
-	
-	
-	
+
 	//
 	// @GetMapping("delete/{id}")
 	// public String create(@PathVariable("id") Integer id) {
