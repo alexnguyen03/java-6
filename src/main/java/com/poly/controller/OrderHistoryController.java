@@ -107,9 +107,8 @@ public class OrderHistoryController {
 
 	@PostMapping("filter")
 	public String search(Model model, @RequestParam("status") String status) {
-		Account account = sessionService.get("account");
 		if (status.equals("C")) {
-			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, sessionService.get("username"));
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isC", true);
@@ -118,7 +117,7 @@ public class OrderHistoryController {
 				model.addAttribute("success", "Không tìm thấy đơn hàng có trạng thái là Đang chờ");
 			}
 		} else if (status.equals("XL")) {
-			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, sessionService.get("username"));
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isXl", true);
@@ -127,7 +126,7 @@ public class OrderHistoryController {
 				model.addAttribute("success", "Không tìm thấy đơn hàng có trạng thái là Đang xử lý");
 			}
 		} else if (status.equals("G")) {
-			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, sessionService.get("username"));
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isG", true);
@@ -136,7 +135,7 @@ public class OrderHistoryController {
 				model.addAttribute("success", "Không tìm thấy đơn hàng có trạng thái là Đang giao");
 			}
 		} else if (status.equals("DG")) {
-			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, sessionService.get("username"));
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isDg", true);
@@ -146,7 +145,7 @@ public class OrderHistoryController {
 			}
 
 		} else if (status.equals("H")) {
-			List<Order> orders = orderService.findByStatusAndUser(status, account.getUsername());
+			List<Order> orders = orderService.findByStatusAndUser(status, sessionService.get("username"));
 			if (orders.size() > 0) {
 				model.addAttribute("orders", orders);
 				model.addAttribute("isH", true);
