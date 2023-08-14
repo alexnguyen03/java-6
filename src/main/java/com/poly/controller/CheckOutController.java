@@ -66,7 +66,6 @@ public class CheckOutController {
 		String username = sessionService.get("username");
 		if (username == null) {
 			sessionService.set("state", "cart");
-			return "redirect:/account/login";
 		}
 		Account acc = accountService.findById(username).get();
 		// Optional<Account> account = accountService.findById("hoainam");

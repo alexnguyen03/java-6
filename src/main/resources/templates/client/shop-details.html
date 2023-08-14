@@ -422,5 +422,12 @@
             <script th:src="@{/js/main.js}"></script>
             <script th:src="@{/js/cart.js}"></script>
             <script th:src="@{/js/product-detail.js}"></script>
+            <script>
+              $(document).ready(function () {
+                $(".myBtn").click(function () {
+                  $('.toast').toast('show');
+                });
+              });
+            </script>
   </body>
 </html>

@@ -208,7 +208,7 @@
                     <th scope="col">Mã Đơn Hàng</th>
                     <th scope="col">Ngày Đặt</th>
                     <th scope="col">Tổng Tiền</th>
-                    <th scope="col">Giảm Giá</th>
+                    <!-- <th scope="col">Giảm Giá</th> -->
                     <th scope="col">Địa Chỉ</th>
                     <th scope="col">Số Điện Thoại</th>
                     <th scope="col">Trạng Thái</th>
@@ -226,7 +226,6 @@
                       [[${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA',
                       2, 'POINT')}]]<sup>đ</sup>
                     </td>
-                    <td class="pt-4" ></td>
                     <td class="pt-4" th:text="${order.address}"></td>
                     <td class="pt-4" th:text="${order.phone}"></td>
                     <td class="pt-4">
